@@ -1,0 +1,24 @@
+/* ✅ Este orden elimina el warning */
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
+
+@import "tailwindcss";
+
+/* Variables personalizadas */
+@layer base {
+  :root {
+    --font-roboto: "Roboto", sans-serif;
+    --font-cursiva: "Cedarville Cursive", cursive;
+  }
+}
+
+/* Clases personalizadas */
+.font-roboto {
+  font-family: var(--font-roboto);
+}
+
+.font-cursiva {
+  font-family: var(--font-cursiva);
+    font-size: 30px;
+    color: aquamarine;
+}
