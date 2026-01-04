@@ -20,7 +20,7 @@ export default function Informacion1() {
             <div className="space-y-4">
               {" "}
               <div className="flex justify-between items-center ">
-                <div className="">
+                <div >
                   <h3 className="">
                     <a href="">Manicure y Pedicure</a>{" "}
                   </h3>
@@ -29,7 +29,7 @@ export default function Informacion1() {
                 <h4>$30.000</h4>
               </div>
               <div className="flex justify-between items-center ">
-                <div className="">
+                <div >
                   <h3>
                     <a href="">Salon de belleza</a>
                   </h3>
@@ -44,7 +44,7 @@ export default function Informacion1() {
                   </h3>
                   <h4>20 min de masaje </h4>
                 </div>
-                <div clas>
+                <div >
                   <h4>$30.000</h4>
                 </div>
               </div>

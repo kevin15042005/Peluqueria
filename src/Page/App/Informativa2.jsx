@@ -14,7 +14,7 @@ export default function Informativa2() {
       </div>
       <ul className="flex flex-col sm:flex-row  justify-center  items-center gap-8 list-decimal p-10 ">
         <li className="flex flex-col items-center text-center max-w-xs py-2">
-          <img src="" alt="" />
+          <img src="#" alt="" />
           Imagen 1
           <h4 className="">
             <span>1.</span>Manicure y pedicure
@@ -25,7 +25,7 @@ export default function Informativa2() {
           </p>
         </li>
         <li className="flex flex-col items-center text-center max-w-xs">
-          <img src="" alt="" />
+          <img src="#" alt="" />
           Imagen 2
           <h4>
             <span>2.</span>Salon belleza
@@ -36,7 +36,7 @@ export default function Informativa2() {
           </p>
         </li>
         <li className="flex flex-col items-center text-center max-w-xs">
-          <img src="" alt="" />
+          <img src="#" alt="" />
           Imagen 3
           <h4>
             <span>3.</span>Masajes

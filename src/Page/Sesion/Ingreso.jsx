@@ -1,8 +1,24 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../Components/RutaProteguida/AutoContext.jsx";
+
+/* 🔹 USUARIOS DE PRUEBA (SIMULAN LA BD) */
+const usuariosMock = [
+  {
+    correo: "admin@correo.com",
+    contraseña: "12345678",
+    nombre: "Administrador",
+  },
+  {
+    correo: "user@correo.com",
+    contraseña: "87654321",
+    nombre: "Usuario",
+  },
+];
 
 const Ingreso = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [currentForm, setCurrentForm] = useState("login");
   const [showPassword, setShowPassword] = useState(false);
@@ -15,112 +31,86 @@ const Ingreso = () => {
   const hanldeClick = () => {
     window.scrollTo(0, 0);
   };
-  //Iniciar Sesion
-  const handleIniciar = async (e) => {
+
+  /* 🔹 LOGIN CON ARRAY */
+  const handleIniciar = (e) => {
     e.preventDefault();
 
     const email = e.target.correo.value;
     const password = e.target.contraseña.value;
 
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/admin/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          correo: email,
-          constraseña: password,
-        }),
-      });
+    const usuario = usuariosMock.find(
+      (u) => u.correo === email && u.contraseña === password
+    );
 
-      const data = await res.json();
+    if (usuario) {
+      alert("Inicio de sesión correcto");
 
-      if (res.ok) {
-        alert("Iniciar de seion correcto");
-        localStorage.setItem("USER", JSON.stringify(data.usuario));
-        localStorage.setItem("isLogin", "true");
-        navigate("/Administrador");
-      } else {
-        alert(data.message || "Credenciales incorrectas");
-        localStorage.setItem("isLogin", "false");
-      }
-    } catch (error) {
-      console.log("Error al inicar sesion", error);
+      localStorage.setItem("USER", JSON.stringify(usuario));
+      login(); // 🔐 Estado global
+      navigate("/Administrador");
+    } else {
+      alert("Correo o contraseña incorrectos");
     }
   };
 
-  const hanldeActualizar = async (e) => {
+  /* 🔹 RECUPERAR CONTRASEÑA (SIMULADA) */
+  const hanldeActualizar = (e) => {
     e.preventDefault();
 
-    const correo = e.target.correo.value;
-    const pinSeguridad = e.target.antiguaContraseña.value;
-    const nuevacontraseña = e.target.nuevacontraseña.value;
-
-    if (!correo || !pinSeguridad || !nuevacontraseña) {
-      alert("Todos los comapos son obligatorios");
-      return;
-    }
-    if (nuevacontraseña.length < 8) {
-      alert("La contraseña debe contener minimo 8 caracteres");
-      return;
-    }
-    if (!/^\d{4}$/.test(pinSeguridad)) {
-      alert(" pin deb ser extamente 4 digitos");
-      return;
-    }
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/admin/update`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          correo_Usuario: correo,
-          pinSeguridad: pinSeguridad,
-          nuevacontraseña: nuevacontraseña,
-        }),
-      });
-      const data = await res.json();
-
-      if (res.ok) {
-        alert("Contrasem=na actualizada correctamente");
-        changeForm("login");
-      } else {
-        alert(data.message || "Error al actualizar la contrasena");
-      }
-    } catch (error) {
-      console.log("Error al actualzoia contrasena", error);
-      alert("Error de conexion con el servidor");
-    }
+    alert("Función simulada (sin backend)");
+    changeForm("login");
   };
 
   return (
     <>
-      <div>
-        {currentForm === "login" && (
-          <form
-            className="bg-[#F2F4F7] flex flex-col p-4 "
-            onSubmit={handleIniciar}
-          >
-            <fieldset className="flex flex-col  items-center text-center ">
-              <legend>Ingreso</legend>
-              <legend>Email</legend>
-              <input  type="email" name="correo" placeholder="correo" required />
-              <legend></legend>
-              <input 
-                type={showPassword ? "text" : "password"}
-                name="contraseña"
-                placeholder="contraseña" 
-                required
-              />
-              <input
-                type="checkbox"
-                onChange={() => setShowPassword(!showPassword)}
-              />{" "}
-              Olvide Contraseña
-              <div>
-                <button type="submit" onClick={hanldeClick}>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-full max-w-md ">
+          {currentForm === "login" && (
+            <form
+              className="bg-[#F2F4F7] flex flex-col p-20 border-2 rounded-3xl min-h-130 "
+              onSubmit={handleIniciar}
+            >
+              <h2 className="my-2 text-2xl font-extrabold text-center">
+                Ingreso
+              </h2>
+
+              <fieldset className="flex flex-col items-center text-center">
+                <legend>Email</legend>
+                <input
+                  type="email"
+                  name="correo"
+                  placeholder="Correo"
+                  required
+                  className="border-amber-500 border-2 p-2 rounded-3xl my-4"
+                />
+
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="contraseña"
+                  placeholder="Contraseña"
+                  required
+                  className="border-amber-500 border-2 p-2 rounded-3xl"
+                />
+
+                <button
+                  className="bg-green-800 my-4 p-3 rounded-2xl w-full text-amber-50 font-bold"
+                  type="submit"
+                  onClick={hanldeClick}
+                >
                   Ingreso
                 </button>
+
+                <div className="flex items-center justify-center gap-2">
+                  <input
+                    type="checkbox"
+                    onChange={() => setShowPassword(!showPassword)}
+                  />
+                  <span>Ver contraseña</span>
+                </div>
+              </fieldset>
+
+              <div className="flex justify-center text-black hover:text-gray-500">
                 <a
                   href=""
                   onClick={(e) => {
@@ -128,61 +118,39 @@ const Ingreso = () => {
                     changeForm("forgotPassword");
                   }}
                 >
-                  Olvide mi contraseña
+                  Olvidé mi contraseña
                 </a>
               </div>
-            </fieldset>
-          </form>
-        )}
+            </form>
+          )}
 
-        {/*Recuperar contrasena*/}
+          {currentForm === "forgotPassword" && (
+            <form
+              className="bg-[#F2F4F7] flex flex-col p-20 border-2 rounded-3xl min-h-130"
+              onSubmit={hanldeActualizar}
+            >
+              <fieldset className="text-center">
+                <legend className="font-extrabold text-2xl">
+                  Recuperar Contraseña
+                </legend>
 
-        {currentForm === "forgotPassword" && (
-          <form onSubmit={hanldeActualizar}>
-            <fieldset>
-              <legend>Recuperar Contrasena</legend>
-              <legend>
-                Correo
-                <input
-                  type="email"
-                  name="correo"
-                  placeholder="Ingrese Su Corrreo"
-                />
-              </legend>
-              <legend>
-                PIN seguridad 4
-                <input
-                  type="password"
-                  name="antiguaContraseña"
-                  pattern="\d{4}"
-                  maxLength={4}
-                  required
-                />
-              </legend>
-              <legend>
-                Nueva Contrasena{" "}
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="nuevacontraseña"
-                  minLength={8}
-                  placeholder="MIninimo 8 caracteres"
-                />
-                <input
-                  type="checkbox"
-                  onChange={() => setShowPassword(!showPassword)}
-                />
-              </legend>
-              <button type="submit">Actualiar contrasena</button>
-            </fieldset>
-            <div>
-              <button onClick={() => changeForm("login")}>
-                Volver a inicio
-              </button>
-            </div>
-          </form>
-        )}
+                <p className="my-4">Función simulada (sin base de datos)</p>
+              </fieldset>
+
+              <div className="flex justify-center gap-2">
+                <button
+                  className="bg-blue-500 p-2 rounded-2xl my-4"
+                  onClick={() => changeForm("login")}
+                >
+                  Volver a inicio
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
       </div>
     </>
   );
 };
+
 export default Ingreso;
