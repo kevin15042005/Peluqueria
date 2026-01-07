@@ -1,24 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../Components/RutaProteguida/AutoContext.jsx";
-
-/* 🔹 USUARIOS DE PRUEBA (SIMULAN LA BD) */
-const usuariosMock = [
-  {
-    correo: "admin@correo.com",
-    contraseña: "12345678",
-    nombre: "Administrador",
-  },
-  {
-    correo: "user@correo.com",
-    contraseña: "87654321",
-    nombre: "Usuario",
-  },
-];
 
 const Ingreso = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
 
   const [currentForm, setCurrentForm] = useState("login");
   const [showPassword, setShowPassword] = useState(false);
@@ -28,128 +12,176 @@ const Ingreso = () => {
     localStorage.setItem("currentForm", formName);
   };
 
-  const hanldeClick = () => {
-    window.scrollTo(0, 0);
-  };
-
-  /* 🔹 LOGIN CON ARRAY */
-  const handleIniciar = (e) => {
+  // LOGIN
+  const handleIniciar = async (e) => {
     e.preventDefault();
 
-    const email = e.target.correo.value;
-    const password = e.target.contraseña.value;
+    const correo = e.target.correo.value;
+    const contraseña = e.target.contraseña.value;
 
-    const usuario = usuariosMock.find(
-      (u) => u.correo === email && u.contraseña === password
-    );
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/administrador/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ correo, password: contraseña }),
+        }
+      );
 
-    if (usuario) {
-      alert("Inicio de sesión correcto");
+      const data = await res.json();
 
-      localStorage.setItem("USER", JSON.stringify(usuario));
-      login(); // 🔐 Estado global
-      navigate("/Administrador");
-    } else {
-      alert("Correo o contraseña incorrectos");
+      if (res.ok) {
+        alert("Inicio de sesión correcto");
+        localStorage.setItem("USER", JSON.stringify(data.usuario));
+        localStorage.setItem("isLogin", "true");
+        if (data.usuario.ROL === "administrador") {
+          navigate("/Administrador");
+        } else {
+          navigate("/Empleado");
+        }
+      }
+    } catch (error) {
+      console.error("Error al iniciar sesión", error);
+      alert("Error de conexión");
     }
   };
 
-  /* 🔹 RECUPERAR CONTRASEÑA (SIMULADA) */
-  const hanldeActualizar = (e) => {
+  // ACTUALIZAR CONTRASEÑA
+  const handleActualizar = async (e) => {
     e.preventDefault();
 
-    alert("Función simulada (sin backend)");
-    changeForm("login");
+    const correo = e.target.correo.value;
+    const pin = e.target.pin.value;
+    const nueva_password = e.target.nueva_password.value;
+
+    if (!correo || !pin || !nueva_password) {
+      alert("Todos los campos son obligatorios");
+      return;
+    }
+
+    if (!/^\d{6}$/.test(pin)) {
+      alert("El PIN debe tener 6 dígitos");
+      return;
+    }
+
+    if (nueva_password.length < 8) {
+      alert("La contraseña debe tener mínimo 8 caracteres");
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/administrador/update_admin`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ correo, pin, nueva_password }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Contraseña actualizada correctamente");
+        changeForm("login");
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error("Error al actualizar contraseña", error);
+      alert("Error de conexión");
+    }
   };
 
   return (
-    <>
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-full max-w-md ">
-          {currentForm === "login" && (
-            <form
-              className="bg-[#F2F4F7] flex flex-col p-20 border-2 rounded-3xl min-h-130 "
-              onSubmit={handleIniciar}
-            >
-              <h2 className="my-2 text-2xl font-extrabold text-center">
-                Ingreso
-              </h2>
+    <div className="flex items-center justify-center min-h-screen">
+      {currentForm === "login" && (
+        <form
+          className="flex flex-col  w-full max-w-sm bg-white p-6 rounded shadow"
+          onSubmit={handleIniciar}
+        >
+          <fieldset>
+            <legend className="text-center">Ingreso</legend>
 
-              <fieldset className="flex flex-col items-center text-center">
-                <legend>Email</legend>
-                <input
-                  type="email"
-                  name="correo"
-                  placeholder="Correo"
-                  required
-                  className="border-amber-500 border-2 p-2 rounded-3xl my-4"
-                />
+            <input className="w-full border mb-3 p-3" type="email" name="correo" placeholder="Correo" required />
 
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="contraseña"
-                  placeholder="Contraseña"
-                  required
-                  className="border-amber-500 border-2 p-2 rounded-3xl"
-                />
+            <input 
+            className="w-full border p-3"
+              type={showPassword ? "text" : "password"}
+              name="contraseña"
+              placeholder="Contraseña"
+              required
+            />
 
-                <button
-                  className="bg-green-800 my-4 p-3 rounded-2xl w-full text-amber-50 font-bold"
-                  type="submit"
-                  onClick={hanldeClick}
-                >
-                  Ingreso
-                </button>
+            <label className="flex mb-3 justify-center ">
+              <input 
+              className=" "
+                type="checkbox"
+                onChange={() => setShowPassword(!showPassword)}
+              />
+              Mostrar contraseña
+            </label>
 
-                <div className="flex items-center justify-center gap-2">
-                  <input
-                    type="checkbox"
-                    onChange={() => setShowPassword(!showPassword)}
-                  />
-                  <span>Ver contraseña</span>
-                </div>
-              </fieldset>
+<div className="flex justify-around">
+  
+            <button className="border" type="submit">Ingresar</button>
 
-              <div className="flex justify-center text-black hover:text-gray-500">
-                <a
-                  href=""
-                  onClick={(e) => {
-                    e.preventDefault();
-                    changeForm("forgotPassword");
-                  }}
-                >
-                  Olvidé mi contraseña
-                </a>
-              </div>
-            </form>
-          )}
+            <button className="border " type="button" onClick={() => changeForm("forgotPassword")}>
+              Olvidé mi contraseña
+            </button>
+</div>
+          </fieldset>
+        </form>
+      )}
 
-          {currentForm === "forgotPassword" && (
-            <form
-              className="bg-[#F2F4F7] flex flex-col p-20 border-2 rounded-3xl min-h-130"
-              onSubmit={hanldeActualizar}
-            >
-              <fieldset className="text-center">
-                <legend className="font-extrabold text-2xl">
-                  Recuperar Contraseña
-                </legend>
+      {currentForm === "forgotPassword" && (
+        <form
+          className="flex flex-col  mb-3 w-full max-w-sm "
+          onSubmit={handleActualizar}
+        >
+          <fieldset>
+            <legend>Recuperar contraseña</legend>
 
-                <p className="my-4">Función simulada (sin base de datos)</p>
-              </fieldset>
+            <input className="border p-2 mb-3 w-full" type="email" name="correo" placeholder="Correo" required />
 
-              <div className="flex justify-center gap-2">
-                <button
-                  className="bg-blue-500 p-2 rounded-2xl my-4"
-                  onClick={() => changeForm("login")}
-                >
-                  Volver a inicio
-                </button>
-              </div>
-            </form>
-          )}
-        </div>
-      </div>
-    </>
+            <input
+            className="border p-2 mb-3  w-full "
+              type={showPassword ? "text" : "password"}
+              name="pin"
+              placeholder="PIN (6 dígitos)"
+              maxLength={6}
+              required
+            />
+
+            <input 
+            className="border p-2 mb-3 rounded w-full"
+              type={showPassword ? "text" : "password"}
+              name="nueva_password"
+              maxLength={8}
+              placeholder="Nueva contraseña"
+              required
+            />
+
+            <label className="flex justify-center">
+              <input 
+              
+                type="checkbox"
+                onChange={() => setShowPassword(!showPassword)}
+              />
+              Mostrar contraseña
+            </label>
+            <div className="flex justify-between ">
+              <button className="border" type="submit">Actualizar contraseña</button>
+
+              <button className="border" type="button" onClick={() => changeForm("login")}>
+                Volver
+              </button>
+            </div>
+          </fieldset>
+        </form>
+      )}
+    </div>
   );
 };
 
