@@ -209,30 +209,30 @@ const Index = () => {
 
         <h3>Usuarios</h3>
 
-        <table>
+        <table className="table-auto border-collapse border border-gray-400 w-full">
           <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Correo</th>
-              <th>Rol</th>
-              <th>Acciones </th>
+            <tr className="">
+              <th className="border border-gray-400 px-4 py-2">ID</th>
+              <th className="border border-gray-400 px-4 py-2">Nombre</th>
+              <th className="border border-gray-400 px-4 py-2">Correo</th>
+              <th className="border border-gray-400 px-4 py-2">Rol</th>
+              <th className="border border-gray-400 px-4 py-2">Acciones </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="">
             {usuarios.length > 0 ? (
               usuarios.map((u) => (
                 <tr key={u.ID}>
-                  <td>{u.ID}</td>
-                  <td>{u.NOMBRE}</td>
-                  <td>{u.CORREO}</td>
-                  <td>{u.ROL}</td>
-                  <td>
+                  <td  className="border border-gray-400 px-4 py-2">{u.ID}</td>
+                  <td  className="border border-gray-400 px-4 py-2">{u.NOMBRE}</td>
+                  <td  className="border border-gray-400 px-4 py-2">{u.CORREO}</td>
+                  <td  className="border border-gray-400 px-4 py-2">{u.ROL}</td>
+                  <td  className="border border-gray-400 px-4 py-2">
                     <button
                       onClick={() => {
                         setUsuarioSeleccionado(u);
                         setModalEditar(true);
-                      }}
+                      }} className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
                     >
                       Editar
                     </button>{" "}
@@ -241,7 +241,10 @@ const Index = () => {
                         setUsuarioSeleccionado(u);
                         setModalEliminar(true);
                       }}
-                    >
+                      className="bg-red-500 text-white px-2 py-1 rounded"
+            >
+
+                    
                       Eliminar
                     </button>
                   </td>
