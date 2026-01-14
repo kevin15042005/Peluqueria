@@ -1,11 +1,19 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "./AutoContext.jsx";
+
+const RutaProtegida = ({ children, rolPermitido }) => {
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  const user = JSON.parse(localStorage.getItem("USER"));
 
 
-const RutaProtegida = ({ children }) => {
-  const { isLoggedIn } = useAuth();
+  if (!isLoggedIn || !user) {
+    return <Navigate to="/" replace />;
+  }
 
-  return isLoggedIn ? children : <Navigate to="/Ingreso" replace />;
+  if (rolPermitido && user.ROL !== rolPermitido) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
 };
 
 export default RutaProtegida;

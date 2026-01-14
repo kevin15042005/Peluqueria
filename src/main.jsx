@@ -7,17 +7,19 @@ import { AuthProvider } from "./Components/RutaProteguida/AutoContext.jsx";
 
 //Layout o
 import Layout from "./Components/Layout.jsx";
-//LayoutAdmin 
+//LayoutAdmin
 import LayoutAdmin from "./Components/LayoutAdmin.jsx";
-
 
 import App from "./Page/App/App.jsx";
 import Servicios from "./Page/Servicios.jsx";
 import Citas from "./Page/Citas.jsx";
 import Ingreso from "./Page/Sesion/Ingreso.jsx";
-import Administrador from "./Page/Administrador/Index.jsx";
-import Empleado from "./Page/Empleado/Asistencia.jsx"
+import TurnosEmpleado from "./Page/Empleado/Misturnos.jsx";
 import RutaProtegida from "./Components/RutaProteguida/Index.jsx";
+
+//Rutas proteguidas
+import Administrador from "./Page/Administrador/Index.jsx";
+import Asistencia from "./Page/Administrador/Asistenica.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -34,16 +36,26 @@ createRoot(document.getElementById("root")).render(
             <Route
               path="/Administrador"
               element={
-                <RutaProtegida>
+                <RutaProtegida rolPermitido="administrador">
                   <Administrador />
                 </RutaProtegida>
               }
             />
+
+            <Route
+              path="/Asistencia"
+              element={
+                <RutaProtegida rolPermitido="administrador">
+                  <Asistencia />
+                </RutaProtegida>
+              }
+            />
+
             <Route
               path="/Empleado"
               element={
-                <RutaProtegida>
-                  <Empleado />
+                <RutaProtegida rolPermitido="empleado">
+                  <TurnosEmpleado />
                 </RutaProtegida>
               }
             />
