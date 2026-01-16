@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-const Navbar = () => {
+const NavbarEmpleado = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -41,19 +41,7 @@ const Navbar = () => {
               >
                 <Link to="/">Inico</Link>
               </li>
-              <li
-                className="font-extrabold hover:text-amber-900  transition-colors duration-300"
-                onClick={handleMenuClick}
-              >
-                <Link to="/Servicios">Servicios</Link>
-              </li>
 
-              <li
-                className="font-extrabold hover:text-amber-900  transition-colors duration-300"
-                onClick={handleMenuClick}
-              >
-                <Link to="/Citas">Agenda Turno</Link>
-              </li>
               <li
                 className="font-extrabold hover:text-amber-900  transition-colors duration-300"
                 onClick={handleMenuClick}
@@ -83,24 +71,10 @@ const Navbar = () => {
           >
             <Link to="/">Inico</Link>
           </li>
-          <li
-            className="font-extrabold hover:text-amber-900  transition-colors duration-300"
-            onClick={handleMenuClick}
-          >
-            <Link to="/Servicios">Servicios</Link>
-          </li>
-
-          <li
-            className="font-extrabold hover:text-amber-900  transition-colors duration-300"
-            onClick={handleMenuClick}
-          >
-            <Link to="Citas">CITAS</Link>
-            
-          </li>
         </ul>
       </nav>
     </>
   );
 };
 
-export default Navbar;
+export default NavbarEmpleado;

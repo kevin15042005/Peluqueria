@@ -12,8 +12,10 @@ const NavbarEmpleado = () => {
             alt="Logo"
             className="h-10"
           />
-          <Link to = "/Administrador">CRUD</Link>
+          <Link to="/Administrador">CRUD</Link>
           <Link to="/Asistencia">Asistencia</Link>
+              <Link to="/Servicios">Servicios</Link>
+
           {/* Botón Salir */}
           <Link
             to="/"

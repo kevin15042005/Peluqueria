@@ -9,12 +9,14 @@ import { AuthProvider } from "./Components/RutaProteguida/AutoContext.jsx";
 import Layout from "./Components/Layout.jsx";
 //LayoutAdmin
 import LayoutAdmin from "./Components/LayoutAdmin.jsx";
+//Layout Empleado
+import LayouEmpleado from "./Components/LayoutEmpleado.jsx"
 
 import App from "./Page/App/App.jsx";
-import Servicios from "./Page/Servicios.jsx";
 import Citas from "./Page/Citas.jsx";
 import Ingreso from "./Page/Sesion/Ingreso.jsx";
 import TurnosEmpleado from "./Page/Empleado/Misturnos.jsx";
+import Servicios from "./Page/Administrador/Servicios.jsx"
 import RutaProtegida from "./Components/RutaProteguida/Index.jsx";
 
 //Rutas proteguidas
@@ -41,6 +43,14 @@ createRoot(document.getElementById("root")).render(
                 </RutaProtegida>
               }
             />
+                  <Route
+              path="/Servicios"
+              element={
+                <RutaProtegida rolPermitido="administrador">
+                  <Servicios />
+                </RutaProtegida>
+              }
+            />
 
             <Route
               path="/Asistencia"
@@ -51,6 +61,12 @@ createRoot(document.getElementById("root")).render(
               }
             />
 
+           
+          </Route>
+
+
+          <Route element={<LayouEmpleado />}>
+         
             <Route
               path="/Empleado"
               element={
