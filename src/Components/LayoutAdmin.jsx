@@ -7,7 +7,7 @@ export default function LayoutAdmin() {
   return (
     <>
       <div className="flex  flex-col min-h-screen">
-        LayoutAdmin
+        
         <Navbar1 />
         <main className="grow pt-20 flex items-center justify-center">
           <Outlet />

@@ -1,38 +1,136 @@
 import { X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-const Index = () => {
+export default function UsuariosAdmin() {
   const [showPassword, setShowPassword] = useState(false);
-  const [usuarios, setUsuario] = useState([]);
-
-
-  const navigate = useNavigate()
-  //PoopUps
+  const [usuarios, setUsuarios] = useState([]);
+  const [roles, setRoles] = useState([]);
+  const [serviciosDisponibles, setServiciosDisponibles] = useState([]);
 
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const [mostrarCrear, setModalCrear] = useState(false);
   const [modalEditar, setModalEditar] = useState(false);
   const [modalEliminar, setModalEliminar] = useState(false);
+  const [modalAsignarServicios, setModalAsignarServicios] = useState(false);
+  const [serviciosSeleccionados, setServiciosSeleccionados] = useState([]);
+  const [cargandoServicios, setCargandoServicios] = useState(false);
+  const [errorCarga, setErrorCarga] = useState("");
 
-  //Cargar Usuarios
+  const API = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
+  // Cargar usuarios, roles y servicios
   const cargarUsuarios = async () => {
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/administrador/usuarios`
-      );
+      const res = await fetch(`${API}/administrador/usuarios`);
       const data = await res.json();
-      setUsuario(data);
+      
+      if (data && Array.isArray(data)) {
+        setUsuarios(data);
+      } else {
+        console.error("Formato de usuarios incorrecto:", data);
+        setUsuarios([]);
+      }
     } catch (error) {
       console.error("Error al cargar usuarios", error);
+      setUsuarios([]);
     }
   };
+
+  const cargarRoles = async () => {
+    try {
+      const res = await fetch(`${API}/administrador/roles`);
+      const data = await res.json();
+      
+      if (data && Array.isArray(data)) {
+        setRoles(data);
+      } else {
+        console.error("Formato de roles incorrecto:", data);
+        setRoles([]);
+      }
+    } catch (error) {
+      console.error("Error al cargar roles", error);
+      setRoles([]);
+    }
+  };
+
+  // Cargar todos los subservicios disponibles - CORREGIDO
+  const cargarServiciosDisponibles = async () => {
+    try {
+      console.log("🔍 Cargando servicios desde:", `${API}/subservicio/obtener_subservicios`);
+      const res = await fetch(`${API}/subservicio/obtener_subservicios`);
+      const data = await res.json();
+      
+      console.log("📦 Respuesta completa:", data);
+      
+      if (data.success && data.data && Array.isArray(data.data)) {
+        console.log("✅ Servicios cargados:", data.data.length);
+        console.log("📊 Estructura del primer servicio:", data.data[0]);
+        
+        // Verificar la estructura real de los datos
+        data.data.forEach((serv, idx) => {
+          console.log(`Servicio ${idx}:`, serv);
+        });
+        
+        setServiciosDisponibles(data.data);
+        setErrorCarga("");
+      } else {
+        console.error("⚠️ Error en respuesta o datos vacíos:", data);
+        setServiciosDisponibles([]);
+        setErrorCarga(data.message || "No hay servicios disponibles");
+      }
+    } catch (error) {
+      console.error("❌ Error al cargar servicios:", error);
+      setServiciosDisponibles([]);
+      setErrorCarga("Error de conexión al cargar servicios");
+    }
+  };
+
   useEffect(() => {
     cargarUsuarios();
+    cargarRoles();
+    cargarServiciosDisponibles();
   }, []);
 
-  //Registrar Usuarios
+  // Cargar servicios asignados al usuario cuando se abre el modal
+  useEffect(() => {
+    const cargarServiciosAsignados = async () => {
+      if (modalAsignarServicios && usuarioSeleccionado) {
+        setCargandoServicios(true);
+        try {
+          console.log("🔍 Cargando servicios asignados para usuario ID:", usuarioSeleccionado.ID);
+          const res = await fetch(
+            `${API}/administrador/servicios_empleado/${usuarioSeleccionado.ID}`
+          );
+          const data = await res.json();
+          
+          console.log("📦 Respuesta servicios asignados:", data);
+          
+          if (data.success && data.servicios && Array.isArray(data.servicios)) {
+            // Usar el ID correcto (SUBSERVICIO_ID o ID)
+            const idsAsignados = data.servicios.map(serv => {
+              const id = serv.SUBSERVICIO_ID || serv.ID || serv.id;
+              return id ? id.toString() : "";
+            }).filter(id => id !== "");
+            
+            console.log("✅ IDs asignados encontrados:", idsAsignados);
+            setServiciosSeleccionados(idsAsignados);
+          } else {
+            console.log("ℹ️ No hay servicios asignados aún o formato incorrecto");
+            setServiciosSeleccionados([]);
+          }
+        } catch (error) {
+          console.error("❌ Error al cargar servicios asignados:", error);
+          setServiciosSeleccionados([]);
+        } finally {
+          setCargandoServicios(false);
+        }
+      }
+    };
+
+    cargarServiciosAsignados();
+  }, [modalAsignarServicios, usuarioSeleccionado]);
+
+  // Registrar Usuario
   const handleRegistrar = async (e) => {
     e.preventDefault();
 
@@ -44,287 +142,696 @@ const Index = () => {
     const rolId = formData.get("rol");
 
     if (!nombre || !correo || !password || !pin || !rolId) {
-      alert("Todos los campos son obligatorios");
+      alert("Los campos marcados con * son obligatorios");
       return;
     }
 
-    // Validación pin
     if (!/^\d{6}$/.test(pin)) {
       alert("El PIN debe ser de 6 dígitos");
       return;
     }
 
     try {
+      const res = await fetch(`${API}/administrador/crear_administrador`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          nombre, 
+          correo, 
+          password, 
+          pin, 
+          rolId: parseInt(rolId)
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        alert("✅ Usuario creado correctamente");
+        e.target.reset();
+        setModalCrear(false);
+        cargarUsuarios();
+      } else {
+        alert(data.message || "❌ Error al crear usuario");
+      }
+    } catch (error) {
+      console.error("❌ Error al crear", error);
+      alert("❌ Error al crear usuario");
+    }
+  };
+
+  // Actualizar contraseña
+  const editarUsuario = async () => {
+    if (!usuarioSeleccionado) return;
+
+    if (!usuarioSeleccionado.PIN || usuarioSeleccionado.PIN.length !== 6) {
+      alert("El PIN debe tener 6 dígitos");
+      return;
+    }
+
+    if (!usuarioSeleccionado.PASSWORD) {
+      alert("La contraseña no puede estar vacía");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API}/administrador/update_admin`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          correo: usuarioSeleccionado.CORREO,
+          pin: usuarioSeleccionado.PIN,
+          nueva_password: usuarioSeleccionado.PASSWORD,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        alert("✅ Contraseña actualizada correctamente");
+        setModalEditar(false);
+        setUsuarioSeleccionado(null);
+        cargarUsuarios();
+      } else {
+        alert(data.message || "❌ Error al actualizar");
+      }
+    } catch (error) {
+      console.error("❌ Error al actualizar", error);
+      alert("❌ Error al actualizar contraseña");
+    }
+  };
+
+  // Eliminar Usuario
+  const eliminarUsuario = async () => {
+    if (!usuarioSeleccionado) return;
+
+    try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/administrador/crear_administrador`,
+        `${API}/administrador/delete_administrador/${usuarioSeleccionado.ID}`,
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ nombre, correo, password, pin, rolId }),
+          method: "DELETE",
         }
       );
 
       const data = await res.json();
 
-      if (res.ok) {
-        alert("Usuario creado correctamente");
-        e.target.reset();
-        setModalCrear(false);
+      if (res.ok && data.success) {
+        alert("✅ Usuario eliminado correctamente");
+        setModalEliminar(false);
+        setUsuarioSeleccionado(null);
         cargarUsuarios();
       } else {
-        alert(data.message);
+        alert(data.message || "❌ Error al eliminar");
       }
     } catch (error) {
-      console.error("Error al crear", error);
-      alert("Error al crear usuario");
-    }
-  };
-
-  //Actualizar contrasena
-
-  const editarUsuario = async () => {
-    try {
-      await fetch(
-        `${import.meta.env.VITE_API_URL}/administrador/update_admin`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            correo: usuarioSeleccionado.correo,
-            pin: usuarioSeleccionado.pin,
-            nueva_password: usuarioSeleccionado.password,
-          }),
-        }
-      );
-
-      setModalEditar(false);
-      setUsuarioSeleccionado(null);
-      cargarUsuarios();
-    } catch (error) {
-      console.log("Erro al actualizar", error);
-      alert("Error al actualizar contrasena");
-    }
-  };
-
-  //Eliminar Usuario
-  const EliminarUsuario = async () => {
-    try {
-      await fetch(
-        `${import.meta.env.VITE_API_URL}/administrador/delete_administrador/${
-          usuarioSeleccionado.ID
-        }`,
-        {
-          method: "DELETE",
-        }
-      );
-      setModalEliminar(false);
-      setUsuarioSeleccionado(null), cargarUsuarios();
-    } catch (error) {
       console.error(error);
-      alert("Error al eliminar usuario");
+      alert("❌ Error al eliminar usuario");
     }
   };
+
+  // Asignar servicios a empleado - CORREGIDO
+  const asignarServiciosEmpleado = async () => {
+    if (!usuarioSeleccionado) return;
+    
+    if (serviciosSeleccionados.length === 0) {
+      alert("⚠️ Debe seleccionar al menos un servicio");
+      return;
+    }
+    
+    // Convertir a números y enviar como array
+    const serviciosIds = serviciosSeleccionados.map(id => parseInt(id)).filter(id => !isNaN(id));
+    
+    if (serviciosIds.length === 0) {
+      alert("⚠️ IDs de servicios inválidos");
+      return;
+    }
+    
+    console.log("📤 Enviando datos al backend:", {
+      trabajadorId: usuarioSeleccionado.ID,
+      serviciosIds: serviciosIds
+    });
+    
+    try {
+      const res = await fetch(`${API}/administrador/asignar_servicios_empleado`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          trabajadorId: parseInt(usuarioSeleccionado.ID),
+          serviciosIds: serviciosIds
+        }),
+      });
+
+      const data = await res.json();
+      console.log("📦 Respuesta del backend:", data);
+      
+      if (!res.ok) {
+        throw new Error(data.message || `Error HTTP ${res.status}`);
+      }
+      
+      if (data.success) {
+        alert("✅ Servicios asignados correctamente");
+        setModalAsignarServicios(false);
+        setServiciosSeleccionados([]);
+        setUsuarioSeleccionado(null);
+        cargarUsuarios();
+      } else {
+        alert(data.message || "❌ Error al asignar servicios");
+      }
+    } catch (error) {
+      console.error("❌ Error detallado:", error);
+      alert(`❌ Error: ${error.message}`);
+    }
+  };
+
+  // Abrir modal de asignar servicios
+  const abrirModalAsignarServicios = (usuario) => {
+    if (usuario.ROL !== 'empleado') {
+      alert("⚠️ Solo se pueden asignar servicios a empleados");
+      return;
+    }
+    
+    setUsuarioSeleccionado(usuario);
+    setModalAsignarServicios(true);
+  };
+
+  // Función helper para obtener el ID de un servicio
+  const obtenerIdServicio = (servicio) => {
+    return servicio.SUBSERVICIO_ID || servicio.ID || servicio.id || "";
+  };
+
+  // Función helper para obtener el nombre de un servicio
+  const obtenerNombreServicio = (servicio) => {
+    return servicio.NOMBRE || servicio.nombre || "Sin nombre";
+  };
+
+  // Función helper para obtener la categoría de un servicio
+  const obtenerCategoriaServicio = (servicio) => {
+    return servicio.SERVICIO_NOMBRE || servicio.SERVICIO || servicio.categoria || "General";
+  };
+
   return (
-    <>
-      <div>
-        {mostrarCrear && (
-          <div className="fixed  inset-0 flex items-center justify-center ">
-            <div className="bg-amber-100  rounded-lg shadow-md p-6 w-full max-w-sm">
-              <form onSubmit={handleRegistrar}>
-                <div className=" text-end">
-                  {" "}
-                  <button onClick={() => setModalCrear(false)}>
-                    <X size={32} />
-                  </button>
+    <div className="p-6">
+      {/* Modal Crear */}
+      {mostrarCrear && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold">Crear Nuevo Usuario</h3>
+              <button
+                onClick={() => setModalCrear(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            <form onSubmit={handleRegistrar}>
+              <div className="space-y-4">
+                <input
+                  name="nombre"
+                  placeholder="Nombre completo *"
+                  className="w-full p-3 border rounded-lg"
+                  required
+                />
+                <input
+                  type="email"
+                  name="correo"
+                  placeholder="Correo electrónico *"
+                  className="w-full p-3 border rounded-lg"
+                  required
+                />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Contraseña *"
+                  className="w-full p-3 border rounded-lg"
+                  required
+                />
+                <input
+                  type="text"
+                  name="pin"
+                  placeholder="PIN (6 dígitos) *"
+                  maxLength={6}
+                  pattern="\d{6}"
+                  className="w-full p-3 border rounded-lg"
+                  required
+                />
+                <select
+                  name="rol"
+                  className="w-full p-3 border rounded-lg"
+                  required
+                >
+                  <option value="">Seleccione rol *</option>
+                  {roles.map((rol) => (
+                    <option key={rol.ID} value={rol.ID}>
+                      {rol.NOMBRE}
+                    </option>
+                  ))}
+                </select>
+
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="showPassword"
+                    checked={showPassword}
+                    onChange={() => setShowPassword(!showPassword)}
+                    className="mr-2"
+                  />
+                  <label htmlFor="showPassword">Mostrar contraseña</label>
                 </div>
 
-                <fieldset className="">
-                  <legend className="text-center">Crear Usuario</legend>
-                  <input
-                    name="nombre"
-                    placeholder="Nombre"
-                    className=" text-center w-full"
-                  />
-                  <input
-                    type="email"
-                    name="correo"
-                    placeholder="Correo"
-                    className=" text-center w-full"
-                  />
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    placeholder="Contrasena"
-                    className=" text-center w-full"
-                  />
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    name="pin"
-                    placeholder="PIN (6 digitos)"
-                    maxLength={6}
-                    className=" text-center w-full"
-                  />
-                  <select
-                    name="rol"
-                    id=""
-                    className="flex justify-center text-center w-full"
+                <div className="flex justify-end space-x-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setModalCrear(false)}
+                    className="px-4 py-2 border rounded-lg hover:bg-gray-100"
                   >
-                    <option value="">Seleccione rol</option>
-                    <option value="1">Empleado</option>
-                    <option value="2">Administrador</option>
-                  </select>
-                  <div className="flex justify-between my-4">
-                    <label htmlFor="">
-                      <input
-                        type="checkbox"
-                        onChange={() => setShowPassword(!showPassword)}
-                      />
-                      Mostrar Contrasena
-                    </label>
-                    <button
-                      className="bg-green-300 p-2 rounded-2xl"
-                      type="submit"
-                    >
-                      Guardar
-                    </button>
-                  </div>
-                </fieldset>
-              </form>
-            </div>
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                  >
+                    Guardar
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
-        )}
-
-        {/*Actualizar*/}
-        {modalEditar && (
-          <div className="fixed  inset-0 flex items-center justify-center ">
-            <div className="bg-amber-100  rounded-lg shadow-md p-6 w-full max-w-sm">
-              <div className="text-end">
-                {" "}
-                <button onClick={() => setModalEditar(false)}>
-                  {" "}
-                  <X size={22} />
-                </button>
-              </div>{" "}
-              <h3 className="text-center">Editar Usuario</h3>{" "}
-              <input
-                className="text-center w-full "
-                value={usuarioSeleccionado.CORREO}
-                onChange={(e) =>
-                  setUsuarioSeleccionado({
-                    ...usuarioSeleccionado,
-                    CORREO: e.target.value,
-                  })
-                }
-              />
-              <input
-                className="text-center w-full "
-                type="password"
-                onChange={(e) =>
-                  setUsuarioSeleccionado({
-                    ...usuarioSeleccionado,
-                    PASSWORD: e.target.value,
-                  })
-                }
-                placeholder="Contrasena"
-              />
-              <input
-                className="text-center w-full "
-                onChange={(e) =>
-                  setUsuarioSeleccionado({
-                    ...usuarioSeleccionado,
-                    PIN: e.target.value,
-                  })
-                }
-                placeholder="PIN"
-                maxLength={6}
-              />
-              <button
-                className="bg-gray-950"
-                onClick={editarUsuario}
-                Guardar
-              ></button>
-            </div>
-          </div>
-        )}
-
-        {/*Eliminar*/}
-        {modalEliminar && (
-          <div className="fixed  inset-0 flex items-center justify-center ">
-            <div className="flex justify-between bg-amber-100  rounded-lg shadow-md p-6 w-full max-w-sm">
-              <label className="flex gap-2">
-                Eliminar a{" "}
-                <p className="underline"> {usuarioSeleccionado.NOMBRE}</p>
-              </label>
-              <button className="bg-green-300 px-4 rounded-2xl" onClick={EliminarUsuario}>Si</button>
-              <button  className="bg-red-300 px-4 rounded-2xl" onClick={() => setModalEliminar(false)}>No</button>
-            </div>
-          </div>
-        )}
-        <div className="flex flex-end justify-between mb-4">
-          <h3>Usuarios</h3>
-
-          {/*Btn Crear*/}
-          <button
-            onClick={() => setModalCrear(!mostrarCrear)}
-            className="bg-green-400 p-2 rounded-2xl"
-          >
-            {mostrarCrear ? "Cancelar" : "Agregar Usuario"}
-          </button>
         </div>
+      )}
 
-        <table className="table-auto border-collapse border border-gray-400 w-full">
-          <thead>
-            <tr className="">
-              <th className="border border-gray-400 px-4 py-2">ID</th>
-              <th className="border border-gray-400 px-4 py-2">Nombre</th>
-              <th className="border border-gray-400 px-4 py-2">Correo</th>
-              <th className="border border-gray-400 px-4 py-2">Rol</th>
-              <th className="border border-gray-400 px-4 py-2">Acciones </th>
+      {/* Modal Editar */}
+      {modalEditar && usuarioSeleccionado && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold">Editar Usuario</h3>
+              <button
+                onClick={() => setModalEditar(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Correo</label>
+                <input
+                  value={usuarioSeleccionado.CORREO || ""}
+                  onChange={(e) =>
+                    setUsuarioSeleccionado({
+                      ...usuarioSeleccionado,
+                      CORREO: e.target.value,
+                    })
+                  }
+                  className="w-full p-3 border rounded-lg bg-gray-50"
+                  disabled
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Nueva Contraseña *</label>
+                <input
+                  type="password"
+                  value={usuarioSeleccionado.PASSWORD || ""}
+                  onChange={(e) =>
+                    setUsuarioSeleccionado({
+                      ...usuarioSeleccionado,
+                      PASSWORD: e.target.value,
+                    })
+                  }
+                  placeholder="Nueva contraseña"
+                  className="w-full p-3 border rounded-lg"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">PIN *</label>
+                <input
+                  value={usuarioSeleccionado.PIN || ""}
+                  onChange={(e) =>
+                    setUsuarioSeleccionado({
+                      ...usuarioSeleccionado,
+                      PIN: e.target.value,
+                    })
+                  }
+                  placeholder="6 dígitos"
+                  maxLength={6}
+                  pattern="\d{6}"
+                  className="w-full p-3 border rounded-lg"
+                  required
+                />
+              </div>
+
+              <div className="flex justify-end space-x-3 pt-4">
+                <button
+                  onClick={() => setModalEditar(false)}
+                  className="px-4 py-2 border rounded-lg hover:bg-gray-100"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={editarUsuario}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                >
+                  Guardar Cambios
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Eliminar */}
+      {modalEliminar && usuarioSeleccionado && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+            <h3 className="text-xl font-bold mb-4">Confirmar Eliminación</h3>
+            <p className="mb-6">
+              ¿Estás seguro de eliminar al usuario{" "}
+              <span className="font-bold">{usuarioSeleccionado.NOMBRE}</span>?
+            </p>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => setModalEliminar(false)}
+                className="px-4 py-2 border rounded-lg hover:bg-gray-100"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={eliminarUsuario}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Asignar Servicios */}
+      {modalAsignarServicios && usuarioSeleccionado && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold">
+                Asignar Servicios a {usuarioSeleccionado.NOMBRE}
+              </h3>
+              <button
+                onClick={() => {
+                  setModalAsignarServicios(false);
+                  setServiciosSeleccionados([]);
+                }}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            <div className="mb-4 flex-1 overflow-hidden">
+              <p className="text-sm text-gray-600 mb-4">
+                Seleccione los subservicios que puede realizar este empleado:
+              </p>
+              
+              {cargandoServicios ? (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500 mx-auto"></div>
+                  <p className="mt-2 text-gray-500">Cargando servicios...</p>
+                </div>
+              ) : serviciosDisponibles.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  <p>⚠️ No hay servicios disponibles para asignar</p>
+                  {errorCarga && <p className="text-sm mt-2">{errorCarga}</p>}
+                  <button
+                    onClick={cargarServiciosDisponibles}
+                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >
+                    Reintentar
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="space-y-3 max-h-[40vh] overflow-y-auto p-2 border rounded-lg">
+                    {serviciosDisponibles.map((servicio, index) => {
+                      const servicioId = obtenerIdServicio(servicio);
+                      const servicioNombre = obtenerNombreServicio(servicio);
+                      const categoria = obtenerCategoriaServicio(servicio);
+                      
+                      if (!servicioId) {
+                        console.warn("Servicio sin ID:", servicio);
+                        return null;
+                      }
+                      
+                      return (
+                        <div 
+                          key={`servicio-${servicioId}-${index}`} 
+                          className="flex items-start p-3 hover:bg-gray-50 rounded border-b last:border-b-0"
+                        >
+                          <input
+                            type="checkbox"
+                            id={`servicio-${servicioId}`}
+                            checked={serviciosSeleccionados.includes(servicioId.toString())}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setServiciosSeleccionados([...serviciosSeleccionados, servicioId.toString()]);
+                              } else {
+                                setServiciosSeleccionados(
+                                  serviciosSeleccionados.filter(id => id !== servicioId.toString())
+                                );
+                              }
+                            }}
+                            className="mr-3 mt-1 h-5 w-5"
+                          />
+                          <label 
+                            htmlFor={`servicio-${servicioId}`} 
+                            className="cursor-pointer flex-1"
+                          >
+                            <div className="font-medium">{servicioNombre}</div>
+                            <div className="text-sm text-gray-600 mt-1">
+                              <span className="font-semibold">Categoría:</span> {categoria}
+                              {servicio.PRECIO !== undefined && (
+                                <span className="ml-3 font-semibold text-green-600">
+                                  ${parseFloat(servicio.PRECIO).toLocaleString()}
+                                </span>
+                              )}
+                            </div>
+                            {servicio.DESCRIPCION && (
+                              <div className="text-xs text-gray-500 mt-1">
+                                {servicio.DESCRIPCION}
+                              </div>
+                            )}
+                            {servicio.DURACION_MINUTOS && (
+                              <div className="text-xs text-gray-500 mt-1">
+                                ⏱️ Duración: {servicio.DURACION_MINUTOS} minutos
+                              </div>
+                            )}
+                          </label>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  
+                  <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                    <div className="flex justify-between items-center">
+                      <div className="text-sm">
+                        <p className="font-semibold">📊 Resumen:</p>
+                        <p>Servicios seleccionados: <span className="font-bold text-purple-600">{serviciosSeleccionados.length}</span></p>
+                        <p>Servicios disponibles: <span className="font-bold">{serviciosDisponibles.length}</span></p>
+                      </div>
+                      <button
+                        onClick={() => setServiciosSeleccionados([])}
+                        className="px-3 py-1 text-sm border border-red-300 text-red-600 rounded hover:bg-red-50"
+                      >
+                        Limpiar selección
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="flex justify-end space-x-3 pt-4 border-t">
+              <button
+                onClick={() => {
+                  setModalAsignarServicios(false);
+                  setServiciosSeleccionados([]);
+                }}
+                className="px-4 py-2 border rounded-lg hover:bg-gray-100"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={asignarServiciosEmpleado}
+                disabled={serviciosSeleccionados.length === 0 || cargandoServicios}
+                className={`px-4 py-2 rounded-lg font-medium ${
+                  serviciosSeleccionados.length === 0 || cargandoServicios
+                    ? 'bg-gray-300 cursor-not-allowed text-gray-500'
+                    : 'bg-purple-500 hover:bg-purple-600 text-white'
+                }`}
+              >
+                {cargandoServicios 
+                  ? 'Cargando...' 
+                  : `✅ Asignar ${serviciosSeleccionados.length} servicio(s)`}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tabla de Usuarios */}
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold">👥 Gestión de Usuarios</h2>
+        <button
+          onClick={() => setModalCrear(true)}
+          className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+        >
+          + Agregar Usuario
+        </button>
+      </div>
+
+      <div className="overflow-x-auto bg-white rounded-lg shadow">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                ID
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Nombre
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Correo
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Rol
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Servicios Asignados
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Estado
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Acciones
+              </th>
             </tr>
           </thead>
-          <tbody className="">
+          <tbody className="bg-white divide-y divide-gray-200">
             {usuarios.length > 0 ? (
-              usuarios.map((u) => (
-                <tr key={u.ID}>
-                  <td className="border border-gray-400 px-4 py-2">{u.ID}</td>
-                  <td className="border border-gray-400 px-4 py-2">
-                    {u.NOMBRE}
+              usuarios.map((usuario) => (
+                <tr key={usuario.ID} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">{usuario.ID}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {usuario.NOMBRE}
                   </td>
-                  <td className="border border-gray-400 px-4 py-2">
-                    {u.CORREO}
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {usuario.CORREO}
                   </td>
-                  <td className="border border-gray-400 px-4 py-2">{u.ROL}</td>
-                  <td className="border border-gray-400 px-4 py-2">
-                    <button
-                      onClick={() => {
-                        setUsuarioSeleccionado(u);
-                        setModalEditar(true);
-                      }}
-                      className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
-                    >
-                      Editar
-                    </button>{" "}
-                    <button
-                      onClick={() => {
-                        setUsuarioSeleccionado(u);
-                        setModalEliminar(true);
-                      }}
-                      className="bg-red-500 text-white px-2 py-1 rounded"
-                    >
-                      Eliminar
-                    </button>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      usuario.ROL === 'administrador' 
+                        ? 'bg-purple-100 text-purple-800' 
+                        : 'bg-blue-100 text-blue-800'
+                    }`}>
+                      {usuario.ROL}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="max-w-xs">
+                      {usuario.SERVICIOS_ASIGNADOS && usuario.SERVICIOS_ASIGNADOS !== 'NULL' ? (
+                        <div className="text-sm text-gray-700">
+                          {usuario.SERVICIOS_ASIGNADOS.split(', ').map((servicio, idx) => (
+                            <span 
+                              key={idx} 
+                              className="inline-block bg-gray-100 text-gray-800 px-2 py-1 rounded mr-1 mb-1 text-xs"
+                            >
+                              {servicio}
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="text-gray-400 text-sm">Sin servicios</span>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      usuario.ESTADO === 'activo' 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-red-100 text-red-800'
+                    }`}>
+                      {usuario.ESTADO}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        onClick={() => {
+                          setUsuarioSeleccionado(usuario);
+                          setModalEditar(true);
+                        }}
+                        className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
+                      >
+                        Editar
+                      </button>
+                      
+                      {usuario.ROL === 'empleado' && (
+                        <button
+                          onClick={() => abrirModalAsignarServicios(usuario)}
+                          className="px-3 py-1 bg-purple-500 text-white rounded hover:bg-purple-600 text-sm"
+                        >
+                          Servicios
+                        </button>
+                      )}
+                      
+                      <button
+                        onClick={() => {
+                          setUsuarioSeleccionado(usuario);
+                          setModalEliminar(true);
+                        }}
+                        className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td>No hay ususarios</td>
+                <td colSpan="7" className="px-6 py-8 text-center text-gray-500">
+                  No hay usuarios registrados
+                </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
-    </>
+
+      {/* Información adicional */}
+      <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+        <h3 className="font-bold text-blue-800 mb-2">💡 Instrucciones:</h3>
+        <ul className="text-sm text-blue-700 space-y-1">
+          <li>• <span className="font-medium">Editar:</span> Cambiar contraseña o PIN del usuario</li>
+          <li>• <span className="font-medium">Servicios:</span> Asignar subservicios a empleados (solo para rol empleado)</li>
+          <li>• <span className="font-medium">Eliminar:</span> Cambia el estado a "inactivo" (no borra físicamente)</li>
+          <li>• Los administradores no necesitan servicios asignados</li>
+          <li>• Para asignar servicios, debe haber subservicios creados primero</li>
+        </ul>
+        
+        {/* Debug info */}
+        <div className="mt-4 p-3 bg-gray-100 rounded-lg">
+          <p className="text-sm font-semibold text-gray-700">🔍 Información de depuración:</p>
+          <p className="text-xs text-gray-600">Usuarios cargados: {usuarios.length}</p>
+          <p className="text-xs text-gray-600">Roles cargados: {roles.length}</p>
+          <p className="text-xs text-gray-600">Servicios disponibles: {serviciosDisponibles.length}</p>
+          <p className="text-xs text-gray-600">API URL: {API}</p>
+          {serviciosDisponibles.length > 0 && (
+            <p className="text-xs text-green-600">✅ Primer servicio: {serviciosDisponibles[0]?.NOMBRE || "Sin nombre"}</p>
+          )}
+        </div>
+      </div>
+    </div>
   );
-};
-export default Index;
+}

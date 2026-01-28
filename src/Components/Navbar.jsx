@@ -45,7 +45,7 @@ const Navbar = () => {
                 className="font-extrabold hover:text-amber-900  transition-colors duration-300"
                 onClick={handleMenuClick}
               >
-                <Link to="/Servicios">Servicios</Link>
+                <Link to="/ServiciosUsuarios">Servicios</Link>
               </li>
 
               <li
@@ -78,25 +78,30 @@ const Navbar = () => {
           }`}
         >
           <li
-            className="font-extrabold hover:text-amber-900  transition-colors duration-300"
-            onClick={handleMenuClick}
-          >
-            <Link to="/">Inico</Link>
-          </li>
-          <li
-            className="font-extrabold hover:text-amber-900  transition-colors duration-300"
-            onClick={handleMenuClick}
-          >
-            <Link to="/Servicios">Servicios</Link>
-          </li>
+                className=" font-extrabold hover:text-amber-900  transition-colors duration-300"
+                onClick={handleMenuClick}
+              >
+                <Link to="/">Inico</Link>
+              </li>
+              <li
+                className="font-extrabold hover:text-amber-900  transition-colors duration-300"
+                onClick={handleMenuClick}
+              >
+                <Link to="/ServiciosUsuarios">Servicios</Link>
+              </li>
 
-          <li
-            className="font-extrabold hover:text-amber-900  transition-colors duration-300"
-            onClick={handleMenuClick}
-          >
-            <Link to="Citas">CITAS</Link>
-            
-          </li>
+              <li
+                className="font-extrabold hover:text-amber-900  transition-colors duration-300"
+                onClick={handleMenuClick}
+              >
+                <Link to="/Citas">Agenda Turno</Link>
+              </li>
+              <li
+                className="font-extrabold hover:text-amber-900  transition-colors duration-300"
+                onClick={handleMenuClick}
+              >
+                <Link to="/Ingreso">Ingreso</Link>
+              </li>
         </ul>
       </nav>
     </>

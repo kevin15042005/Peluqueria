@@ -35,19 +35,16 @@ const NavbarEmpleado = () => {
           {/*Menu Desktop*/}
           <div className="flex justify-center">
             <ul className=" hidden md:flex justify-center space-x-8 ml-auto">
+              <li className="font-extrabold"><Link to = "/Empleado">Asistencia</Link></li>
+              <li className="font-extrabold" onClick={handleMenuClick}><Link to="/MisTurnos">MisTurnos</Link></li>
               <li
-                className=" font-extrabold hover:text-amber-900  transition-colors duration-300"
+                className=" font-extrabold"
                 onClick={handleMenuClick}
               >
-                <Link to="/">Inico</Link>
+                <Link to="/" className="bg-red-600 hover:bg-red-700 px-5 py-2 rounded-md font-bold shadow ">Salir</Link>
               </li>
 
-              <li
-                className="font-extrabold hover:text-amber-900  transition-colors duration-300"
-                onClick={handleMenuClick}
-              >
-                <Link to="/Ingreso">Ingreso</Link>
-              </li>
+          
             </ul>
             {/*Menu de navegacion Movil*/}
           </div>
@@ -69,7 +66,7 @@ const NavbarEmpleado = () => {
             className="font-extrabold hover:text-amber-900  transition-colors duration-300"
             onClick={handleMenuClick}
           >
-            <Link to="/">Inico</Link>
+            <Link to="/">Salir</Link>
           </li>
         </ul>
       </nav>

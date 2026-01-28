@@ -10,18 +10,20 @@ import Layout from "./Components/Layout.jsx";
 //LayoutAdmin
 import LayoutAdmin from "./Components/LayoutAdmin.jsx";
 //Layout Empleado
-import LayouEmpleado from "./Components/LayoutEmpleado.jsx"
+import LayouEmpleado from "./Components/LayoutEmpleado.jsx";
 
 import App from "./Page/App/App.jsx";
 import Citas from "./Page/Citas.jsx";
 import Ingreso from "./Page/Sesion/Ingreso.jsx";
-import TurnosEmpleado from "./Page/Empleado/Misturnos.jsx";
-import Servicios from "./Page/Administrador/Servicios.jsx"
+import TurnosEmpleado from "./Page/Empleado/Asistencia.jsx";
+import Misturnos from "./Page/Empleado/Misturnos.jsx";
 import RutaProtegida from "./Components/RutaProteguida/Index.jsx";
-
+import ServiciosUsuario from "./Page/ServiciosUsuario.jsx";
 //Rutas proteguidas
 import Administrador from "./Page/Administrador/Index.jsx";
 import Asistencia from "./Page/Administrador/Asistenica.jsx";
+import Servicios from "./Page/Administrador/Servicios.jsx";
+import VistaTurno from "./Page/Administrador/VistaTurnos.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -30,11 +32,23 @@ createRoot(document.getElementById("root")).render(
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<App />} />
-            <Route path="/Servicios" element={<Servicios />} />
             <Route path="/Citas" element={<Citas />} />
             <Route path="/Ingreso" element={<Ingreso />} />
+            <Route
+              path="/ServiciosUsuarios"
+              element={<ServiciosUsuario />}
+            ></Route>
           </Route>
           <Route element={<LayoutAdmin />}>
+            <Route
+              path="/VistaTurno"
+              element={
+                <RutaProtegida rolPermitido="administrador">
+                  <VistaTurno />
+                </RutaProtegida>
+              }
+            />
+
             <Route
               path="/Administrador"
               element={
@@ -43,7 +57,7 @@ createRoot(document.getElementById("root")).render(
                 </RutaProtegida>
               }
             />
-                  <Route
+            <Route
               path="/Servicios"
               element={
                 <RutaProtegida rolPermitido="administrador">
@@ -51,6 +65,7 @@ createRoot(document.getElementById("root")).render(
                 </RutaProtegida>
               }
             />
+            <Route path="/Servicios" element={<Servicios />} />
 
             <Route
               path="/Asistencia"
@@ -60,13 +75,9 @@ createRoot(document.getElementById("root")).render(
                 </RutaProtegida>
               }
             />
-
-           
           </Route>
 
-
           <Route element={<LayouEmpleado />}>
-         
             <Route
               path="/Empleado"
               element={
@@ -75,9 +86,18 @@ createRoot(document.getElementById("root")).render(
                 </RutaProtegida>
               }
             />
+
+            <Route
+              path="/MisTurnos"
+              element={
+                <RutaProtegida rolPermitido="empleado">
+                  <Misturnos />
+                </RutaProtegida>
+              }
+            />
           </Route>
         </Routes>
       </BrowserRouter>
     </AuthProvider>
-  </StrictMode>
+  </StrictMode>,
 );
