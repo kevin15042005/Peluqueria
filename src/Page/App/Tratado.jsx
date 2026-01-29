@@ -3,7 +3,7 @@ import Tasa from "../../assets/log/Tasa.webp"
 export default function Tratado() {
   return (
     <>
-      <div>
+      <div  className="bg-white ] p-4 ">
         <div className="flex flex-col py-10 items-center text-center">
           <h2>!Se tratado como la realeza!</h2>
           <h2>Porque Peluqueria</h2>

@@ -4,7 +4,7 @@ import { MailCheck, Instagram } from "lucide-react";
 export default function Footer() {
   return (
     <>
-      <footer className="bg-[#05A6C9] opacity-[0.8] p-7 text-white">
+      <footer className="bg-[#000000] p-7 text-white">
         <div className="max-w-8xl max-auto grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8 text-center  ">
           <div>
             <h3 className="font-bold text-[16px] sm:text-[17px]  ">Contacto</h3>
@@ -51,7 +51,7 @@ export default function Footer() {
           </div>
         </div>
       </footer>
-      <div className="flex flex-col sm:flex-row items-center justify-between  bg-[#01A1C4] opacity-[0.9] p-3 text-white">
+      <div className="flex flex-col sm:flex-row items-center justify-between  bg-[#000000] opacity-[0.8] p-3 text-white">
         <p className="text-[12px] sm:text-[12px] md:text-[17px] ] transition-all  ">
           Powered by We are Datalab © Peluqeuria 2025
         </p>

@@ -7,7 +7,7 @@ export default function Layout() {
     <>
       <div className="flex flex-col min-h-screen">
         <Navbar />
-        <main className="grow pt-20 flex items-center justify-center ">
+        <main className="grow pt-20 ">
           <Outlet />
         </main>
         <Footer />

@@ -383,18 +383,18 @@ export default function SubserviciosAdmin({ servicioCreado }) {
               loading || loadingEdicion || !nombre.trim() || !precio.trim() || !servicioId
                 ? 'bg-gray-400 cursor-not-allowed text-gray-600'
                 : editando
-                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl'
+                ? 'bg-gradient-to-r bg-blue-500 text-white shadow-lg hover:shadow-xl'
                 : 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl'
             }`}
           >
             {loading || loadingEdicion ? (
               <>
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                <div className=" rounded-full h-5 w-5 border-b-2 border-white"></div>
                 <span>{editando ? 'Actualizando...' : 'Creando...'}</span>
               </>
             ) : (
               <>
-                <span className="text-xl">{editando ? '✏️' : '+'}</span>
+                <span className="text-xl">{editando ? '' : '+'}</span>
                 <span>{editando ? 'Actualizar Subservicio' : 'Crear Subservicio'}</span>
               </>
             )}

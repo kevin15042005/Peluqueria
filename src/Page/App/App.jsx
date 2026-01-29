@@ -11,12 +11,13 @@ export default function App() {
         <section>
           <Informacion1 />
         </section>
-        <section className="bg-amber-900 opacity-[0.8] p-4 ">
+        <section className="bg-yellow-400 opacity-[0.8] p-4 ">
           <Informativa2 />
+        </section>
+        <section className="bg-gray-800 opacity-[0.8] p-4 ">
           <Tratado />
         </section>
         <section className="bg-[#F7F6ED]">
-          <Citas />
           <Horario />
         </section>
       </div>

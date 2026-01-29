@@ -23,39 +23,39 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className={`font-sans p-9 bg-[#01A1C4] flex items-center justify-between fixed w-full top-0 z-50 transition-all duration-300 ${
-          isScrolled ? "bg-[#01A1C4] opacity-[0.9] " : "bg-[#0083a0] "
+        className={`font-sans text-white p-9 bg-[#000000] flex items-center justify-between fixed w-full top-0 z-50 transition-all duration-300 ${
+          isScrolled ? "bg-yellow-300  shadow-xl/70 drop-shadow-gray-200 " : "bg-[#000000] "
         }`}
       >
         <div className="flex items-center justify-around w-full pr-7">
           <div>
-            <img src="https://thewebmax.org/spa/images/logo.png" alt="Logo" />
+            <img src="https://thewebmax.org/spa/images/logo.png" alt="Logo"  />
           </div>
 
           {/*Menu Desktop*/}
           <div className="flex justify-center">
             <ul className=" hidden md:flex justify-center space-x-8 ml-auto">
               <li
-                className=" font-extrabold hover:text-amber-900  transition-colors duration-300"
+                className={` font-extrabold ${isScrolled?"text-black transition-colors duration-300":"text-yellow-400"} `}
                 onClick={handleMenuClick}
               >
-                <Link to="/">Inico</Link>
+                <Link to="/">Inicio</Link>
               </li>
               <li
-                className="font-extrabold hover:text-amber-900  transition-colors duration-300"
+                className={` font-extrabold ${isScrolled?"text-black transition-colors duration-300":"text-yellow-400"} `}
                 onClick={handleMenuClick}
               >
                 <Link to="/ServiciosUsuarios">Servicios</Link>
               </li>
 
               <li
-                className="font-extrabold hover:text-amber-900  transition-colors duration-300"
+                className={` font-extrabold ${isScrolled?"text-black transition-colors duration-300":"text-yellow-400"} `}
                 onClick={handleMenuClick}
               >
                 <Link to="/Citas">Agenda Turno</Link>
               </li>
               <li
-                className="font-extrabold hover:text-amber-900  transition-colors duration-300"
+                className={` font-extrabold ${isScrolled?"text-black transition-colors duration-300":"text-yellow-400"} `}
                 onClick={handleMenuClick}
               >
                 <Link to="/Ingreso">Ingreso</Link>
@@ -71,33 +71,33 @@ const Navbar = () => {
           </button>
         </div>
         <ul
-          className={`flex flex-col items-center bg-green-500 w-full absolute top-full left-0 md:hidden transition-all duration-300 gap-y-${
+          className={`flex flex-col items-center bg-amber-300  w-full absolute top-full left-0 md:hidden transition-all duration-300 gap-y-${
             isMenuOpen
-              ? "max-h-screen opacity-100"
+              ? "max-h-screen opacity-100 bg-black"
               : "max-h-0 opacity-0 overflow-hidden"
           }`}
         >
           <li
-                className=" font-extrabold hover:text-amber-900  transition-colors duration-300"
+                className=" font-extrabold text-yellow-400  transition-colors duration-300"
                 onClick={handleMenuClick}
               >
                 <Link to="/">Inico</Link>
               </li>
               <li
-                className="font-extrabold hover:text-amber-900  transition-colors duration-300"
+                className=" font-extrabold text-yellow-400  transition-colors duration-300"
                 onClick={handleMenuClick}
               >
                 <Link to="/ServiciosUsuarios">Servicios</Link>
               </li>
 
               <li
-                className="font-extrabold hover:text-amber-900  transition-colors duration-300"
+                className=" font-extrabold text-yellow-400  transition-colors duration-300"
                 onClick={handleMenuClick}
               >
                 <Link to="/Citas">Agenda Turno</Link>
               </li>
               <li
-                className="font-extrabold hover:text-amber-900  transition-colors duration-300"
+                className=" font-extrabold text-yellow-400  transition-colors duration-300"
                 onClick={handleMenuClick}
               >
                 <Link to="/Ingreso">Ingreso</Link>

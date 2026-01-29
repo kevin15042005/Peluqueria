@@ -809,29 +809,7 @@ export default function UsuariosAdmin() {
         </table>
       </div>
 
-      {/* Información adicional */}
-      <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-        <h3 className="font-bold text-blue-800 mb-2">💡 Instrucciones:</h3>
-        <ul className="text-sm text-blue-700 space-y-1">
-          <li>• <span className="font-medium">Editar:</span> Cambiar contraseña o PIN del usuario</li>
-          <li>• <span className="font-medium">Servicios:</span> Asignar subservicios a empleados (solo para rol empleado)</li>
-          <li>• <span className="font-medium">Eliminar:</span> Cambia el estado a "inactivo" (no borra físicamente)</li>
-          <li>• Los administradores no necesitan servicios asignados</li>
-          <li>• Para asignar servicios, debe haber subservicios creados primero</li>
-        </ul>
-        
-        {/* Debug info */}
-        <div className="mt-4 p-3 bg-gray-100 rounded-lg">
-          <p className="text-sm font-semibold text-gray-700">🔍 Información de depuración:</p>
-          <p className="text-xs text-gray-600">Usuarios cargados: {usuarios.length}</p>
-          <p className="text-xs text-gray-600">Roles cargados: {roles.length}</p>
-          <p className="text-xs text-gray-600">Servicios disponibles: {serviciosDisponibles.length}</p>
-          <p className="text-xs text-gray-600">API URL: {API}</p>
-          {serviciosDisponibles.length > 0 && (
-            <p className="text-xs text-green-600">✅ Primer servicio: {serviciosDisponibles[0]?.NOMBRE || "Sin nombre"}</p>
-          )}
-        </div>
-      </div>
+    
     </div>
   );
 }
