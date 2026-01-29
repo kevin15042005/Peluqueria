@@ -11,6 +11,11 @@ export default function SubserviciosAdmin({ servicioCreado }) {
   const [mensaje, setMensaje] = useState("");
   const [loading, setLoading] = useState(false);
   const [subservicioCreado, setSubservicioCreado] = useState(false);
+  
+  // Estados para edición
+  const [editando, setEditando] = useState(false);
+  const [subservicioEditando, setSubservicioEditando] = useState(null);
+  const [loadingEdicion, setLoadingEdicion] = useState(false);
 
   const API = import.meta.env.VITE_API_URL;
 
@@ -47,6 +52,31 @@ export default function SubserviciosAdmin({ servicioCreado }) {
     cargarServicios();
     cargarSubservicios();
   }, [servicioCreado, subservicioCreado]);
+
+  // Iniciar modo edición
+  const iniciarEdicion = (subservicio) => {
+    setEditando(true);
+    setSubservicioEditando(subservicio);
+    setServicioId(subservicio.SERVICIO_ID || subservicio.servicioId || "");
+    setNombre(subservicio.NOMBRE || subservicio.nombre || "");
+    setPrecio(subservicio.PRECIO || subservicio.precio || "");
+    setDescripcion(subservicio.DESCRIPCION || subservicio.descripcion || "");
+    setDuracion(subservicio.DURACION_MINUTOS || subservicio.duracionMinutos || "60");
+    
+    // Desplazar al formulario
+    document.querySelector('form')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Cancelar edición
+  const cancelarEdicion = () => {
+    setEditando(false);
+    setSubservicioEditando(null);
+    setServicioId("");
+    setNombre("");
+    setPrecio("");
+    setDescripcion("");
+    setDuracion("60");
+  };
 
   // Crear nuevo subservicio
   const crearSubservicio = async () => {
@@ -86,10 +116,7 @@ export default function SubserviciosAdmin({ servicioCreado }) {
       if (data.success) {
         setMensaje("✅ Subservicio creado correctamente");
         // Limpiar formulario
-        setNombre("");
-        setPrecio("");
-        setDescripcion("");
-        setDuracion("60");
+        cancelarEdicion();
         
         // Actualizar lista automáticamente
         setSubservicioCreado(prev => !prev);
@@ -109,6 +136,66 @@ export default function SubserviciosAdmin({ servicioCreado }) {
     }
   };
 
+  // Actualizar subservicio existente
+  const actualizarSubservicio = async () => {
+    if (!subservicioEditando) return;
+    
+    if (!nombre.trim() || !precio.trim() || !servicioId) {
+      setMensaje("❌ Todos los campos son obligatorios");
+      return;
+    }
+
+    if (isNaN(parseFloat(precio)) || parseFloat(precio) <= 0) {
+      setMensaje("❌ El precio debe ser un número positivo");
+      return;
+    }
+
+    if (duracion && (isNaN(parseInt(duracion)) || parseInt(duracion) < 15)) {
+      setMensaje("❌ La duración debe ser al menos 15 minutos");
+      return;
+    }
+
+    setLoadingEdicion(true);
+    setMensaje("");
+
+    try {
+      const res = await fetch(`${API}/subservicio/actualizar_subservicio/${subservicioEditando.ID}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          servicioId: parseInt(servicioId),
+          nombre: nombre.trim(),
+          precio: parseFloat(precio),
+          descripcion: descripcion.trim(),
+          duracionMinutos: parseInt(duracion) || 60,
+        }),
+      });
+
+      const data = await res.json();
+      
+      if (data.success) {
+        setMensaje("✅ Subservicio actualizado correctamente");
+        // Limpiar formulario y salir del modo edición
+        cancelarEdicion();
+        
+        // Actualizar lista automáticamente
+        setSubservicioCreado(prev => !prev);
+        
+        // Limpiar mensaje después de 3 segundos
+        setTimeout(() => {
+          setMensaje("");
+        }, 3000);
+      } else {
+        setMensaje(`❌ ${data.message || "Error al actualizar subservicio"}`);
+      }
+    } catch (error) {
+      console.error("Error al actualizar subservicio:", error);
+      setMensaje("❌ Error de conexión con el servidor");
+    } finally {
+      setLoadingEdicion(false);
+    }
+  };
+
   // Eliminar subservicio
   const eliminarSubservicio = async (subservicioId) => {
     if (!confirm("¿Estás seguro de eliminar este subservicio? Esta acción no se puede deshacer.")) {
@@ -116,7 +203,6 @@ export default function SubserviciosAdmin({ servicioCreado }) {
     }
 
     try {
-      // Si tienes un endpoint para eliminar subservicios:
       const res = await fetch(`${API}/subservicio/eliminar/${subservicioId}`, {
         method: "DELETE",
       });
@@ -125,6 +211,10 @@ export default function SubserviciosAdmin({ servicioCreado }) {
       
       if (data.success) {
         setMensaje("✅ Subservicio eliminado correctamente");
+        // Si estamos editando este subservicio, cancelar edición
+        if (subservicioEditando && subservicioEditando.ID === subservicioId) {
+          cancelarEdicion();
+        }
         // Actualizar lista
         setSubservicioCreado(prev => !prev);
         
@@ -150,6 +240,7 @@ export default function SubserviciosAdmin({ servicioCreado }) {
   const recargarDatos = () => {
     cargarServicios();
     cargarSubservicios();
+    cancelarEdicion();
     setMensaje("🔄 Datos actualizados");
     
     setTimeout(() => {
@@ -187,7 +278,19 @@ export default function SubserviciosAdmin({ servicioCreado }) {
 
       {/* Formulario */}
       <div className="mb-8 bg-gray-50 rounded-xl p-6 border border-gray-200">
-        <h3 className="text-lg font-bold mb-4 text-gray-800">➕ Crear Nuevo Subservicio</h3>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-bold text-gray-800">
+            {editando ? `✏️ Editando: ${subservicioEditando?.NOMBRE}` : '➕ Crear Nuevo Subservicio'}
+          </h3>
+          {editando && (
+            <button
+              onClick={cancelarEdicion}
+              className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-200 rounded-lg transition-colors"
+            >
+              Cancelar edición
+            </button>
+          )}
+        </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
           <div>
@@ -219,7 +322,9 @@ export default function SubserviciosAdmin({ servicioCreado }) {
               onChange={(e) => setNombre(e.target.value)}
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               onKeyPress={(e) => {
-                if (e.key === 'Enter') crearSubservicio();
+                if (e.key === 'Enter') {
+                  editando ? actualizarSubservicio() : crearSubservicio();
+                }
               }}
             />
           </div>
@@ -270,27 +375,40 @@ export default function SubserviciosAdmin({ servicioCreado }) {
           />
         </div>
 
-        <button
-          onClick={crearSubservicio}
-          disabled={loading || !nombre.trim() || !precio.trim() || !servicioId}
-          className={`px-8 py-3 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2 ${
-            loading || !nombre.trim() || !precio.trim() || !servicioId
-              ? 'bg-gray-400 cursor-not-allowed text-gray-600'
-              : 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl'
-          }`}
-        >
-          {loading ? (
-            <>
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-              <span>Creando...</span>
-            </>
-          ) : (
-            <>
-              <span className="text-xl">+</span>
-              <span>Crear Subservicio</span>
-            </>
+        <div className="flex space-x-4">
+          <button
+            onClick={editando ? actualizarSubservicio : crearSubservicio}
+            disabled={loading || loadingEdicion || !nombre.trim() || !precio.trim() || !servicioId}
+            className={`px-8 py-3 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2 ${
+              loading || loadingEdicion || !nombre.trim() || !precio.trim() || !servicioId
+                ? 'bg-gray-400 cursor-not-allowed text-gray-600'
+                : editando
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl'
+                : 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl'
+            }`}
+          >
+            {loading || loadingEdicion ? (
+              <>
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                <span>{editando ? 'Actualizando...' : 'Creando...'}</span>
+              </>
+            ) : (
+              <>
+                <span className="text-xl">{editando ? '✏️' : '+'}</span>
+                <span>{editando ? 'Actualizar Subservicio' : 'Crear Subservicio'}</span>
+              </>
+            )}
+          </button>
+
+          {editando && (
+            <button
+              onClick={cancelarEdicion}
+              className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors"
+            >
+              Cancelar
+            </button>
           )}
-        </button>
+        </div>
       </div>
 
       {/* Lista de Subservicios */}
@@ -340,7 +458,12 @@ export default function SubserviciosAdmin({ servicioCreado }) {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {subservicios.map((ss) => (
-                  <tr key={ss.ID} className="hover:bg-gray-50 transition-colors group">
+                  <tr 
+                    key={ss.ID} 
+                    className={`hover:bg-gray-50 transition-colors group ${
+                      editando && subservicioEditando?.ID === ss.ID ? 'bg-blue-50' : ''
+                    }`}
+                  >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="text-sm font-medium text-gray-900">#{ss.ID}</span>
                     </td>
@@ -374,13 +497,24 @@ export default function SubserviciosAdmin({ servicioCreado }) {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={() => eliminarSubservicio(ss.ID)}
-                        className="px-3 py-1 bg-red-50 text-red-600 hover:bg-red-100 rounded text-sm transition-colors"
-                        title="Eliminar subservicio"
-                      >
-                        Eliminar
-                      </button>
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => iniciarEdicion(ss)}
+                          className="px-3 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded text-sm transition-colors flex items-center space-x-1"
+                          title="Editar subservicio"
+                        >
+                          <span>✏️</span>
+                          <span>Editar</span>
+                        </button>
+                        <button
+                          onClick={() => eliminarSubservicio(ss.ID)}
+                          className="px-3 py-1 bg-red-50 text-red-600 hover:bg-red-100 rounded text-sm transition-colors flex items-center space-x-1"
+                          title="Eliminar subservicio"
+                        >
+                          <span>🗑️</span>
+                          <span>Eliminar</span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

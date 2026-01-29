@@ -110,6 +110,68 @@ router.post("/registrar_subservicio", async (req, res) => {
   }
 });
 
+
+
+//ACTUALIZAR SUBSERVICIO
+
+router.put("/actualizar_subservicio/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { servicioId, nombre, precio, descripcion, duracionMinutos } = req.body;
+
+    // VALIDACIONES
+    if (!id || isNaN(parseInt(id))) {
+      return res.status(400).json({ success: false, message: "ID inválido" });
+    }
+
+    if (!servicioId || isNaN(parseInt(servicioId))) {
+      return res.status(400).json({ success: false, message: "Servicio inválido" });
+    }
+
+    if (!nombre || nombre.trim().length < 3) {
+      return res.status(400).json({ success: false, message: "Nombre inválido" });
+    }
+
+    if (!precio || isNaN(parseFloat(precio)) || parseFloat(precio) <= 0) {
+      return res.status(400).json({ success: false, message: "Precio inválido" });
+    }
+
+    const duracion = parseInt(duracionMinutos);
+    if (!duracion || duracion < 15 || duracion > 300) {
+      return res.status(400).json({
+        success: false,
+        message: "Duración debe estar entre 15 y 300 minutos",
+      });
+    }
+
+    const db = await conectDb();
+
+    await db.execute("CALL ACTUALIZAR_SUBSERVICIO(?,?,?,?,?,?)", [
+      parseInt(id),
+      parseInt(servicioId),
+      nombre.trim(),
+      parseFloat(precio),
+      descripcion ? descripcion.trim() : null,
+      duracion,
+    ]);
+
+    res.json({
+      success: true,
+      message: "Subservicio actualizado correctamente",
+    });
+
+  } catch (error) {
+    console.error("❌ Error:", error.message);
+
+    res.status(500).json({
+      success: false,
+      message: error.message || "Error al actualizar subservicio",
+    });
+  }
+});
+
+
+
 // ========== OBTENER SUBSERVICIOS PARA CLIENTES ==========
 router.get("/obtener_subservicios_cliente", async (req, res) => {
   try {
@@ -225,28 +287,6 @@ router.get("/duracion/:id", async (req, res) => {
   }
 });
 
-// ========== RUTA DE PRUEBA ==========
-router.get("/test", async (req, res) => {
-  try {
-    const db = await conectDb();
-    
-    // Probar conexión con consulta simple
-    const [result] = await db.execute("SELECT 1 + 1 as test");
-    
-    res.json({ 
-      success: true, 
-      message: "Backend de subservicios funcionando",
-      test: result[0].test,
-      timestamp: new Date().toISOString()
-    });
-    
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message,
-      message: "Error en test de conexión"
-    });
-  }
-});
+
 
 export default router;
