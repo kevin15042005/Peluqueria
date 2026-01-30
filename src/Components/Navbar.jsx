@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import Logo from "./../assets/log/logo.png"
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -23,39 +24,39 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className={`font-sans text-white p-9 bg-[#000000] flex items-center justify-between fixed w-full top-0 z-50 transition-all duration-300 ${
-          isScrolled ? "bg-yellow-300  shadow-xl/70 drop-shadow-gray-200 " : "bg-[#000000] "
+        className={`font-sans text-white p-4 bg-[#000000] flex items-center justify-between fixed w-full top-0 z-50 transition-all duration-300 ${
+          isScrolled ? "bg-black   shadow-xl/70 shadow-amber-400 " : "bg-[#000000] "
         }`}
       >
         <div className="flex items-center justify-around w-full pr-7">
-          <div>
-            <img src="https://thewebmax.org/spa/images/logo.png" alt="Logo"  />
+          <div >
+            <img src={Logo} alt="Logo" className={`${isScrolled?" roun": "border-2 border-amber-50 rounded-2xl"} `} />
           </div>
 
           {/*Menu Desktop*/}
           <div className="flex justify-center">
             <ul className=" hidden md:flex justify-center space-x-8 ml-auto">
               <li
-                className={` font-extrabold ${isScrolled?"text-black transition-colors duration-300":"text-yellow-400"} `}
+                className={` font-extrabold ${isScrolled?"text-yellow-400 transition-colors duration-300":"text-yellow-400"} `}
                 onClick={handleMenuClick}
               >
                 <Link to="/">Inicio</Link>
               </li>
               <li
-                className={` font-extrabold ${isScrolled?"text-black transition-colors duration-300":"text-yellow-400"} `}
+                className={` font-extrabold ${isScrolled?"text-yellow-400 transition-colors duration-300":"text-yellow-400"} `}
                 onClick={handleMenuClick}
               >
                 <Link to="/ServiciosUsuarios">Servicios</Link>
               </li>
 
               <li
-                className={` font-extrabold ${isScrolled?"text-black transition-colors duration-300":"text-yellow-400"} `}
+                className={` font-extrabold ${isScrolled?"text-yellow-400 transition-colors duration-300":"text-yellow-400"} `}
                 onClick={handleMenuClick}
               >
                 <Link to="/Citas">Agenda Turno</Link>
               </li>
               <li
-                className={` font-extrabold ${isScrolled?"text-black transition-colors duration-300":"text-yellow-400"} `}
+                className={` font-extrabold ${isScrolled?"text-yellow-400 transition-colors duration-300":"text-yellow-400"} `}
                 onClick={handleMenuClick}
               >
                 <Link to="/Ingreso">Ingreso</Link>

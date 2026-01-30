@@ -24,9 +24,8 @@ export default function Citas() {
 
   const API = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
-  /* ===============================
-     CARGAR CATEGORÍAS Y SUBSERVICIOS
-  ================================ */
+  //CARGAR CATEGORÍAS Y SUBSERVICIOS
+
   useEffect(() => {
     const cargarTodo = async () => {
       try {
@@ -105,9 +104,8 @@ export default function Citas() {
     cargarTodo();
   }, []);
 
-  /* ===============================
-     ACTUALIZAR SUBSERVICIOS AL CAMBIAR CATEGORÍA
-  ================================ */
+  // ACTUALIZAR SUBSERVICIOS AL CAMBIAR CATEGORÍA
+  
   useEffect(() => {
     if (servicioSeleccionado && servicios[servicioSeleccionado]) {
       const subs = servicios[servicioSeleccionado];
@@ -132,9 +130,8 @@ export default function Citas() {
     }
   }, [servicioSeleccionado, servicios]);
 
-  /* ===============================
-     ACTUALIZAR DURACIÓN AL SELECCIONAR SUBSERVICIO
-  ================================ */
+//ACTUALIZAR DURACIÓN AL SELECCIONAR SUBSERVICIO
+ 
   useEffect(() => {
     if (subservicioSeleccionado) {
       const subservicioInfo = obtenerSubservicioInfo(subservicioSeleccionado);
@@ -146,9 +143,7 @@ export default function Citas() {
     }
   }, [subservicioSeleccionado]);
 
-  /* ===============================
-     CARGAR HORARIOS DISPONIBLES (CORREGIDO)
-  ================================ */
+  //Cargar hoarios disponibles
   const cargarHorariosDisponibles = async () => {
     if (!subservicioSeleccionado || !fecha) {
       setMensaje("Por favor selecciona un servicio y una fecha primero");
@@ -254,9 +249,7 @@ export default function Citas() {
     }
   };
 
-  /* ===============================
-     GENERAR HORARIOS DE PRUEBA (PARA DESARROLLO)
-  ================================ */
+  //Generar horarios
   const generarHorariosDePrueba = () => {
     const horarios = [];
     const horaInicio = 9; // 9:00 AM
@@ -272,9 +265,7 @@ export default function Citas() {
     return horarios;
   };
 
-  /* ===============================
-     CARGAR HORARIOS OCUPADOS DEL EMPLEADO
-  ================================ */
+  //Calcular horarios ocupado por el empelado 
   const cargarHorariosOcupados = async (empleadoId, fechaSeleccionada, todosHorarios) => {
     try {
       console.log(`📅 Buscando horarios ocupados para empleado ${empleadoId} en ${fechaSeleccionada}`);
@@ -305,9 +296,7 @@ export default function Citas() {
     }
   };
 
-  /* ===============================
-     CALCULAR BLOQUES A BLOQUEAR
-  ================================ */
+  //Calcular bloques a bloquear
   const calcularBloquesABloquear = (horasOcupadas, todosHorarios) => {
     const bloquesABloquear = new Set();
     
@@ -332,9 +321,7 @@ export default function Citas() {
     return Array.from(bloquesABloquear);
   };
 
-  /* ===============================
-     VERIFICAR SI UN HORARIO ESTÁ OCUPADO
-  ================================ */
+  //Verificar horario
   const estaHorarioOcupado = (horario) => {
     const horaStr = formatearHoraParaComparar(horario.HORA || horario);
     return horariosOcupados.some(horaOcupada => 
@@ -342,9 +329,7 @@ export default function Citas() {
     );
   };
 
-  /* ===============================
-     FORMATEAR HORA
-  ================================ */
+  //Formatear Hora
   const formatearHoraParaComparar = (horaStr) => {
     if (!horaStr) return "";
     if (horaStr.length === 4) return `0${horaStr}`.substring(0, 5);
@@ -355,9 +340,7 @@ export default function Citas() {
     return formatearHoraParaComparar(horaStr);
   };
 
-  /* ===============================
-     CALCULAR HORA FIN
-  ================================ */
+  //Calcular hora fin
   const calcularHoraFin = (horaInicio) => {
     if (!horaInicio || !duracionServicio) return "";
     
@@ -369,9 +352,7 @@ export default function Citas() {
     return `${finHoras.toString().padStart(2, '0')}:${finMinutos.toString().padStart(2, '0')}`;
   };
 
-  /* ===============================
-     REGISTRAR TURNO
-  ================================ */
+  //Registrar turno
   const registrarTurno = async () => {
     if (!subservicioSeleccionado || !fecha || !hora || !clienteNombre || !clienteTelefono) {
       setMensaje("Por favor completa todos los campos obligatorios");
@@ -445,9 +426,7 @@ export default function Citas() {
     }
   };
 
-  /* ===============================
-     OBTENER INFORMACIÓN DEL SUBSERVICIO
-  ================================ */
+  //Obtener Subservicio
   const obtenerSubservicioInfo = (id) => {
     if (!id) return null;
     
@@ -462,13 +441,11 @@ export default function Citas() {
     return null;
   };
 
-  /* ===============================
-     COMPONENTE VISUAL
-  ================================ */
+
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white rounded-xl shadow-lg mt-8">
-      <h2 className="text-2xl font-bold mb-6 text-center text-blue-600">
-        📅 Agendar Cita
+    <div className=" max-w-86 md:max-w-lg  mx-auto  p-6 bg-white rounded-xl shadow-lg my-16 ">
+      <h2 className="text-2xl font-bold mb-6 text-center text-amber-400">
+        Agendar Cita
       </h2>
 
       {/* FECHA */}
@@ -694,7 +671,7 @@ export default function Citas() {
       >
         {loading ? (
           <span className="flex items-center justify-center">
-            <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <svg className="animate-spin h-2 w- mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
