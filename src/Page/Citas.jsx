@@ -443,14 +443,14 @@ export default function Citas() {
 
 
   return (
-    <div className=" max-w-86 md:max-w-lg  mx-auto  p-6 bg-white rounded-xl shadow-lg my-16 ">
-      <h2 className="text-2xl font-bold mb-6 text-center text-amber-400">
+    <div className=" max-w-86 md:max-w-lg  mx-auto  p-6 bg-black rounded-xl shadow-lg my-16 ">
+      <h2 className="text-2xl font-bold mb-6 text-center text-white">
         Agendar Cita
       </h2>
 
       {/* FECHA */}
       <div className="mb-4">
-        <label className="block font-semibold mb-2 text-gray-700">
+        <label className="block font-semibold mb-2 text-amber-400">
           📅 Fecha *
         </label>
         <input
@@ -458,23 +458,23 @@ export default function Citas() {
           value={fecha}
           min={new Date().toISOString().split('T')[0]}
           onChange={(e) => setFecha(e.target.value)}
-          className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
+          className="w-full border text-amber-400 border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
           required
         />
-        <p className="text-xs text-gray-500 mt-1">
+        <p className="text-xs text-amber-400 mt-1">
           Selecciona una fecha para ver horarios disponibles
         </p>
       </div>
 
       {/* CATEGORÍA DE SERVICIO */}
       <div className="mb-4">
-        <label className="block font-semibold mb-2 text-gray-700">
-          💇 Categoría de Servicio
+        <label className="block font-semibold mb-2 text-amber-400">
+           Categoría de Servicio
         </label>
         <select
           value={servicioSeleccionado}
           onChange={(e) => setServicioSeleccionado(e.target.value)}
-          className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
+          className="w-full border text-amber-400 border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
           disabled={cargandoServicios || categorias.length === 0}
         >
           <option value="">
@@ -485,13 +485,13 @@ export default function Citas() {
                 : "Selecciona una categoría"}
           </option>
           {categorias.map((categoria) => (
-            <option key={categoria} value={categoria}>
+            <option  className="bg-black text-amber-400" key={categoria} value={categoria}>
               {categoria}
             </option>
           ))}
         </select>
         {categorias.length > 0 && (
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-amber-400 mt-1">
             {categorias.length} categoría(s) disponible(s)
           </p>
         )}
@@ -499,16 +499,16 @@ export default function Citas() {
 
       {/* SERVICIO ESPECÍFICO */}
       <div className="mb-4">
-        <label className="block font-semibold mb-2 text-gray-700">
-          ✨ Servicio Específico *
+        <label className=" block font-semibold mb-2 text-amber-400">
+           Servicio Específico *
         </label>
         <select
           value={subservicioSeleccionado}
           onChange={(e) => setSubservicioSeleccionado(e.target.value)}
-          className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
+          className="w-full border border-gray-300 p-3   text-amber-400 rounded-lg focus:ring-2 focus:ring-blue-500"
           disabled={!servicioSeleccionado || subservicios.length === 0}
         >
-          <option value="">
+          <option value="" >
             {!servicioSeleccionado 
               ? "Primero selecciona una categoría" 
               : subservicios.length === 0 
@@ -522,7 +522,7 @@ export default function Citas() {
             const itemDuracion = s.DURACION_MINUTOS || s.duracionMinutos || s.duracion || 60;
             
             return (
-              <option 
+              <option  className="bg-black"
                 key={`${itemId}-${index}`} 
                 value={itemId}
               >
@@ -533,7 +533,7 @@ export default function Citas() {
         </select>
         
         {subservicios.length > 0 && (
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs  text-amber-400  mt-1">
             {subservicios.length} servicio(s) disponible(s)
           </p>
         )}
@@ -626,10 +626,10 @@ export default function Citas() {
 
       {/* DATOS DEL CLIENTE */}
       <div className="mb-6">
-        <h3 className="font-semibold mb-3 text-gray-700">👤 Tus datos</h3>
+        <h3 className="font-semibold mb-3 text-amber-400"> Tus datos</h3>
         
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-600 mb-1">
+          <label className="block text-sm font-medium text-amber-400 mb-1">
             Nombre Completo *
           </label>
           <input
@@ -637,13 +637,13 @@ export default function Citas() {
             value={clienteNombre}
             onChange={(e) => setClienteNombre(e.target.value)}
             placeholder="Ej: Juan Pérez"
-            className="w-full border border-gray-300 p-3 rounded-lg"
+            className="w-full border text-amber-400 border-gray-300 p-3 rounded-lg"
             required
           />
         </div>
         
         <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">
+          <label className="block text-sm font-medium text-amber-400 mb-1">
             Teléfono *
           </label>
           <input
@@ -651,7 +651,7 @@ export default function Citas() {
             value={clienteTelefono}
             onChange={(e) => setClienteTelefono(e.target.value)}
             placeholder="Ej: 3001234567"
-            className="w-full border border-gray-300 p-3 rounded-lg"
+            className="w-full border border-gray-300 p-3 rounded-lg text-amber-400"
             required
           />
         </div>
@@ -678,7 +678,7 @@ export default function Citas() {
             Agendando...
           </span>
         ) : (
-          '✅ Confirmar Cita'
+          ' Confirmar Cita'
         )}
       </button>
 

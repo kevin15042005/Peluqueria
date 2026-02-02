@@ -53,7 +53,7 @@ export default function Footer() {
       </footer>
       <div className="flex flex-col sm:flex-row items-center justify-between  bg-[#222222] opacity-[0.9] p-3 text-white">
         <p className="text-[12px] sm:text-[12px] md:text-[17px] ] transition-all  ">
-          Powered by We are Datalab © Peluqeuria 2025
+          Powered by We are Datalab © Peluqeuria 2026
         </p>
         <div className="flex items-center gap-4 my-2 text-[13px] sm:text-[15px] px-5 ">
           <MailCheck />

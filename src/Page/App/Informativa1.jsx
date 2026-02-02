@@ -28,7 +28,7 @@ export default function Informacion1() {
           <div>
             <VideoPlayer />
           </div>
-          <div className="bg-[#222222]  rounded-2xl font-serif flex flex-col justify-center items-center text-center p-1 md:mb-3 sm:p-8  min-h-full">
+          <div className="bg-[#222222]  rounded-2xl font-serif flex flex-col justify-center items-center text-center p-1 md:mb-3 sm:p-8  min-h-ful shadow-xl/60 shadow-amber-300">
             <div className="flex  flex-col justify-center p-10 max-w-full ">
               <h2 className="text-1 md:text-[20px] sm:text-[10px]font-bold mb-2 text-white text-center flex flex-col justify-center">
                 CAMBIA TU ESTILO CON CONFIANZA

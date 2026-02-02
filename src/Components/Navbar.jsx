@@ -72,7 +72,7 @@ const Navbar = () => {
           </button>
         </div>
         <ul
-          className={`flex flex-col items-center bg-amber-300  w-full absolute top-full left-0 md:hidden transition-all duration-300 gap-y-${
+          className={`flex flex-col items-center  border-y-[0.8px]  bg-amber-300  w-full absolute top-full left-0 md:hidden transition-all duration-300 gap-y-${
             isMenuOpen
               ? "max-h-screen opacity-100 bg-black"
               : "max-h-0 opacity-0 overflow-hidden"
