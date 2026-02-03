@@ -1,10 +1,10 @@
 // Page/Administrador/MonitorTurnos.jsx
 import React, { useState, useEffect } from "react";
-import { 
-  RefreshCw, 
-  CheckCircle, 
-  Clock, 
-  User, 
+import {
+  RefreshCw,
+  CheckCircle,
+  Clock,
+  User,
   AlertCircle,
   Calendar,
   Scissors,
@@ -12,7 +12,7 @@ import {
   History,
   CheckSquare,
   PlayCircle,
-  Timer
+  Timer,
 } from "lucide-react";
 
 export default function MonitorTurnos() {
@@ -31,7 +31,7 @@ export default function MonitorTurnos() {
     try {
       const res = await fetch(`${API}/turnos/activos-hoy`);
       const data = await res.json();
-      
+
       if (data.success) {
         // Ordenar turnos por hora de inicio
         const turnosOrdenados = data.turnos.sort((a, b) => {
@@ -52,13 +52,15 @@ export default function MonitorTurnos() {
   const cargarHistorialTurnos = async () => {
     setLoadingHistorial(true);
     try {
-      const hoy = new Date().toISOString().split('T')[0];
+      const hoy = new Date().toISOString().split("T")[0];
       const res = await fetch(`${API}/turnos/turnos-por-fecha/${hoy}`);
       const data = await res.json();
-      
+
       if (data.success) {
         // Filtrar solo los completados
-        const completados = data.turnos.filter(t => t.ESTADO === 'completado');
+        const completados = data.turnos.filter(
+          (t) => t.ESTADO === "completado",
+        );
         setHistorialTurnos(completados);
       }
     } catch (error) {
@@ -72,7 +74,7 @@ export default function MonitorTurnos() {
   useEffect(() => {
     cargarTurnosActivos();
     cargarHistorialTurnos();
-    
+
     const intervalo = setInterval(() => {
       cargarTurnosActivos();
       if (mostrarHistorial) {
@@ -90,11 +92,11 @@ export default function MonitorTurnos() {
       const resFin = await fetch(`${API}/turnos/finalizar-turno`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ turnoId })
+        body: JSON.stringify({ turnoId }),
       });
 
       const dataFin = await resFin.json();
-      
+
       if (dataFin.success) {
         // Luego marcar como completado con empleadoId 0 (admin)
         const resCompletar = await fetch(`${API}/turnos/completar-turno`, {
@@ -102,8 +104,8 @@ export default function MonitorTurnos() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             turnoId,
-            empleadoId: 0 // Admin puede completar cualquier turno
-          })
+            empleadoId: 0, // Admin puede completar cualquier turno
+          }),
         });
 
         const dataCompletar = await resCompletar.json();
@@ -115,7 +117,9 @@ export default function MonitorTurnos() {
             cargarHistorialTurnos();
           }
         } else {
-          setMensaje(`❌ ${dataCompletar.message || "Error al completar turno"}`);
+          setMensaje(
+            `❌ ${dataCompletar.message || "Error al completar turno"}`,
+          );
         }
       } else {
         setMensaje(`❌ ${dataFin.message || "Error al finalizar turno"}`);
@@ -132,7 +136,7 @@ export default function MonitorTurnos() {
       const res = await fetch(`${API}/turnos/iniciar-turno`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ turnoId })
+        body: JSON.stringify({ turnoId }),
       });
 
       const data = await res.json();
@@ -151,12 +155,12 @@ export default function MonitorTurnos() {
   // Cancelar turno
   const cancelarTurnoAdmin = async (turnoId) => {
     if (!confirm("¿Está seguro de cancelar este turno?")) return;
-    
+
     try {
       const res = await fetch(`${API}/turnos/cancelar-turno`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ turnoId })
+        body: JSON.stringify({ turnoId }),
       });
 
       const data = await res.json();
@@ -185,84 +189,93 @@ export default function MonitorTurnos() {
   // Convertir hora a minutos para cálculos
   const convertirHoraAMinutos = (horaString) => {
     if (!horaString) return 0;
-    const horaFormateada = horaString.length === 4 ? `0${horaString}` : horaString;
-    const [horas, minutos] = horaFormateada.substring(0, 5).split(':').map(Number);
+    const horaFormateada =
+      horaString.length === 4 ? `0${horaString}` : horaString;
+    const [horas, minutos] = horaFormateada
+      .substring(0, 5)
+      .split(":")
+      .map(Number);
     return horas * 60 + minutos;
   };
 
   // Calcular hora fin basada en hora inicio y duración
   const calcularHoraFin = (horaInicio, duracionMinutos) => {
     if (!horaInicio || !duracionMinutos) return "--:--";
-    
+
     const inicioMinutos = convertirHoraAMinutos(horaInicio);
     const finMinutos = inicioMinutos + parseInt(duracionMinutos);
-    
+
     const horas = Math.floor(finMinutos / 60);
     const minutos = finMinutos % 60;
-    
-    return `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
+
+    return `${horas.toString().padStart(2, "0")}:${minutos.toString().padStart(2, "0")}`;
   };
 
   // Calcular diferencia de tiempo real
   const calcularDuracionReal = (horaInicioReal, horaFinReal) => {
     if (!horaInicioReal || !horaFinReal) return null;
-    
+
     const inicio = convertirHoraAMinutos(horaInicioReal);
     const fin = convertirHoraAMinutos(horaFinReal);
     const diffMins = fin - inicio;
-    
+
     return diffMins > 0 ? diffMins : null;
   };
 
   // Calcular próxima hora disponible
   const calcularProximaHoraDisponible = (turnos) => {
     if (turnos.length === 0) return "Ahora";
-    
+
     // Tomar el último turno en atención o pendiente
     const ultimoTurno = turnos[turnos.length - 1];
-    const ultimaHoraFin = ultimoTurno.HORA_FIN_REAL || calcularHoraFin(
-      ultimoTurno.HORA_INICIO_REAL || ultimoTurno.HORA_INICIO,
-      ultimoTurno.DURACION_MINUTOS || 60
-    );
-    
+    const ultimaHoraFin =
+      ultimoTurno.HORA_FIN_REAL ||
+      calcularHoraFin(
+        ultimoTurno.HORA_INICIO_REAL || ultimoTurno.HORA_INICIO,
+        ultimoTurno.DURACION_MINUTOS || 60,
+      );
+
     return formatearHora(ultimaHoraFin);
   };
 
   // Obtener tiempo transcurrido desde inicio real
   const obtenerTiempoTranscurrido = (horaInicioReal) => {
     if (!horaInicioReal) return null;
-    
+
     const inicio = convertirHoraAMinutos(horaInicioReal);
     const ahora = new Date();
     const ahoraMinutos = ahora.getHours() * 60 + ahora.getMinutes();
-    
+
     const diffMins = ahoraMinutos - inicio;
     return diffMins > 0 ? diffMins : 0;
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4 md:p-8">
+    <div className="min-h-screen my-10  p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
+        <div className="bg-black rounded-xl shadow-lg p-6 mb-8">
+          <div className="flex flex-col gap-5 md:flex-row justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-800">
-                👁️ Monitor de Turnos - Administrador
+              <h1 className="text-3xl font-bold text-amber-400">
+                Monitor de Turnos - Administrador
               </h1>
-              <p className="text-gray-600 mt-2">
-                Gestión de turnos en tiempo real - {new Date().toLocaleDateString('es-ES')}
+              <p className="text-amber-400 mt-2">
+                Gestión de turnos en tiempo real -{" "}
+                {new Date().toLocaleDateString("es-ES")}
               </p>
             </div>
-            <div className="flex items-center space-x-4 mt-4 md:mt-0">
-              <div className="flex items-center space-x-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-lg">
+            <div className="flex  items-center space-x-4 mt-4 md:mt-0">
+              <div className="flex items-center  border-[0.8px] space-x-2 bg-black text-amber-400 px-4 py-2 rounded-lg">
                 <Calendar size={20} />
-                <span>{new Date().toLocaleDateString('es-ES', { 
-                  weekday: 'long', 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
-                })}</span>
+                <span className="">
+                  {new Date().toLocaleDateString("es-ES", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </span>
               </div>
               <button
                 onClick={() => {
@@ -270,9 +283,12 @@ export default function MonitorTurnos() {
                   if (mostrarHistorial) cargarHistorialTurnos();
                   setMensaje("🔄 Datos actualizados");
                 }}
-                className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex items-center space-x-2 px-4 py-2 bg-amber-200 border-[0.8px]  border-amber-400 text-balck-400 rounded-lg hover:bg-white transition-colors"
               >
-                <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
+                <RefreshCw
+                  size={20}
+                  className={loading ? "animate-spin" : ""}
+                />
                 <span>Actualizar</span>
               </button>
             </div>
@@ -281,11 +297,13 @@ export default function MonitorTurnos() {
 
         {/* Mensajes */}
         {mensaje && (
-          <div className={`mb-6 p-4 rounded-lg ${
-            mensaje.includes("✅") || mensaje.includes("🔄") 
-              ? "bg-green-100 text-green-800" 
-              : "bg-red-100 text-red-800"
-          }`}>
+          <div
+            className={`mb-6 p-4 rounded-lg ${
+              mensaje.includes("✅") || mensaje.includes("🔄")
+                ? "bg-green-100 text-green-800"
+                : "bg-red-100 text-red-800"
+            }`}
+          >
             {mensaje}
           </div>
         )}
@@ -294,15 +312,16 @@ export default function MonitorTurnos() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white p-6 rounded-xl shadow-lg border border-blue-200">
             <div className="flex items-center">
-              <Clock className="text-blue-600 mr-3" size={32} />
+              <Clock className="text-black mr-3" size={32} />
               <div>
                 <p className="text-3xl font-bold text-blue-800">
                   {turnosActivos.length}
                 </p>
-                <p className="text-gray-600">Turnos Activos</p>
+                <p className="text-black0">Turnos Activos</p>
                 {turnosActivos.length > 0 && (
                   <p className="text-xs text-blue-600 mt-1">
-                    Próximo disponible: {calcularProximaHoraDisponible(turnosActivos)}
+                    Próximo disponible:{" "}
+                    {calcularProximaHoraDisponible(turnosActivos)}
                   </p>
                 )}
               </div>
@@ -314,7 +333,7 @@ export default function MonitorTurnos() {
               <AlertCircle className="text-yellow-600 mr-3" size={32} />
               <div>
                 <p className="text-3xl font-bold text-yellow-800">
-                  {turnosActivos.filter(t => t.ESTADO === 'pendiente').length}
+                  {turnosActivos.filter((t) => t.ESTADO === "pendiente").length}
                 </p>
                 <p className="text-gray-600">En Espera</p>
               </div>
@@ -326,12 +345,20 @@ export default function MonitorTurnos() {
               <PlayCircle className="text-green-600 mr-3" size={32} />
               <div>
                 <p className="text-3xl font-bold text-green-800">
-                  {turnosActivos.filter(t => t.ESTADO === 'confirmado').length}
+                  {
+                    turnosActivos.filter((t) => t.ESTADO === "confirmado")
+                      .length
+                  }
                 </p>
                 <p className="text-gray-600">En Atención</p>
-                {turnosActivos.filter(t => t.ESTADO === 'confirmado').length > 0 && (
+                {turnosActivos.filter((t) => t.ESTADO === "confirmado").length >
+                  0 && (
                   <p className="text-xs text-green-600 mt-1">
-                    En curso: {turnosActivos.filter(t => t.ESTADO === 'confirmado').length}
+                    En curso:{" "}
+                    {
+                      turnosActivos.filter((t) => t.ESTADO === "confirmado")
+                        .length
+                    }
                   </p>
                 )}
               </div>
@@ -348,10 +375,17 @@ export default function MonitorTurnos() {
                 <p className="text-gray-600">Completados Hoy</p>
                 {historialTurnos.length > 0 && (
                   <p className="text-xs text-purple-600 mt-1">
-                    Promedio: {Math.round(historialTurnos.reduce((sum, t) => {
-                      const duracion = calcularDuracionReal(t.HORA_INICIO_REAL, t.HORA_FIN_REAL);
-                      return sum + (duracion || 0);
-                    }, 0) / historialTurnos.length)} min
+                    Promedio:{" "}
+                    {Math.round(
+                      historialTurnos.reduce((sum, t) => {
+                        const duracion = calcularDuracionReal(
+                          t.HORA_INICIO_REAL,
+                          t.HORA_FIN_REAL,
+                        );
+                        return sum + (duracion || 0);
+                      }, 0) / historialTurnos.length,
+                    )}{" "}
+                    min
                   </p>
                 )}
               </div>
@@ -371,7 +405,9 @@ export default function MonitorTurnos() {
             className="flex items-center space-x-2 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors"
           >
             <History size={20} />
-            <span>{mostrarHistorial ? "Ocultar Historial" : "Ver Historial"}</span>
+            <span>
+              {mostrarHistorial ? "Ocultar Historial" : "Ver Historial"}
+            </span>
           </button>
         </div>
 
@@ -440,15 +476,21 @@ export default function MonitorTurnos() {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {turnosActivos.map((turno) => {
                     const duracion = turno.DURACION_MINUTOS || 60;
-                    const horaFinProgramada = calcularHoraFin(turno.HORA_INICIO, duracion);
-                    const horaFinEstimada = turno.HORA_INICIO_REAL 
+                    const horaFinProgramada = calcularHoraFin(
+                      turno.HORA_INICIO,
+                      duracion,
+                    );
+                    const horaFinEstimada = turno.HORA_INICIO_REAL
                       ? calcularHoraFin(turno.HORA_INICIO_REAL, duracion)
                       : null;
-                    const tiempoTranscurrido = obtenerTiempoTranscurrido(turno.HORA_INICIO_REAL);
-                    const tiempoRestante = tiempoTranscurrido !== null 
-                      ? Math.max(0, duracion - tiempoTranscurrido)
-                      : null;
-                    
+                    const tiempoTranscurrido = obtenerTiempoTranscurrido(
+                      turno.HORA_INICIO_REAL,
+                    );
+                    const tiempoRestante =
+                      tiempoTranscurrido !== null
+                        ? Math.max(0, duracion - tiempoTranscurrido)
+                        : null;
+
                     return (
                       <tr key={turno.ID} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -472,7 +514,10 @@ export default function MonitorTurnos() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
-                            <Scissors size={16} className="text-gray-400 mr-2" />
+                            <Scissors
+                              size={16}
+                              className="text-gray-400 mr-2"
+                            />
                             <div>
                               <div className="font-medium text-gray-900">
                                 {turno.SUBSERVICIO || turno.SERVICIO}
@@ -493,7 +538,11 @@ export default function MonitorTurnos() {
                               Fin: {formatearHora(horaFinProgramada)}
                             </div>
                             <div className="text-xs text-gray-500">
-                              {turno.FECHA ? new Date(turno.FECHA).toLocaleDateString('es-ES') : ''}
+                              {turno.FECHA
+                                ? new Date(turno.FECHA).toLocaleDateString(
+                                    "es-ES",
+                                  )
+                                : ""}
                             </div>
                           </div>
                         </td>
@@ -502,55 +551,64 @@ export default function MonitorTurnos() {
                             {turno.HORA_INICIO_REAL ? (
                               <>
                                 <div className="text-green-700 font-medium">
-                                  Inicio: {formatearHora(turno.HORA_INICIO_REAL)}
+                                  Inicio:{" "}
+                                  {formatearHora(turno.HORA_INICIO_REAL)}
                                 </div>
                                 <div className="text-blue-700">
                                   Fin estimado: {formatearHora(horaFinEstimada)}
                                 </div>
                                 {turno.HORA_FIN_REAL && (
                                   <div className="text-purple-700">
-                                    Fin real: {formatearHora(turno.HORA_FIN_REAL)}
+                                    Fin real:{" "}
+                                    {formatearHora(turno.HORA_FIN_REAL)}
                                   </div>
                                 )}
                               </>
                             ) : (
-                              <span className="text-gray-400 text-sm">No iniciado</span>
+                              <span className="text-gray-400 text-sm">
+                                No iniciado
+                              </span>
                             )}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex flex-col space-y-1">
-                            <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                              turno.ESTADO === 'pendiente' 
-                                ? 'bg-yellow-100 text-yellow-800' 
-                                : 'bg-green-100 text-green-800'
-                            }`}>
+                            <span
+                              className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                turno.ESTADO === "pendiente"
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : "bg-green-100 text-green-800"
+                              }`}
+                            >
                               {turno.ESTADO_TEXTO || turno.ESTADO}
                             </span>
-                            
+
                             {tiempoTranscurrido !== null && (
                               <div className="text-xs">
-                                <div className={`font-bold ${
-                                  tiempoTranscurrido > duracion 
-                                    ? 'text-red-600' 
-                                    : tiempoTranscurrido > duracion * 0.8
-                                    ? 'text-yellow-600'
-                                    : 'text-green-600'
-                                }`}>
+                                <div
+                                  className={`font-bold ${
+                                    tiempoTranscurrido > duracion
+                                      ? "text-red-600"
+                                      : tiempoTranscurrido > duracion * 0.8
+                                        ? "text-yellow-600"
+                                        : "text-green-600"
+                                  }`}
+                                >
                                   ⏱️ {tiempoTranscurrido}/{duracion} min
                                 </div>
-                                {tiempoRestante !== null && tiempoRestante > 0 && (
-                                  <div className="text-gray-500">
-                                    Restan: {tiempoRestante} min
-                                  </div>
-                                )}
+                                {tiempoRestante !== null &&
+                                  tiempoRestante > 0 && (
+                                    <div className="text-gray-500">
+                                      Restan: {tiempoRestante} min
+                                    </div>
+                                  )}
                               </div>
                             )}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex flex-col space-y-2">
-                            {turno.ESTADO === 'pendiente' && (
+                            {turno.ESTADO === "pendiente" && (
                               <button
                                 onClick={() => iniciarTurnoAdmin(turno.ID)}
                                 className="flex items-center space-x-1 px-3 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors text-sm"
@@ -559,8 +617,8 @@ export default function MonitorTurnos() {
                                 <span>Iniciar</span>
                               </button>
                             )}
-                            
-                            {turno.ESTADO === 'confirmado' && (
+
+                            {turno.ESTADO === "confirmado" && (
                               <button
                                 onClick={() => completarTurnoAdmin(turno.ID)}
                                 className="flex items-center space-x-1 px-3 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors text-sm"
@@ -569,8 +627,9 @@ export default function MonitorTurnos() {
                                 <span>Completar</span>
                               </button>
                             )}
-                            
-                            {(turno.ESTADO === 'pendiente' || turno.ESTADO === 'confirmado') && (
+
+                            {(turno.ESTADO === "pendiente" ||
+                              turno.ESTADO === "confirmado") && (
                               <button
                                 onClick={() => cancelarTurnoAdmin(turno.ID)}
                                 className="flex items-center space-x-1 px-3 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors text-sm"
@@ -612,9 +671,7 @@ export default function MonitorTurnos() {
             ) : historialTurnos.length === 0 ? (
               <div className="text-center py-12">
                 <div className="text-4xl mb-4">📝</div>
-                <p className="text-gray-500">
-                  No hay turnos completados hoy
-                </p>
+                <p className="text-gray-500">No hay turnos completados hoy</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -648,12 +705,17 @@ export default function MonitorTurnos() {
                     {historialTurnos.map((turno) => {
                       const duracionEstimada = turno.DURACION_MINUTOS || 60;
                       const duracionReal = calcularDuracionReal(
-                        turno.HORA_INICIO_REAL, 
-                        turno.HORA_FIN_REAL
+                        turno.HORA_INICIO_REAL,
+                        turno.HORA_FIN_REAL,
                       );
-                      const horaFinProgramada = calcularHoraFin(turno.HORA_INICIO, duracionEstimada);
-                      const diferencia = duracionReal ? duracionReal - duracionEstimada : null;
-                      
+                      const horaFinProgramada = calcularHoraFin(
+                        turno.HORA_INICIO,
+                        duracionEstimada,
+                      );
+                      const diferencia = duracionReal
+                        ? duracionReal - duracionEstimada
+                        : null;
+
                       return (
                         <tr key={turno.ID} className="hover:bg-gray-50">
                           <td className="px-6 py-4 whitespace-nowrap">
@@ -693,10 +755,13 @@ export default function MonitorTurnos() {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm">
                               <div className="text-gray-900">
-                                Inicio: {formatearHora(turno.HORA_INICIO_REAL) || "--:--"}
+                                Inicio:{" "}
+                                {formatearHora(turno.HORA_INICIO_REAL) ||
+                                  "--:--"}
                               </div>
                               <div className="text-gray-900">
-                                Fin: {formatearHora(turno.HORA_FIN_REAL) || "--:--"}
+                                Fin:{" "}
+                                {formatearHora(turno.HORA_FIN_REAL) || "--:--"}
                               </div>
                             </div>
                           </td>
@@ -704,16 +769,23 @@ export default function MonitorTurnos() {
                             <div className="text-sm">
                               {duracionReal ? (
                                 <div className="space-y-1">
-                                  <span className={`px-2 py-1 rounded-full text-xs font-bold ${
-                                    duracionReal > duracionEstimada
-                                      ? 'bg-red-100 text-red-800'
-                                      : 'bg-green-100 text-green-800'
-                                  }`}>
+                                  <span
+                                    className={`px-2 py-1 rounded-full text-xs font-bold ${
+                                      duracionReal > duracionEstimada
+                                        ? "bg-red-100 text-red-800"
+                                        : "bg-green-100 text-green-800"
+                                    }`}
+                                  >
                                     {duracionReal} min
                                   </span>
                                   {diferencia !== null && (
-                                    <div className={`text-xs ${diferencia > 0 ? 'text-red-600' : 'text-green-600'}`}>
-                                      {diferencia > 0 ? `+${diferencia}` : diferencia} min
+                                    <div
+                                      className={`text-xs ${diferencia > 0 ? "text-red-600" : "text-green-600"}`}
+                                    >
+                                      {diferencia > 0
+                                        ? `+${diferencia}`
+                                        : diferencia}{" "}
+                                      min
                                     </div>
                                   )}
                                 </div>
@@ -725,14 +797,19 @@ export default function MonitorTurnos() {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm">
                               {duracionReal ? (
-                                <span className={`px-2 py-1 rounded-full text-xs font-bold ${
-                                  duracionReal <= duracionEstimada
-                                    ? 'bg-green-100 text-green-800'
-                                    : duracionReal <= duracionEstimada * 1.2
-                                    ? 'bg-yellow-100 text-yellow-800'
-                                    : 'bg-red-100 text-red-800'
-                                }`}>
-                                  {Math.round((duracionEstimada / duracionReal) * 100)}% eficiencia
+                                <span
+                                  className={`px-2 py-1 rounded-full text-xs font-bold ${
+                                    duracionReal <= duracionEstimada
+                                      ? "bg-green-100 text-green-800"
+                                      : duracionReal <= duracionEstimada * 1.2
+                                        ? "bg-yellow-100 text-yellow-800"
+                                        : "bg-red-100 text-red-800"
+                                  }`}
+                                >
+                                  {Math.round(
+                                    (duracionEstimada / duracionReal) * 100,
+                                  )}
+                                  % eficiencia
                                 </span>
                               ) : (
                                 <span className="text-gray-400">--</span>
@@ -750,38 +827,62 @@ export default function MonitorTurnos() {
             {/* Resumen estadístico del historial */}
             {historialTurnos.length > 0 && (
               <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                <h4 className="font-bold text-gray-700 mb-3">📈 Resumen del día:</h4>
+                <h4 className="font-bold text-gray-700 mb-3">
+                  📈 Resumen del día:
+                </h4>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="text-center">
-                    <p className="text-2xl font-bold text-blue-600">{historialTurnos.length}</p>
+                    <p className="text-2xl font-bold text-blue-600">
+                      {historialTurnos.length}
+                    </p>
                     <p className="text-xs text-gray-600">Total completados</p>
                   </div>
                   <div className="text-center">
                     <p className="text-2xl font-bold text-green-600">
-                      {historialTurnos.filter(t => {
-                        const duracionReal = calcularDuracionReal(t.HORA_INICIO_REAL, t.HORA_FIN_REAL);
-                        const duracionEstimada = t.DURACION_MINUTOS || 60;
-                        return duracionReal && duracionReal <= duracionEstimada;
-                      }).length}
+                      {
+                        historialTurnos.filter((t) => {
+                          const duracionReal = calcularDuracionReal(
+                            t.HORA_INICIO_REAL,
+                            t.HORA_FIN_REAL,
+                          );
+                          const duracionEstimada = t.DURACION_MINUTOS || 60;
+                          return (
+                            duracionReal && duracionReal <= duracionEstimada
+                          );
+                        }).length
+                      }
                     </p>
                     <p className="text-xs text-gray-600">A tiempo</p>
                   </div>
                   <div className="text-center">
                     <p className="text-2xl font-bold text-red-600">
-                      {historialTurnos.filter(t => {
-                        const duracionReal = calcularDuracionReal(t.HORA_INICIO_REAL, t.HORA_FIN_REAL);
-                        const duracionEstimada = t.DURACION_MINUTOS || 60;
-                        return duracionReal && duracionReal > duracionEstimada;
-                      }).length}
+                      {
+                        historialTurnos.filter((t) => {
+                          const duracionReal = calcularDuracionReal(
+                            t.HORA_INICIO_REAL,
+                            t.HORA_FIN_REAL,
+                          );
+                          const duracionEstimada = t.DURACION_MINUTOS || 60;
+                          return (
+                            duracionReal && duracionReal > duracionEstimada
+                          );
+                        }).length
+                      }
                     </p>
                     <p className="text-xs text-gray-600">Con retraso</p>
                   </div>
                   <div className="text-center">
                     <p className="text-2xl font-bold text-purple-600">
-                      {Math.round(historialTurnos.reduce((sum, t) => {
-                        const duracionReal = calcularDuracionReal(t.HORA_INICIO_REAL, t.HORA_FIN_REAL);
-                        return sum + (duracionReal || 0);
-                      }, 0) / historialTurnos.length)} min
+                      {Math.round(
+                        historialTurnos.reduce((sum, t) => {
+                          const duracionReal = calcularDuracionReal(
+                            t.HORA_INICIO_REAL,
+                            t.HORA_FIN_REAL,
+                          );
+                          return sum + (duracionReal || 0);
+                        }, 0) / historialTurnos.length,
+                      )}{" "}
+                      min
                     </p>
                     <p className="text-xs text-gray-600">Promedio real</p>
                   </div>
@@ -790,47 +891,6 @@ export default function MonitorTurnos() {
             )}
           </div>
         )}
-
-        {/* Información del sistema */}
-        <div className="mt-8 p-6 bg-blue-50 rounded-xl border border-blue-200">
-          <h3 className="text-lg font-bold text-blue-800 mb-3">ℹ️ Funciones del Administrador:</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h4 className="font-semibold text-blue-700 mb-2">Cálculos de tiempo:</h4>
-              <ul className="text-sm text-blue-600 space-y-2">
-                <li className="flex items-start">
-                  <span className="text-blue-800 font-bold mr-2">•</span>
-                  <span><strong>Duración estimada:</strong> Basada en configuración del servicio</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-800 font-bold mr-2">•</span>
-                  <span><strong>Horario real:</strong> Marcado al iniciar/completar turno</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-800 font-bold mr-2">•</span>
-                  <span><strong>Fin estimado:</strong> Hora inicio real + duración del servicio</span>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-blue-700 mb-2">Supervisión:</h4>
-              <ul className="text-sm text-blue-600 space-y-2">
-                <li className="flex items-start">
-                  <span className="text-blue-800 font-bold mr-2">•</span>
-                  <span><strong>Tiempo transcurrido:</strong> Minutos desde inicio real</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-800 font-bold mr-2">•</span>
-                  <span><strong>Eficiencia:</strong> Comparación duración real vs estimada</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-800 font-bold mr-2">•</span>
-                  <span><strong>Próximo disponible:</strong> Basado en último turno</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

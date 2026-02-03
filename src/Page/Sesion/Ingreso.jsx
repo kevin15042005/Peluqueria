@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FondoInicio from "../../assets/FondoInicio.webp";
+import { EyeClosed , Eye } from 'lucide-react';
 
 export default function Login() {
   const [correo, setCorreo] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const API = import.meta.env.VITE_API_URL;
 
@@ -70,13 +71,10 @@ export default function Login() {
         src={FondoInicio}
         alt=""
       />
-      <div className="absolute inset-0 bg-gray-900 opacity-[0.6] z-10">
-        {" "}
-      </div>
+      <div className="absolute inset-0 bg-gray-900 opacity-[0.6] z-10"> </div>
 
       <div className="relative bg-black p-8 rounded-2xl shadow-2xl w-[90%] max-w-md z-20">
         <div className="text-center mb-8">
-      
           <h1 className="text-3xl font-bold text-amber-400">Inicio Sesion</h1>
         </div>
 
@@ -89,8 +87,7 @@ export default function Login() {
               type="email"
               value={correo}
               onChange={(e) => setCorreo(e.target.value)}
-              className="w-full p-3 border border-gray-300 text-amber-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="admin@gmail.com"
+className="w-full p-3 bg-transparent border border-gray-300 text-amber-400 rounded-lg appearance-none"              placeholder="admin@gmail.com"
               required
             />
           </div>
@@ -99,14 +96,25 @@ export default function Login() {
             <label className="block text-sm font-medium text-amber-400 mb-2">
               Contraseña
             </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-3 border border-gray-300 text-amber-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="••••••••"
-              required
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text":"password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full p-3  bg-transaprent-500 border-gray-300 text-amber-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="••••••••"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-orange-500 hover:text-orange-400 transition-colors"
+              >
+                {showPassword ? <span> <Eye />   
+</span> : <span>  <EyeClosed />   
+</span>}
+              </button>
+            </div>
           </div>
 
           <button

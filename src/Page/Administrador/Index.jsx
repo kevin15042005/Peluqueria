@@ -23,7 +23,7 @@ export default function UsuariosAdmin() {
     try {
       const res = await fetch(`${API}/administrador/usuarios`);
       const data = await res.json();
-      
+
       if (data && Array.isArray(data)) {
         setUsuarios(data);
       } else {
@@ -40,7 +40,7 @@ export default function UsuariosAdmin() {
     try {
       const res = await fetch(`${API}/administrador/roles`);
       const data = await res.json();
-      
+
       if (data && Array.isArray(data)) {
         setRoles(data);
       } else {
@@ -56,21 +56,24 @@ export default function UsuariosAdmin() {
   // Cargar todos los subservicios disponibles - CORREGIDO
   const cargarServiciosDisponibles = async () => {
     try {
-      console.log("🔍 Cargando servicios desde:", `${API}/subservicio/obtener_subservicios`);
+      console.log(
+        "🔍 Cargando servicios desde:",
+        `${API}/subservicio/obtener_subservicios`,
+      );
       const res = await fetch(`${API}/subservicio/obtener_subservicios`);
       const data = await res.json();
-      
+
       console.log("📦 Respuesta completa:", data);
-      
+
       if (data.success && data.data && Array.isArray(data.data)) {
         console.log("✅ Servicios cargados:", data.data.length);
         console.log("📊 Estructura del primer servicio:", data.data[0]);
-        
+
         // Verificar la estructura real de los datos
         data.data.forEach((serv, idx) => {
           console.log(`Servicio ${idx}:`, serv);
         });
-        
+
         setServiciosDisponibles(data.data);
         setErrorCarga("");
       } else {
@@ -97,25 +100,32 @@ export default function UsuariosAdmin() {
       if (modalAsignarServicios && usuarioSeleccionado) {
         setCargandoServicios(true);
         try {
-          console.log("🔍 Cargando servicios asignados para usuario ID:", usuarioSeleccionado.ID);
+          console.log(
+            "🔍 Cargando servicios asignados para usuario ID:",
+            usuarioSeleccionado.ID,
+          );
           const res = await fetch(
-            `${API}/administrador/servicios_empleado/${usuarioSeleccionado.ID}`
+            `${API}/administrador/servicios_empleado/${usuarioSeleccionado.ID}`,
           );
           const data = await res.json();
-          
+
           console.log("📦 Respuesta servicios asignados:", data);
-          
+
           if (data.success && data.servicios && Array.isArray(data.servicios)) {
             // Usar el ID correcto (SUBSERVICIO_ID o ID)
-            const idsAsignados = data.servicios.map(serv => {
-              const id = serv.SUBSERVICIO_ID || serv.ID || serv.id;
-              return id ? id.toString() : "";
-            }).filter(id => id !== "");
-            
+            const idsAsignados = data.servicios
+              .map((serv) => {
+                const id = serv.SUBSERVICIO_ID || serv.ID || serv.id;
+                return id ? id.toString() : "";
+              })
+              .filter((id) => id !== "");
+
             console.log("✅ IDs asignados encontrados:", idsAsignados);
             setServiciosSeleccionados(idsAsignados);
           } else {
-            console.log("ℹ️ No hay servicios asignados aún o formato incorrecto");
+            console.log(
+              "ℹ️ No hay servicios asignados aún o formato incorrecto",
+            );
             setServiciosSeleccionados([]);
           }
         } catch (error) {
@@ -155,12 +165,12 @@ export default function UsuariosAdmin() {
       const res = await fetch(`${API}/administrador/crear_administrador`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          nombre, 
-          correo, 
-          password, 
-          pin, 
-          rolId: parseInt(rolId)
+        body: JSON.stringify({
+          nombre,
+          correo,
+          password,
+          pin,
+          rolId: parseInt(rolId),
         }),
       });
 
@@ -230,7 +240,7 @@ export default function UsuariosAdmin() {
         `${API}/administrador/delete_administrador/${usuarioSeleccionado.ID}`,
         {
           method: "DELETE",
-        }
+        },
       );
 
       const data = await res.json();
@@ -252,42 +262,47 @@ export default function UsuariosAdmin() {
   // Asignar servicios a empleado - CORREGIDO
   const asignarServiciosEmpleado = async () => {
     if (!usuarioSeleccionado) return;
-    
+
     if (serviciosSeleccionados.length === 0) {
       alert("⚠️ Debe seleccionar al menos un servicio");
       return;
     }
-    
+
     // Convertir a números y enviar como array
-    const serviciosIds = serviciosSeleccionados.map(id => parseInt(id)).filter(id => !isNaN(id));
-    
+    const serviciosIds = serviciosSeleccionados
+      .map((id) => parseInt(id))
+      .filter((id) => !isNaN(id));
+
     if (serviciosIds.length === 0) {
       alert("⚠️ IDs de servicios inválidos");
       return;
     }
-    
+
     console.log("📤 Enviando datos al backend:", {
       trabajadorId: usuarioSeleccionado.ID,
-      serviciosIds: serviciosIds
+      serviciosIds: serviciosIds,
     });
-    
+
     try {
-      const res = await fetch(`${API}/administrador/asignar_servicios_empleado`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          trabajadorId: parseInt(usuarioSeleccionado.ID),
-          serviciosIds: serviciosIds
-        }),
-      });
+      const res = await fetch(
+        `${API}/administrador/asignar_servicios_empleado`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            trabajadorId: parseInt(usuarioSeleccionado.ID),
+            serviciosIds: serviciosIds,
+          }),
+        },
+      );
 
       const data = await res.json();
       console.log("📦 Respuesta del backend:", data);
-      
+
       if (!res.ok) {
         throw new Error(data.message || `Error HTTP ${res.status}`);
       }
-      
+
       if (data.success) {
         alert("✅ Servicios asignados correctamente");
         setModalAsignarServicios(false);
@@ -305,11 +320,11 @@ export default function UsuariosAdmin() {
 
   // Abrir modal de asignar servicios
   const abrirModalAsignarServicios = (usuario) => {
-    if (usuario.ROL !== 'empleado') {
+    if (usuario.ROL !== "empleado") {
       alert("⚠️ Solo se pueden asignar servicios a empleados");
       return;
     }
-    
+
     setUsuarioSeleccionado(usuario);
     setModalAsignarServicios(true);
   };
@@ -326,7 +341,12 @@ export default function UsuariosAdmin() {
 
   // Función helper para obtener la categoría de un servicio
   const obtenerCategoriaServicio = (servicio) => {
-    return servicio.SERVICIO_NOMBRE || servicio.SERVICIO || servicio.categoria || "General";
+    return (
+      servicio.SERVICIO_NOMBRE ||
+      servicio.SERVICIO ||
+      servicio.categoria ||
+      "General"
+    );
   };
 
   return (
@@ -437,7 +457,9 @@ export default function UsuariosAdmin() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm text-gray-600 mb-1">Correo</label>
+                <label className="block text-sm text-gray-600 mb-1">
+                  Correo
+                </label>
                 <input
                   value={usuarioSeleccionado.CORREO || ""}
                   onChange={(e) =>
@@ -451,7 +473,9 @@ export default function UsuariosAdmin() {
                 />
               </div>
               <div>
-                <label className="block text-sm text-gray-600 mb-1">Nueva Contraseña *</label>
+                <label className="block text-sm text-gray-600 mb-1">
+                  Nueva Contraseña *
+                </label>
                 <input
                   type="password"
                   value={usuarioSeleccionado.PASSWORD || ""}
@@ -467,7 +491,9 @@ export default function UsuariosAdmin() {
                 />
               </div>
               <div>
-                <label className="block text-sm text-gray-600 mb-1">PIN *</label>
+                <label className="block text-sm text-gray-600 mb-1">
+                  PIN *
+                </label>
                 <input
                   value={usuarioSeleccionado.PIN || ""}
                   onChange={(e) =>
@@ -553,7 +579,7 @@ export default function UsuariosAdmin() {
               <p className="text-sm text-gray-600 mb-4">
                 Seleccione los subservicios que puede realizar este empleado:
               </p>
-              
+
               {cargandoServicios ? (
                 <div className="text-center py-8">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500 mx-auto"></div>
@@ -577,42 +603,51 @@ export default function UsuariosAdmin() {
                       const servicioId = obtenerIdServicio(servicio);
                       const servicioNombre = obtenerNombreServicio(servicio);
                       const categoria = obtenerCategoriaServicio(servicio);
-                      
+
                       if (!servicioId) {
                         console.warn("Servicio sin ID:", servicio);
                         return null;
                       }
-                      
+
                       return (
-                        <div 
-                          key={`servicio-${servicioId}-${index}`} 
+                        <div
+                          key={`servicio-${servicioId}-${index}`}
                           className="flex items-start p-3 hover:bg-gray-50 rounded border-b last:border-b-0"
                         >
                           <input
                             type="checkbox"
                             id={`servicio-${servicioId}`}
-                            checked={serviciosSeleccionados.includes(servicioId.toString())}
+                            checked={serviciosSeleccionados.includes(
+                              servicioId.toString(),
+                            )}
                             onChange={(e) => {
                               if (e.target.checked) {
-                                setServiciosSeleccionados([...serviciosSeleccionados, servicioId.toString()]);
+                                setServiciosSeleccionados([
+                                  ...serviciosSeleccionados,
+                                  servicioId.toString(),
+                                ]);
                               } else {
                                 setServiciosSeleccionados(
-                                  serviciosSeleccionados.filter(id => id !== servicioId.toString())
+                                  serviciosSeleccionados.filter(
+                                    (id) => id !== servicioId.toString(),
+                                  ),
                                 );
                               }
                             }}
                             className="mr-3 mt-1 h-5 w-5"
                           />
-                          <label 
-                            htmlFor={`servicio-${servicioId}`} 
+                          <label
+                            htmlFor={`servicio-${servicioId}`}
                             className="cursor-pointer flex-1"
                           >
                             <div className="font-medium">{servicioNombre}</div>
                             <div className="text-sm text-gray-600 mt-1">
-                              <span className="font-semibold">Categoría:</span> {categoria}
+                              <span className="font-semibold">Categoría:</span>{" "}
+                              {categoria}
                               {servicio.PRECIO !== undefined && (
                                 <span className="ml-3 font-semibold text-green-600">
-                                  ${parseFloat(servicio.PRECIO).toLocaleString()}
+                                  $
+                                  {parseFloat(servicio.PRECIO).toLocaleString()}
                                 </span>
                               )}
                             </div>
@@ -631,13 +666,23 @@ export default function UsuariosAdmin() {
                       );
                     })}
                   </div>
-                  
+
                   <div className="mt-4 p-3 bg-blue-50 rounded-lg">
                     <div className="flex justify-between items-center">
                       <div className="text-sm">
                         <p className="font-semibold">📊 Resumen:</p>
-                        <p>Servicios seleccionados: <span className="font-bold text-purple-600">{serviciosSeleccionados.length}</span></p>
-                        <p>Servicios disponibles: <span className="font-bold">{serviciosDisponibles.length}</span></p>
+                        <p>
+                          Servicios seleccionados:{" "}
+                          <span className="font-bold text-purple-600">
+                            {serviciosSeleccionados.length}
+                          </span>
+                        </p>
+                        <p>
+                          Servicios disponibles:{" "}
+                          <span className="font-bold">
+                            {serviciosDisponibles.length}
+                          </span>
+                        </p>
                       </div>
                       <button
                         onClick={() => setServiciosSeleccionados([])}
@@ -663,15 +708,17 @@ export default function UsuariosAdmin() {
               </button>
               <button
                 onClick={asignarServiciosEmpleado}
-                disabled={serviciosSeleccionados.length === 0 || cargandoServicios}
+                disabled={
+                  serviciosSeleccionados.length === 0 || cargandoServicios
+                }
                 className={`px-4 py-2 rounded-lg font-medium ${
                   serviciosSeleccionados.length === 0 || cargandoServicios
-                    ? 'bg-gray-300 cursor-not-allowed text-gray-500'
-                    : 'bg-purple-500 hover:bg-purple-600 text-white'
+                    ? "bg-gray-300 cursor-not-allowed text-gray-500"
+                    : "bg-purple-500 hover:bg-purple-600 text-white"
                 }`}
               >
-                {cargandoServicios 
-                  ? 'Cargando...' 
+                {cargandoServicios
+                  ? "Cargando..."
                   : `✅ Asignar ${serviciosSeleccionados.length} servicio(s)`}
               </button>
             </div>
@@ -680,136 +727,149 @@ export default function UsuariosAdmin() {
       )}
 
       {/* Tabla de Usuarios */}
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">👥 Gestión de Usuarios</h2>
-        <button
-          onClick={() => setModalCrear(true)}
-          className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
-        >
-          + Agregar Usuario
-        </button>
-      </div>
 
-      <div className="overflow-x-auto bg-white rounded-lg shadow">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                ID
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Nombre
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Correo
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Rol
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Servicios Asignados
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Estado
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Acciones
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {usuarios.length > 0 ? (
-              usuarios.map((usuario) => (
-                <tr key={usuario.ID} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">{usuario.ID}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {usuario.NOMBRE}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {usuario.CORREO}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      usuario.ROL === 'administrador' 
-                        ? 'bg-purple-100 text-purple-800' 
-                        : 'bg-blue-100 text-blue-800'
-                    }`}>
-                      {usuario.ROL}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="max-w-xs">
-                      {usuario.SERVICIOS_ASIGNADOS && usuario.SERVICIOS_ASIGNADOS !== 'NULL' ? (
-                        <div className="text-sm text-gray-700">
-                          {usuario.SERVICIOS_ASIGNADOS.split(', ').map((servicio, idx) => (
-                            <span 
-                              key={idx} 
-                              className="inline-block bg-gray-100 text-gray-800 px-2 py-1 rounded mr-1 mb-1 text-xs"
-                            >
-                              {servicio}
-                            </span>
-                          ))}
-                        </div>
-                      ) : (
-                        <span className="text-gray-400 text-sm">Sin servicios</span>
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      usuario.ESTADO === 'activo' 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-red-100 text-red-800'
-                    }`}>
-                      {usuario.ESTADO}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex flex-wrap gap-2">
-                      <button
-                        onClick={() => {
-                          setUsuarioSeleccionado(usuario);
-                          setModalEditar(true);
-                        }}
-                        className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
+      <div className=" py-10  my-10 grid grid-cols-1 md: overflow-x-auto bg-white rounded-lg shadow">
+<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 px-4 md:px-6">          <h2 className="text-2xl font-bold"> Gestión de Usuarios</h2>
+          <button
+            onClick={() => setModalCrear(true)}
+            className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+          >
+            Agregar Usuario
+          </button>
+        </div>
+        <div>
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className=" bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  ID
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Nombre
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Correo
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Rol
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Servicios Asignados
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Estado
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Acciones
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {usuarios.length > 0 ? (
+                usuarios.map((usuario) => (
+                  <tr key={usuario.ID} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {usuario.ID}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {usuario.NOMBRE}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {usuario.CORREO}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          usuario.ROL === "administrador"
+                            ? "bg-purple-100 text-purple-800"
+                            : "bg-blue-100 text-blue-800"
+                        }`}
                       >
-                        Editar
-                      </button>
-                      
-                      {usuario.ROL === 'empleado' && (
+                        {usuario.ROL}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="max-w-xs">
+                        {usuario.SERVICIOS_ASIGNADOS &&
+                        usuario.SERVICIOS_ASIGNADOS !== "NULL" ? (
+                          <div className="text-sm text-gray-700">
+                            {usuario.SERVICIOS_ASIGNADOS.split(", ").map(
+                              (servicio, idx) => (
+                                <span
+                                  key={idx}
+                                  className="inline-block bg-gray-100 text-gray-800 px-2 py-1 rounded mr-1 mb-1 text-xs"
+                                >
+                                  {servicio}
+                                </span>
+                              ),
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-gray-400 text-sm">
+                            Sin servicios
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          usuario.ESTADO === "activo"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        {usuario.ESTADO}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex flex-wrap gap-2">
                         <button
-                          onClick={() => abrirModalAsignarServicios(usuario)}
-                          className="px-3 py-1 bg-purple-500 text-white rounded hover:bg-purple-600 text-sm"
+                          onClick={() => {
+                            setUsuarioSeleccionado(usuario);
+                            setModalEditar(true);
+                          }}
+                          className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
                         >
-                          Servicios
+                          Editar
                         </button>
-                      )}
-                      
-                      <button
-                        onClick={() => {
-                          setUsuarioSeleccionado(usuario);
-                          setModalEliminar(true);
-                        }}
-                        className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
-                      >
-                        Eliminar
-                      </button>
-                    </div>
+
+                        {usuario.ROL === "empleado" && (
+                          <button
+                            onClick={() => abrirModalAsignarServicios(usuario)}
+                            className="px-3 py-1 bg-purple-500 text-white rounded hover:bg-purple-600 text-sm"
+                          >
+                            Servicios
+                          </button>
+                        )}
+
+                        <button
+                          onClick={() => {
+                            setUsuarioSeleccionado(usuario);
+                            setModalEliminar(true);
+                          }}
+                          className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
+                        >
+                          Eliminar
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="7"
+                    className="px-6 py-8 text-center text-gray-500"
+                  >
+                    No hay usuarios registrados
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="7" className="px-6 py-8 text-center text-gray-500">
-                  No hay usuarios registrados
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
-
-    
     </div>
   );
 }
