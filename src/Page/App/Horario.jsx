@@ -23,7 +23,7 @@ export default function Horario() {
         </div>
         <div className="my-20">
           <iframe
-            className="rounded-2xl h-70 w-100 md:h-130 md:w-200 "
+            className="rounded-2xl h-70 w-82 md:h-130 md:w-200 "
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3976.414658000806!2d-74.1455078251313!3d4.6977993952771975!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f9cb753f18c55%3A0x6f766c561c665212!2sPeluquer%C3%ADa!5e0!3m2!1ses-419!2sco!4v1769799174912!5m2!1ses-419!2sco"
             width="600"
             height="450"

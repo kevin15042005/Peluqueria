@@ -11,7 +11,7 @@ export default function SubserviciosAdmin({ servicioCreado }) {
   const [mensaje, setMensaje] = useState("");
   const [loading, setLoading] = useState(false);
   const [subservicioCreado, setSubservicioCreado] = useState(false);
-  
+
   // Estados para edición
   const [editando, setEditando] = useState(false);
   const [subservicioEditando, setSubservicioEditando] = useState(null);
@@ -61,10 +61,12 @@ export default function SubserviciosAdmin({ servicioCreado }) {
     setNombre(subservicio.NOMBRE || subservicio.nombre || "");
     setPrecio(subservicio.PRECIO || subservicio.precio || "");
     setDescripcion(subservicio.DESCRIPCION || subservicio.descripcion || "");
-    setDuracion(subservicio.DURACION_MINUTOS || subservicio.duracionMinutos || "60");
-    
+    setDuracion(
+      subservicio.DURACION_MINUTOS || subservicio.duracionMinutos || "60",
+    );
+
     // Desplazar al formulario
-    document.querySelector('form')?.scrollIntoView({ behavior: 'smooth' });
+    document.querySelector("form")?.scrollIntoView({ behavior: "smooth" });
   };
 
   // Cancelar edición
@@ -112,15 +114,15 @@ export default function SubserviciosAdmin({ servicioCreado }) {
       });
 
       const data = await res.json();
-      
+
       if (data.success) {
         setMensaje("✅ Subservicio creado correctamente");
         // Limpiar formulario
         cancelarEdicion();
-        
+
         // Actualizar lista automáticamente
-        setSubservicioCreado(prev => !prev);
-        
+        setSubservicioCreado((prev) => !prev);
+
         // Limpiar mensaje después de 3 segundos
         setTimeout(() => {
           setMensaje("");
@@ -139,7 +141,7 @@ export default function SubserviciosAdmin({ servicioCreado }) {
   // Actualizar subservicio existente
   const actualizarSubservicio = async () => {
     if (!subservicioEditando) return;
-    
+
     if (!nombre.trim() || !precio.trim() || !servicioId) {
       setMensaje("❌ Todos los campos son obligatorios");
       return;
@@ -159,28 +161,31 @@ export default function SubserviciosAdmin({ servicioCreado }) {
     setMensaje("");
 
     try {
-      const res = await fetch(`${API}/subservicio/actualizar_subservicio/${subservicioEditando.ID}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          servicioId: parseInt(servicioId),
-          nombre: nombre.trim(),
-          precio: parseFloat(precio),
-          descripcion: descripcion.trim(),
-          duracionMinutos: parseInt(duracion) || 60,
-        }),
-      });
+      const res = await fetch(
+        `${API}/subservicio/actualizar_subservicio/${subservicioEditando.ID}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            servicioId: parseInt(servicioId),
+            nombre: nombre.trim(),
+            precio: parseFloat(precio),
+            descripcion: descripcion.trim(),
+            duracionMinutos: parseInt(duracion) || 60,
+          }),
+        },
+      );
 
       const data = await res.json();
-      
+
       if (data.success) {
         setMensaje("✅ Subservicio actualizado correctamente");
         // Limpiar formulario y salir del modo edición
         cancelarEdicion();
-        
+
         // Actualizar lista automáticamente
-        setSubservicioCreado(prev => !prev);
-        
+        setSubservicioCreado((prev) => !prev);
+
         // Limpiar mensaje después de 3 segundos
         setTimeout(() => {
           setMensaje("");
@@ -198,7 +203,11 @@ export default function SubserviciosAdmin({ servicioCreado }) {
 
   // Eliminar subservicio
   const eliminarSubservicio = async (subservicioId) => {
-    if (!confirm("¿Estás seguro de eliminar este subservicio? Esta acción no se puede deshacer.")) {
+    if (
+      !confirm(
+        "¿Estás seguro de eliminar este subservicio? Esta acción no se puede deshacer.",
+      )
+    ) {
       return;
     }
 
@@ -208,7 +217,7 @@ export default function SubserviciosAdmin({ servicioCreado }) {
       });
 
       const data = await res.json();
-      
+
       if (data.success) {
         setMensaje("✅ Subservicio eliminado correctamente");
         // Si estamos editando este subservicio, cancelar edición
@@ -216,8 +225,8 @@ export default function SubserviciosAdmin({ servicioCreado }) {
           cancelarEdicion();
         }
         // Actualizar lista
-        setSubservicioCreado(prev => !prev);
-        
+        setSubservicioCreado((prev) => !prev);
+
         setTimeout(() => {
           setMensaje("");
         }, 3000);
@@ -227,9 +236,9 @@ export default function SubserviciosAdmin({ servicioCreado }) {
     } catch (error) {
       console.error("Error al eliminar subservicio:", error);
       // Si no hay endpoint, simulamos eliminación local
-      setSubservicios(prev => prev.filter(ss => ss.ID !== subservicioId));
+      setSubservicios((prev) => prev.filter((ss) => ss.ID !== subservicioId));
       setMensaje("✅ Subservicio eliminado (localmente)");
-      
+
       setTimeout(() => {
         setMensaje("");
       }, 3000);
@@ -242,19 +251,20 @@ export default function SubserviciosAdmin({ servicioCreado }) {
     cargarSubservicios();
     cancelarEdicion();
     setMensaje("🔄 Datos actualizados");
-    
+
     setTimeout(() => {
       setMensaje("");
     }, 2000);
   };
 
   return (
-    <div className="bg-gradient-to-br from-black to-gray-900 rounded-2xl shadow-xl border-2 border-amber-500/30 p-6">
+    <div className="bg-linear-to-br from-black to-gray-900 rounded-2xl shadow-xl border-2 border-amber-500/30 p-4 md:p-6">
+  {/* Header */}
   <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-    <h2 className="text-2xl md:text-3xl font-bold text-amber-300"> Administrar Subservicios</h2>
+    <h2 className="text-xl md:text-3xl font-bold text-amber-300"> Administrar Subservicios</h2>
     <button
       onClick={recargarDatos}
-      className="flex items-center space-x-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 border-2 border-amber-500/30 text-amber-300 rounded-lg transition-colors"
+      className="flex items-center space-x-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 border-2 border-amber-500/30 text-amber-300 rounded-lg transition-colors text-sm md:text-base"
     >
       <span>🔄</span>
       <span>Actualizar</span>
@@ -262,7 +272,7 @@ export default function SubserviciosAdmin({ servicioCreado }) {
   </div>
 
   {mensaje && (
-    <div className={`mb-6 p-4 rounded-xl border flex items-center ${
+    <div className={`mb-6 p-4 rounded-xl border flex items-center text-sm md:text-base ${
       mensaje.includes('✅') 
         ? 'bg-green-900/20 text-green-300 border-green-500/30' 
         : mensaje.includes('❌')
@@ -275,151 +285,8 @@ export default function SubserviciosAdmin({ servicioCreado }) {
       <span>{mensaje.replace('✅', '').replace('❌', '').replace('🔄', '').trim()}</span>
     </div>
   )}
-
-
-  {/* Lista de Subservicios */}
-  <div>
-    <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-      <h3 className="text-xl font-bold text-amber-300">Subservicios Registrados</h3>
-      <div className="bg-gray-800/50 border border-amber-500/30 px-4 py-2 rounded-xl">
-        <span className="text-amber-300">Total: </span>
-        <span className="font-bold text-amber-400 text-xl">{subservicios.length}</span>
-      </div>
-    </div>
-    
-    {subservicios.length === 0 ? (
-      <div className="text-center py-12 border-2 border-dashed border-amber-500/20 rounded-2xl">
-        <div className="text-amber-500/50 text-6xl mb-4">📋</div>
-        <p className="text-amber-300 text-lg font-medium">No hay subservicios registrados</p>
-        <p className="text-amber-500/70 text-sm mt-2">
-          Crea tu primer subservicio usando el formulario de arriba
-        </p>
-      </div>
-    ) : (
-      <div className="overflow-x-auto rounded-xl border-2 border-amber-500/20">
-        <table className="min-w-full divide-y divide-amber-500/20">
-          <thead className="bg-linear-to-r from-amber-700/50 to-amber-800/50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-bold text-amber-300 uppercase tracking-wider">
-                ID
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-amber-300 uppercase tracking-wider">
-                Servicio
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-amber-300 uppercase tracking-wider">
-                Subservicio
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-amber-300 uppercase tracking-wider">
-                Precio
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-amber-300 uppercase tracking-wider">
-                Duración
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-amber-300 uppercase tracking-wider">
-                Descripción
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-amber-300 uppercase tracking-wider">
-                Acciones
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-gray-800/30 divide-y divide-amber-500/10">
-            {subservicios.map((ss) => (
-              <tr 
-                key={ss.ID} 
-                className={`hover:bg-gray-700/50 transition-colors ${
-                  editando && subservicioEditando?.ID === ss.ID ? 'bg-blue-900/30' : ''
-                }`}
-              >
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="text-sm font-bold text-amber-400">#{ss.ID}</span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="inline-block px-3 py-1 bg-amber-900/50 text-amber-300 border border-amber-500/30 rounded-full text-xs font-medium">
-                    {ss.SERVICIO_NOMBRE || "Sin servicio"}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="font-bold text-amber-300">
-                    {ss.NOMBRE}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="text-lg font-bold text-green-400">
-                    ${parseFloat(ss.PRECIO || 0).toLocaleString()}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="px-3 py-1 bg-purple-900/30 text-purple-300 border border-purple-500/30 rounded-full text-sm font-medium">
-                    {ss.DURACION_MINUTOS || 60} min
-                  </span>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="max-w-xs">
-                    {ss.DESCRIPCION ? (
-                      <p className="text-sm text-gray-300 line-clamp-2">{ss.DESCRIPCION}</p>
-                    ) : (
-                      <span className="text-gray-500 text-sm italic">Sin descripción</span>
-                    )}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => iniciarEdicion(ss)}
-                      className="px-3 py-1 bg-blue-900/30 text-blue-300 hover:bg-blue-800/50 border border-blue-500/30 rounded text-sm transition-colors flex items-center space-x-1"
-                      title="Editar subservicio"
-                    >
-                      <span>✏️</span>
-                      <span>Editar</span>
-                    </button>
-                    <button
-                      onClick={() => eliminarSubservicio(ss.ID)}
-                      className="px-3 py-1 bg-red-900/30 text-red-300 hover:bg-red-800/50 border border-red-500/30 rounded text-sm transition-colors flex items-center space-x-1"
-                      title="Eliminar subservicio"
-                    >
-                      <span>🗑️</span>
-                      <span>Eliminar</span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    )}
-  </div>
-
-  {/* Estadísticas */}
-  {subservicios.length > 0 && (
-    <div className=" font- m-8 grid grid-cols-1 md:grid-cols-4 gap-4">
-      <div className="bg-blue-900/20 p-4 rounded-xl border border-blue-500/30">
-        <p className="text-2xl font-bold text-blue-300">{subservicios.length}</p>
-        <p className="text-sm text-gray-400">Total subservicios</p>
-      </div>
-      <div className="bg-green-900/20 p-4 rounded-xl border border-green-500/30">
-        <p className="text-2xl font-bold text-green-300">
-          ${subservicios.reduce((sum, ss) => sum + parseFloat(ss.PRECIO || 0), 0).toLocaleString()}
-        </p>
-        <p className="text-sm text-gray-400">Valor total</p>
-      </div>
-      <div className="bg-purple-900/20 p-4 rounded-xl border border-purple-500/30">
-        <p className="text-2xl font-bold text-purple-300">
-          {servicios.length}
-        </p>
-        <p className="text-sm text-gray-400">Servicios disponibles</p>
-      </div>
-      <div className="bg-amber-900/20 p-4 rounded-xl border border-amber-500/30">
-        <p className="text-2xl font-bold text-amber-300">
-          {Math.round(subservicios.reduce((sum, ss) => sum + (ss.DURACION_MINUTOS || 60), 0) / subservicios.length)} min
-        </p>
-        <p className="text-sm text-gray-400">Duración promedio</p>
-      </div>
-      
-    </div>
-  )}
-    <div className="mb-8 bg-gray-800/50 rounded-xl p-6 border-2 border-amber-500/30">
+ {/* Formulario */}
+  <div className="bg-gray-800/50 rounded-xl p-4 md:p-6 border-2 border-amber-500/30">
     <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
       <h3 className="text-lg font-bold text-amber-300">
         {editando ? `✏️ Editando: ${subservicioEditando?.NOMBRE}` : '➕ Crear Nuevo Subservicio'}
@@ -434,7 +301,7 @@ export default function SubserviciosAdmin({ servicioCreado }) {
       )}
     </div>
     
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6">
       <div>
         <label className="block text-sm font-medium text-amber-300 mb-2">
           Servicio *
@@ -442,7 +309,7 @@ export default function SubserviciosAdmin({ servicioCreado }) {
         <select
           value={servicioId}
           onChange={(e) => setServicioId(e.target.value)}
-          className="w-full p-3 bg-gray-800 border-2 border-amber-500/30 text-amber-200 rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all duration-300"
+          className="w-full p-3 bg-gray-800 border-2 border-amber-500/30 text-amber-200 rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all duration-300 text-sm md:text-base"
         >
           <option value="" className="bg-gray-800">Seleccione un servicio</option>
           {servicios.map((s) => (
@@ -462,7 +329,7 @@ export default function SubserviciosAdmin({ servicioCreado }) {
           placeholder="Ej: Corte Caballero"
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
-          className="w-full p-3 bg-gray-800 border-2 border-amber-500/30 text-amber-200 rounded-lg placeholder-gray-500 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all duration-300"
+          className="w-full p-3 bg-gray-800 border-2 border-amber-500/30 text-amber-200 rounded-lg placeholder-gray-500 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all duration-300 text-sm md:text-base"
           onKeyPress={(e) => {
             if (e.key === 'Enter') {
               editando ? actualizarSubservicio() : crearSubservicio();
@@ -480,7 +347,7 @@ export default function SubserviciosAdmin({ servicioCreado }) {
           placeholder="Ej: 15000"
           value={precio}
           onChange={(e) => setPrecio(e.target.value)}
-          className="w-full p-3 bg-gray-800 border-2 border-amber-500/30 text-amber-200 rounded-lg placeholder-gray-500 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all duration-300"
+          className="w-full p-3 bg-gray-800 border-2 border-amber-500/30 text-amber-200 rounded-lg placeholder-gray-500 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all duration-300 text-sm md:text-base"
           min="0"
           step="1000"
         />
@@ -493,7 +360,7 @@ export default function SubserviciosAdmin({ servicioCreado }) {
         <select
           value={duracion}
           onChange={(e) => setDuracion(e.target.value)}
-          className="w-full p-3 bg-gray-800 border-2 border-amber-500/30 text-amber-200 rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all duration-300"
+          className="w-full p-3 bg-gray-800 border-2 border-amber-500/30 text-amber-200 rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all duration-300 text-sm md:text-base"
         >
           <option value="15" className="bg-gray-800">15 minutos</option>
           <option value="30" className="bg-gray-800">30 minutos</option>
@@ -513,7 +380,7 @@ export default function SubserviciosAdmin({ servicioCreado }) {
         placeholder="Ej: Corte básico para hombres con lavado incluido"
         value={descripcion}
         onChange={(e) => setDescripcion(e.target.value)}
-        className="w-full p-3 bg-gray-800 border-2 border-amber-500/30 text-amber-200 rounded-lg placeholder-gray-500 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all duration-300 h-32 resize-none"
+        className="w-full p-3 bg-gray-800 border-2 border-amber-500/30 text-amber-200 rounded-lg placeholder-gray-500 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all duration-300 h-32 resize-none text-sm md:text-base"
       />
     </div>
 
@@ -521,7 +388,7 @@ export default function SubserviciosAdmin({ servicioCreado }) {
       <button
         onClick={editando ? actualizarSubservicio : crearSubservicio}
         disabled={loading || loadingEdicion || !nombre.trim() || !precio.trim() || !servicioId}
-        className={`px-8 py-3 rounded-xl font-bold transition-all duration-300 flex items-center justify-center space-x-2 ${
+        className={`px-6 md:px-8 py-3 rounded-xl font-bold transition-all duration-300 flex items-center justify-center space-x-2 text-sm md:text-base ${
           loading || loadingEdicion || !nombre.trim() || !precio.trim() || !servicioId
             ? 'bg-gray-700 cursor-not-allowed text-gray-400 border border-gray-600'
             : editando
@@ -545,14 +412,243 @@ export default function SubserviciosAdmin({ servicioCreado }) {
       {editando && (
         <button
           onClick={cancelarEdicion}
-          className="px-6 py-3 bg-gray-800 hover:bg-gray-700 border-2 border-amber-500/30 text-amber-300 rounded-xl font-medium transition-colors"
+          className="px-4 md:px-6 py-3 bg-gray-800 hover:bg-gray-700 border-2 border-amber-500/30 text-amber-300 rounded-xl font-medium transition-colors text-sm md:text-base"
         >
           Cancelar
         </button>
       )}
     </div>
   </div>
+  {/* ============ VISTA MÓVIL ============ */}
+  <div className="md:hidden">
+    {/* Encabezado móvil */}
+    <div className="flex justify-between items-center mb-4">
+      <h3 className="text-lg font-bold text-amber-300">Subservicios</h3>
+      <div className="bg-gray-800/50 border border-amber-500/30 px-3 py-1 rounded-lg">
+        <span className="text-amber-300 text-sm">Total: </span>
+        <span className="font-bold text-amber-400">{subservicios.length}</span>
+      </div>
+    </div>
+    
+    {/* Mensaje vacío */}
+    {subservicios.length === 0 ? (
+      <div className="text-center py-8 border-2 border-dashed border-amber-500/20 rounded-xl mb-6">
+        <div className="text-amber-500/50 text-4xl mb-3">📋</div>
+        <p className="text-amber-300 font-medium">No hay subservicios</p>
+        <p className="text-amber-500/70 text-xs mt-1">Crea tu primer subservicio abajo</p>
+      </div>
+    ) : (
+      <div className="space-y-4 mb-6">
+        {subservicios.map((ss) => (
+          <div 
+            key={ss.ID} 
+            className={`bg-gray-800/30 border-2 border-amber-500/20 rounded-xl p-4 ${
+              editando && subservicioEditando?.ID === ss.ID ? 'bg-blue-900/30 border-blue-500/30' : ''
+            }`}
+          >
+            {/* Header de la tarjeta */}
+            <div className="flex justify-between items-start mb-3">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs font-bold text-amber-400">#{ss.ID}</span>
+                  <span className="px-2 py-0.5 bg-amber-900/50 text-amber-300 border border-amber-500/30 rounded-full text-xs">
+                    {ss.SERVICIO_NOMBRE || "Sin servicio"}
+                  </span>
+                </div>
+                <h4 className="font-bold text-amber-300 text-base">{ss.NOMBRE}</h4>
+              </div>
+              
+              {/* Precio */}
+              <span className="text-lg font-bold text-green-400 whitespace-nowrap ml-2">
+                ${parseFloat(ss.PRECIO || 0).toLocaleString()}
+              </span>
+            </div>
+            
+            {/* Duración */}
+            <div className="mb-3">
+              <span className="px-2 py-1 bg-purple-900/30 text-purple-300 border border-purple-500/30 rounded-full text-xs">
+                {ss.DURACION_MINUTOS || 60} min
+              </span>
+            </div>
+            
+            {/* Descripción */}
+            <div className="mb-4">
+              {ss.DESCRIPCION ? (
+                <p className="text-sm text-gray-300">{ss.DESCRIPCION}</p>
+              ) : (
+                <span className="text-gray-500 text-sm italic">Sin descripción</span>
+              )}
+            </div>
+            
+            {/* Botones de acción */}
+            <div className="flex gap-2">
+              <button
+                onClick={() => iniciarEdicion(ss)}
+                className="flex-1 px-3 py-2 bg-blue-900/30 text-blue-300 hover:bg-blue-800/50 border border-blue-500/30 rounded-lg text-sm transition-colors flex items-center justify-center gap-1"
+              >
+                <span>✏️</span>
+                <span>Editar</span>
+              </button>
+              <button
+                onClick={() => eliminarSubservicio(ss.ID)}
+                className="flex-1 px-3 py-2 bg-red-900/30 text-red-300 hover:bg-red-800/50 border border-red-500/30 rounded-lg text-sm transition-colors flex items-center justify-center gap-1"
+              >
+                <span>🗑️</span>
+                <span>Eliminar</span>
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
 
+  {/* ============ VISTA DESKTOP ============ */}
+  <div className="hidden md:block">
+    {/* Lista de Subservicios - TABLA DESKTOP */}
+    <div>
+      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+        <h3 className="text-xl font-bold text-amber-300">Subservicios Registrados</h3>
+        <div className="bg-gray-800/50 border border-amber-500/30 px-4 py-2 rounded-xl">
+          <span className="text-amber-300">Total: </span>
+          <span className="font-bold text-amber-400 text-xl">{subservicios.length}</span>
+        </div>
+      </div>
+      
+      {subservicios.length === 0 ? (
+        <div className="text-center py-12 border-2 border-dashed border-amber-500/20 rounded-2xl">
+          <div className="text-amber-500/50 text-6xl mb-4">📋</div>
+          <p className="text-amber-300 text-lg font-medium">No hay subservicios registrados</p>
+          <p className="text-amber-500/70 text-sm mt-2">
+            Crea tu primer subservicio usando el formulario de arriba
+          </p>
+        </div>
+      ) : (
+        <div className="overflow-x-auto rounded-xl border-2 border-amber-500/20">
+          <table className="min-w-full divide-y divide-amber-500/20">
+            <thead className="bg-linear-to-r from-amber-700/50 to-amber-800/50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-bold text-amber-300 uppercase tracking-wider">
+                  ID
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-amber-300 uppercase tracking-wider">
+                  Servicio
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-amber-300 uppercase tracking-wider">
+                  Subservicio
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-amber-300 uppercase tracking-wider">
+                  Precio
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-amber-300 uppercase tracking-wider">
+                  Duración
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-amber-300 uppercase tracking-wider">
+                  Descripción
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-amber-300 uppercase tracking-wider">
+                  Acciones
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-gray-800/30 divide-y divide-amber-500/10">
+              {subservicios.map((ss) => (
+                <tr 
+                  key={ss.ID} 
+                  className={`hover:bg-gray-700/50 transition-colors ${
+                    editando && subservicioEditando?.ID === ss.ID ? 'bg-blue-900/30' : ''
+                  }`}
+                >
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="text-sm font-bold text-amber-400">#{ss.ID}</span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="inline-block px-3 py-1 bg-amber-900/50 text-amber-300 border border-amber-500/30 rounded-full text-xs font-medium">
+                      {ss.SERVICIO_NOMBRE || "Sin servicio"}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="font-bold text-amber-300">
+                      {ss.NOMBRE}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="text-lg font-bold text-green-400">
+                      ${parseFloat(ss.PRECIO || 0).toLocaleString()}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="px-3 py-1 bg-purple-900/30 text-purple-300 border border-purple-500/30 rounded-full text-sm font-medium">
+                      {ss.DURACION_MINUTOS || 60} min
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="max-w-xs">
+                      {ss.DESCRIPCION ? (
+                        <p className="text-sm text-gray-300 line-clamp-2">{ss.DESCRIPCION}</p>
+                      ) : (
+                        <span className="text-gray-500 text-sm italic">Sin descripción</span>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => iniciarEdicion(ss)}
+                        className="px-3 py-1 bg-blue-900/30 text-blue-300 hover:bg-blue-800/50 border border-blue-500/30 rounded text-sm transition-colors flex items-center space-x-1"
+                        title="Editar subservicio"
+                      >
+                        <span>✏️</span>
+                        <span>Editar</span>
+                      </button>
+                      <button
+                        onClick={() => eliminarSubservicio(ss.ID)}
+                        className="px-3 py-1 bg-red-900/30 text-red-300 hover:bg-red-800/50 border border-red-500/30 rounded text-sm transition-colors flex items-center space-x-1"
+                        title="Eliminar subservicio"
+                      >
+                        <span>🗑️</span>
+                        <span>Eliminar</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  </div>
+
+  {/* Estadísticas */}
+  {subservicios.length > 0 && (
+    <div className="mt-6 mb-6 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+      <div className="bg-blue-900/20 p-3 md:p-4 rounded-xl border border-blue-500/30">
+        <p className="text-lg md:text-2xl font-bold text-blue-300">{subservicios.length}</p>
+        <p className="text-xs md:text-sm text-gray-400">Total subservicios</p>
+      </div>
+      <div className="bg-green-900/20 p-3 md:p-4 rounded-xl border border-green-500/30">
+        <p className="text-lg md:text-2xl font-bold text-green-300">
+          ${subservicios.reduce((sum, ss) => sum + parseFloat(ss.PRECIO || 0), 0).toLocaleString()}
+        </p>
+        <p className="text-xs md:text-sm text-gray-400">Valor total</p>
+      </div>
+      <div className="bg-purple-900/20 p-3 md:p-4 rounded-xl border border-purple-500/30">
+        <p className="text-lg md:text-2xl font-bold text-purple-300">
+          {servicios.length}
+        </p>
+        <p className="text-xs md:text-sm text-gray-400">Servicios disponibles</p>
+      </div>
+      <div className="bg-amber-900/20 p-3 md:p-4 rounded-xl border border-amber-500/30">
+        <p className="text-lg md:text-2xl font-bold text-amber-300">
+          {Math.round(subservicios.reduce((sum, ss) => sum + (ss.DURACION_MINUTOS || 60), 0) / subservicios.length)} min
+        </p>
+        <p className="text-xs md:text-sm text-gray-400">Duración promedio</p>
+      </div>
+    </div>
+  )}
+
+ 
 </div>
   );
 }

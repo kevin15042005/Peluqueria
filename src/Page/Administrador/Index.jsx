@@ -786,7 +786,7 @@ export default function UsuariosAdmin() {
                       {usuario.NOMBRE}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap md:table-cell block ">
-                      <span className="md:hidden font-bold pr-4">Correo:</span>
+                      <span className="md:hidden font-bold pr-2">Correo:</span>
                       <span className="text-[14px]">{usuario.CORREO}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap md:table-cell block">
