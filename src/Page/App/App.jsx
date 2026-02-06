@@ -13,7 +13,7 @@ export default function App() {
         <section className="bg-[#272724]  p-4 ">
           <Informativa2 />
         </section>
-        <section className="bg-yellow-400 opacity-[0.8] p-4 ">
+        <section className="bg-yellow-400/40 opacity-[0.8] p-4 ">
         </section>
         <section className="bg-[#222222]">
           <Horario />

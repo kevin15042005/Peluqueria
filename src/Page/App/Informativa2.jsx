@@ -38,12 +38,12 @@ const Slider = () => {
 
 export default function Informativa2() {
   return (
-    <div className="my-20 bg-white flex flex-col justify-center items-center">
-      <h2 className="text-black font-extrabold font-serif text-[20px] sm:text-[20px] md:text-[40px] py-10">
+    <div className="my-20 rounded-2xl  bg-linear-to-r from-amber-900 to-gray-900 shadow-lg flex flex-col justify-center items-center">
+      <h2 className="text-white font-extrabold font-serif text-[20px] sm:text-[20px] md:text-[40px] py-10">
         Buena Higiene
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 justify-center items-center">
-        <div className=" flex flex-col justify-center items-center border-2 border-amber-300 max-h-full my-20 py-6 px-3  bg-black    text-white transform scale-105  w-11/12 max-w-lg mx-auto">
+        <div className=" flex flex-col justify-center items-center rounded-2xl gap-4 border-2 border-amber-300 max-h-full my-20 py-6 px-3  bg-black    text-white transform scale-105  w-11/12 max-w-lg mx-auto">
           <h5 className="text-2xl text-[18px] sm:text-[20px] md:text-[26px] ">
             La mejor escapada 
           </h5>
@@ -57,40 +57,40 @@ export default function Informativa2() {
       </div>
       <ul className="grid  grid-cols-1 md:grid-cols-2  gap-8 p-10 my-40  ">
         <li className="flex flex-col items-center text-center max-w-xs py-2 border-t-2 pt-6">
-          <h4 className="font-bold font-serif text-2xl">
+          <h4 className="font-bold font-serif text-2xl text-white">
             <span>1.</span>Manicure y pedicure
           </h4>
           <img src={ImageneManicure} alt="Manicure" />
-          <p>
+          <p className="text-white">
             There are many variations of passages of Lorem Ipsum available.
             Majority have suffered alteration in some form.
           </p>
         </li>
         <li className="flex flex-col items-center text-center max-w-xs border-t-2 pt-6">
-          <h4 className="font-bold font-serif text-2xl">
+          <h4 className="font-bold font-serif text-2xl text-white">
             <span>2.</span>Salon belleza
           </h4>
           <img src={ImageSalonBelleza} alt="Belleza" />
-          <p className="font-sans">
+          <p className="font-sans text-white">
             There are many variations of passages of Lorem Ipsum available.
             Majority have suffered alteration in some form.
           </p>
         </li>
         <li className="flex flex-col items-center text-center max-w-xs border-t-2 pt-6 ">
-          <h4 className="font-bold font-serif text-2xl">
+          <h4 className="font-bold font-serif text-2xl text-white">
             <span>3.</span>Masajes
           </h4>
           <img src={ImagenMasajes} alt="Masaje" />
-          <p>
+          <p className="text-white">
             There are many variations of passages of Lorem Ipsum available.
             Majority have suffered alteration in some form.
           </p>
         </li>  <li className="flex flex-col items-center text-center max-w-xs border-t-2 pt-6 ">
-          <h4 className="font-bold font-serif text-2xl">
+          <h4 className="font-bold font-serif text-2xl text-white">
             <span>4.</span>Facial
           </h4>
           <img src={ImagenMasajesFacial} alt="Facial" />
-          <p>
+          <p className="text-white"> 
             There are many variations of passages of Lorem Ipsum available.
             Majority have suffered alteration in some form.
           </p>
