@@ -22,7 +22,7 @@ export default function Footer() {
               <span className=" text-[15px]  sm:text-[17px]">
                 Bogota , Colombia
               </span>
-            </ul>{" "}
+            </ul> 
           </div>
           <div>
             <h3 className="font-bold text-[16px] sm:text-[17px]">

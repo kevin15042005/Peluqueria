@@ -261,7 +261,7 @@ export default function MonitorTurnos() {
                 Monitor de Turnos - Administrador
               </h1>
               <p className="text-amber-400 mt-2">
-                Gestión de turnos en tiempo real -{" "}
+                Gestión de turnos en tiempo real 
                 {new Date().toLocaleDateString("es-ES")}
               </p>
             </div>
@@ -310,17 +310,17 @@ export default function MonitorTurnos() {
 
         {/* Estadísticas */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-xl shadow-lg border border-blue-200">
+          <div className="bg-amber-200 p-6 rounded-xl shadow-lg border border-blue-200">
             <div className="flex items-center">
-              <Clock className="text-black mr-3" size={32} />
+              <Clock className="text-blue-500 font-extrabold mr-3" size={32} />
               <div>
-                <p className="text-3xl font-bold text-blue-800">
+                <p className="text-3xl  font-extrabold text-blue-500 ">
                   {turnosActivos.length}
                 </p>
-                <p className="text-black0">Turnos Activos</p>
+                <p className="text-black font-extrabold">Turnos Activos</p>
                 {turnosActivos.length > 0 && (
-                  <p className="text-xs text-blue-600 mt-1">
-                    Próximo disponible:{" "}
+                  <p className="text-xs text-gray-00 mt-1">
+                    Próximo disponible:
                     {calcularProximaHoraDisponible(turnosActivos)}
                   </p>
                 )}
@@ -328,33 +328,33 @@ export default function MonitorTurnos() {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-lg border border-yellow-200">
+          <div className="bg-amber-200 p-6 rounded-xl shadow-lg border border-yellow-200">
             <div className="flex items-center">
               <AlertCircle className="text-yellow-600 mr-3" size={32} />
               <div>
-                <p className="text-3xl font-bold text-yellow-800">
+                <p className="text-3xl  text-yellow-800 font-extrabold">
                   {turnosActivos.filter((t) => t.ESTADO === "pendiente").length}
                 </p>
-                <p className="text-gray-600">En Espera</p>
+                <p className="text-black font-extrabold ">En Espera</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-lg border border-green-200">
+          <div className="bg-amber-200 p-6 rounded-xl shadow-lg border border-amber-200">
             <div className="flex items-center">
               <PlayCircle className="text-green-600 mr-3" size={32} />
               <div>
-                <p className="text-3xl font-bold text-green-800">
+                <p className="text-3xl  text-green-800 font-extrabold">
                   {
                     turnosActivos.filter((t) => t.ESTADO === "confirmado")
                       .length
                   }
                 </p>
-                <p className="text-gray-600">En Atención</p>
+                <p className="text-black font-extrabold">En Atención</p>
                 {turnosActivos.filter((t) => t.ESTADO === "confirmado").length >
                   0 && (
                   <p className="text-xs text-green-600 mt-1">
-                    En curso:{" "}
+                    En curso:
                     {
                       turnosActivos.filter((t) => t.ESTADO === "confirmado")
                         .length
@@ -365,17 +365,17 @@ export default function MonitorTurnos() {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-lg border border-purple-200">
+          <div className="bg-amber-200 p-6 rounded-xl shadow-lg border border-purple-200">
             <div className="flex items-center">
-              <CheckSquare className="text-purple-600 mr-3" size={32} />
+              <CheckSquare className="text-purple-600  mr-3" size={32} />
               <div>
-                <p className="text-3xl font-bold text-purple-800">
+                <p className="text-3xl  font-extrabold text-purple-800">
                   {historialTurnos.length}
                 </p>
-                <p className="text-gray-600">Completados Hoy</p>
+                <p className="text-black font-extrabold">Completados Hoy</p>
                 {historialTurnos.length > 0 && (
-                  <p className="text-xs text-purple-600 mt-1">
-                    Promedio:{" "}
+                  <p className="text-xs  font-extrabold text-purple-600 mt-1">
+                    Promedio:
                     {Math.round(
                       historialTurnos.reduce((sum, t) => {
                         const duracion = calcularDuracionReal(
@@ -384,7 +384,7 @@ export default function MonitorTurnos() {
                         );
                         return sum + (duracion || 0);
                       }, 0) / historialTurnos.length,
-                    )}{" "}
+                    )}
                     min
                   </p>
                 )}
@@ -402,9 +402,9 @@ export default function MonitorTurnos() {
                 cargarHistorialTurnos();
               }
             }}
-            className="flex items-center space-x-2 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors"
+            className="flex items-center space-x-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-900 transition-colors font-extrabold"
           >
-            <History size={20} />
+            <History size={20}  />
             <span>
               {mostrarHistorial ? "Ocultar Historial" : "Ver Historial"}
             </span>
@@ -412,14 +412,14 @@ export default function MonitorTurnos() {
         </div>
 
         {/* Turnos Activos */}
-        <div className="mb-8 bg-white rounded-xl shadow-lg p-6">
+        <div className="mb-8 bg-amber-200 rounded-xl shadow-lg p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold text-gray-800 flex items-center">
-              <Clock className="mr-2 text-blue-600" />
+              <Clock className="mr-2 text-yellow-800 font-extrabold" />
               Turnos Activos Hoy
             </h2>
             <div className="flex items-center space-x-2">
-              <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-bold">
+              <span className="px-4 py-2 bg-blue-100 text-yellow-800  rounded-full text-sm font-extrabold">
                 {turnosActivos.length} activos
               </span>
               {turnosActivos.length > 0 && (
@@ -437,18 +437,17 @@ export default function MonitorTurnos() {
             </div>
           ) : turnosActivos.length === 0 ? (
             <div className="text-center py-12">
-              <div className="text-6xl mb-4">🎉</div>
-              <p className="text-gray-600 text-lg">
+              <p className="text-yellow-800  font-extrabold text-lg">
                 No hay turnos activos en este momento
               </p>
-              <p className="text-gray-500 mt-2">
+              <p className="text-black font-extrabold mt-2">
                 Todos los turnos han sido atendidos o no hay citas programadas
               </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+                <thead className="bg-amber-200">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Cliente
@@ -551,7 +550,7 @@ export default function MonitorTurnos() {
                             {turno.HORA_INICIO_REAL ? (
                               <>
                                 <div className="text-green-700 font-medium">
-                                  Inicio:{" "}
+                                  Inicio:
                                   {formatearHora(turno.HORA_INICIO_REAL)}
                                 </div>
                                 <div className="text-blue-700">
@@ -559,7 +558,7 @@ export default function MonitorTurnos() {
                                 </div>
                                 {turno.HORA_FIN_REAL && (
                                   <div className="text-purple-700">
-                                    Fin real:{" "}
+                                    Fin real:
                                     {formatearHora(turno.HORA_FIN_REAL)}
                                   </div>
                                 )}
@@ -650,14 +649,14 @@ export default function MonitorTurnos() {
 
         {/* Historial de Turnos Completados */}
         {mostrarHistorial && (
-          <div className="bg-white rounded-xl shadow-lg p-6">
+          <div className="bg-amber-200 rounded-xl shadow-lg p-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-gray-800 flex items-center">
-                <History className="mr-2 text-purple-600" />
-                Historial de Turnos Completados Hoy
+                <History className="mr-2 text-yellow-800 " />
+                Historial de Turnos 
               </h2>
-              <div className="flex items-center space-x-2">
-                <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-bold">
+              <div className="flex justify-center space-x-2">
+                <span className="px-4 py-2 bg-blue-100 text-yellow-800  rounded-full text-sm font-extrabold">
                   {historialTurnos.length} turnos
                 </span>
               </div>
@@ -670,8 +669,7 @@ export default function MonitorTurnos() {
               </div>
             ) : historialTurnos.length === 0 ? (
               <div className="text-center py-12">
-                <div className="text-4xl mb-4">📝</div>
-                <p className="text-gray-500">No hay turnos completados hoy</p>
+                <p className="text-black font-extrabold ">No hay turnos completados hoy</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -755,12 +753,12 @@ export default function MonitorTurnos() {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm">
                               <div className="text-gray-900">
-                                Inicio:{" "}
+                                Inicio: 
                                 {formatearHora(turno.HORA_INICIO_REAL) ||
                                   "--:--"}
                               </div>
                               <div className="text-gray-900">
-                                Fin:{" "}
+                                Fin: 
                                 {formatearHora(turno.HORA_FIN_REAL) || "--:--"}
                               </div>
                             </div>
@@ -784,7 +782,7 @@ export default function MonitorTurnos() {
                                     >
                                       {diferencia > 0
                                         ? `+${diferencia}`
-                                        : diferencia}{" "}
+                                        : diferencia} 
                                       min
                                     </div>
                                   )}
@@ -881,7 +879,7 @@ export default function MonitorTurnos() {
                           );
                           return sum + (duracionReal || 0);
                         }, 0) / historialTurnos.length,
-                      )}{" "}
+                      )} 
                       min
                     </p>
                     <p className="text-xs text-gray-600">Promedio real</p>

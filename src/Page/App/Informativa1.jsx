@@ -48,7 +48,7 @@ export default function Informacion1() {
                 <Instagram size={40}  className="text-yellow-300"/>
               </div>
               <div className="flex-1 py-5 px-4 flex justify-center items-center">
-                {" "}
+                 
                 <Instagram size={40}  className="text-yellow-300" />
               </div>
             </div>

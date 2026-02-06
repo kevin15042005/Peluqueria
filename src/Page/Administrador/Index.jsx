@@ -1,6 +1,6 @@
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
-
+import { EyeClosed, Eye } from "lucide-react";
 export default function UsuariosAdmin() {
   const [showPassword, setShowPassword] = useState(false);
   const [usuarios, setUsuarios] = useState([]);
@@ -350,16 +350,18 @@ export default function UsuariosAdmin() {
   };
 
   return (
-    <div className="p-6">
+      <div className="py-12 md:p-8 max-w-6xl w-full ">
       {/* Modal Crear */}
       {mostrarCrear && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+        <div className="fixed inset-0 bg-current/40 flex items-center justify-center z-50">
+          <div className="bg-black rounded-lg shadow-xl p-6 w-full max-w-md">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold">Crear Nuevo Usuario</h3>
+              <h3 className="text-xl font-bold text-white">
+                Crear Nuevo Usuario
+              </h3>
               <button
                 onClick={() => setModalCrear(false)}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-gray-200 hover:text-gray-300"
               >
                 <X size={24} />
               </button>
@@ -369,68 +371,73 @@ export default function UsuariosAdmin() {
               <div className="space-y-4">
                 <input
                   name="nombre"
-                  placeholder="Nombre completo *"
-                  className="w-full p-3 border rounded-lg"
+                  placeholder="Nombre completo "
+                  className="w-full p-3 border text-amber-300 border-amber-300 rounded-lg "
                   required
                 />
                 <input
                   type="email"
                   name="correo"
-                  placeholder="Correo electrónico *"
-                  className="w-full p-3 border rounded-lg"
+                  placeholder="Correo electrónico "
+                  className="w-full p-3 border text-amber-300 border-amber-300 rounded-lg "
                   required
                 />
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
-                  placeholder="Contraseña *"
-                  className="w-full p-3 border rounded-lg"
+                  placeholder="Contraseña "
+                  className="w-full p-3 border text-amber-300 border-amber-300 rounded-lg "
                   required
                 />
                 <input
-                  type="text"
+                  type={showPassword ? "number" : "password"}
                   name="pin"
-                  placeholder="PIN (6 dígitos) *"
+                  placeholder="PIN (6 dígitos) "
                   maxLength={6}
                   pattern="\d{6}"
-                  className="w-full p-3 border rounded-lg"
+                  className="w-full p-3 border text-amber-300 border-amber-300 rounded-lg "
                   required
                 />
+
                 <select
                   name="rol"
-                  className="w-full p-3 border rounded-lg"
+                  className="w-full p-3 border text-amber-300 border-amber-300 rounded-lg "
                   required
                 >
-                  <option value="">Seleccione rol *</option>
+                  <option className="bg-black" value="">
+                    Seleccione rol *
+                  </option>
                   {roles.map((rol) => (
-                    <option key={rol.ID} value={rol.ID}>
+                    <option className="bg-black" key={rol.ID} value={rol.ID}>
                       {rol.NOMBRE}
                     </option>
                   ))}
                 </select>
 
                 <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="showPassword"
-                    checked={showPassword}
-                    onChange={() => setShowPassword(!showPassword)}
-                    className="mr-2"
-                  />
-                  <label htmlFor="showPassword">Mostrar contraseña</label>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="flex items-center text-orange-500 hover:text-orange-400 transition-colors"
+                  >
+                    {showPassword ? <Eye /> : <EyeClosed />}
+                    <span className="ml-2 text-amber-300">
+                      Mostrar contraseña
+                    </span>
+                  </button>
                 </div>
 
                 <div className="flex justify-end space-x-3 pt-4">
                   <button
                     type="button"
                     onClick={() => setModalCrear(false)}
-                    className="px-4 py-2 border rounded-lg hover:bg-gray-100"
+                    className="px-4 py-2 border rounded-lg text-amber-300 border-amber-300 hover:bg-white/30"
                   >
                     Cancelar
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                    className="px-4 py-2 border text-amber-300 border-amber-300   rounded-lg hover:bg-white/30"
                   >
                     Guardar
                   </button>
@@ -443,10 +450,12 @@ export default function UsuariosAdmin() {
 
       {/* Modal Editar */}
       {modalEditar && usuarioSeleccionado && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold">Editar Usuario</h3>
+        <div className="fixed inset-0  bg-current/30 flex items-center justify-center z-50">
+          <div className="bg-black rounded-lg shadow-xl p-6 w-full max-w-md">
+            <div className="flex justify-between  items-center mb-4">
+              <h3 className="text-xl font-bold text-amber-300">
+                Editar Usuario
+              </h3>
               <button
                 onClick={() => setModalEditar(false)}
                 className="text-gray-500 hover:text-gray-700"
@@ -468,7 +477,7 @@ export default function UsuariosAdmin() {
                       CORREO: e.target.value,
                     })
                   }
-                  className="w-full p-3 border rounded-lg bg-gray-50"
+                  className="w-full p-3 border text-amber-300 border-amber-300 rounded-lg "
                   disabled
                 />
               </div>
@@ -477,7 +486,7 @@ export default function UsuariosAdmin() {
                   Nueva Contraseña *
                 </label>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   value={usuarioSeleccionado.PASSWORD || ""}
                   onChange={(e) =>
                     setUsuarioSeleccionado({
@@ -486,7 +495,7 @@ export default function UsuariosAdmin() {
                     })
                   }
                   placeholder="Nueva contraseña"
-                  className="w-full p-3 border rounded-lg"
+                  className="w-full p-3 border text-amber-300 border-amber-300 rounded-lg "
                   required
                 />
               </div>
@@ -502,24 +511,40 @@ export default function UsuariosAdmin() {
                       PIN: e.target.value,
                     })
                   }
+                  type={showPassword?"text":"password"}
                   placeholder="6 dígitos"
                   maxLength={6}
                   pattern="\d{6}"
-                  className="w-full p-3 border rounded-lg"
+                  className="w-full p-3 border text-amber-300 border-amber-300 rounded-lg "
                   required
                 />
               </div>
 
+              <div className="flex items-center">
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="flex items-center text-orange-500 hover:text-orange-400 transition-colors"
+                >
+                  {showPassword?<Eye/>:<EyeClosed/>}
+                  <span
+                    className="text-amber-300 border-amber-300"
+                    htmlFor="showPassword"
+                  >
+                    Mostrar contraseña
+                  </span>
+                </button>
+              </div>
               <div className="flex justify-end space-x-3 pt-4">
                 <button
                   onClick={() => setModalEditar(false)}
-                  className="px-4 py-2 border rounded-lg hover:bg-gray-100"
+                  className="px-4 py-2 border rounded-lg text-amber-300 border-amber-300 hover:bg-white/30"
                 >
                   Cancelar
                 </button>
                 <button
                   onClick={editarUsuario}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                  className="px-4 py-2 border rounded-lg text-amber-300 border-amber-300 hover:bg-white/30"
                 >
                   Guardar Cambios
                 </button>
@@ -531,23 +556,23 @@ export default function UsuariosAdmin() {
 
       {/* Modal Eliminar */}
       {modalEliminar && usuarioSeleccionado && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
-            <h3 className="text-xl font-bold mb-4">Confirmar Eliminación</h3>
-            <p className="mb-6">
-              ¿Estás seguro de eliminar al usuario{" "}
+        <div className="fixed inset-0 bg-current/30 flex items-center justify-center z-50">
+          <div className="bg-black rounded-lg shadow-xl p-6 w-full max-w-md">
+            <h3 className="text-xl font-bold text-amber-300 mb-4">Confirmar Eliminación</h3>
+            <p className="mb-6  text-amber-300">
+              ¿Estás seguro de eliminar al usuario 
               <span className="font-bold">{usuarioSeleccionado.NOMBRE}</span>?
             </p>
             <div className="flex justify-end space-x-3">
               <button
                 onClick={() => setModalEliminar(false)}
-                className="px-4 py-2 border rounded-lg hover:bg-gray-100"
+                  className="px-4 py-2 border rounded-lg text-amber-300 border-amber-300 hover:bg-white/30"
               >
                 Cancelar
               </button>
               <button
                 onClick={eliminarUsuario}
-                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                  className="px-4 py-2 border rounded-lg text-amber-300 border-amber-300 hover:bg-white/30"
               >
                 Eliminar
               </button>
@@ -558,10 +583,10 @@ export default function UsuariosAdmin() {
 
       {/* Modal Asignar Servicios */}
       {modalAsignarServicios && usuarioSeleccionado && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
+        <div className="fixed inset-0  pt-5  bg-current/30 flex items-center justify-center z-50">
+          <div className="bg-black rounded-lg shadow-xl p-6 w-94 max-w-lg max-h-[90vh]  overflow-hidden flex flex-col">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold">
+              <h3 className="text-xl font-bold text-amber-300">
                 Asignar Servicios a {usuarioSeleccionado.NOMBRE}
               </h3>
               <button
@@ -576,18 +601,18 @@ export default function UsuariosAdmin() {
             </div>
 
             <div className="mb-4 flex-1 overflow-hidden">
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-sm text-amber-300 mb-4">
                 Seleccione los subservicios que puede realizar este empleado:
               </p>
 
               {cargandoServicios ? (
                 <div className="text-center py-8">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500 mx-auto"></div>
-                  <p className="mt-2 text-gray-500">Cargando servicios...</p>
+                  <p className="mt-2 text-amber-500">Cargando servicios...</p>
                 </div>
               ) : serviciosDisponibles.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
-                  <p>⚠️ No hay servicios disponibles para asignar</p>
+                  <p> No hay servicios disponibles para asignar</p>
                   {errorCarga && <p className="text-sm mt-2">{errorCarga}</p>}
                   <button
                     onClick={cargarServiciosDisponibles}
@@ -612,7 +637,7 @@ export default function UsuariosAdmin() {
                       return (
                         <div
                           key={`servicio-${servicioId}-${index}`}
-                          className="flex items-start p-3 hover:bg-gray-50 rounded border-b last:border-b-0"
+                          className="flex items-start text-amber-300 p-3 hover:bg-white/30 rounded border-b last:border-b-0"
                         >
                           <input
                             type="checkbox"
@@ -634,15 +659,15 @@ export default function UsuariosAdmin() {
                                 );
                               }
                             }}
-                            className="mr-3 mt-1 h-5 w-5"
+                            className="mr-3 mt-1 h-5 w-5 text-amber-300"
                           />
                           <label
                             htmlFor={`servicio-${servicioId}`}
                             className="cursor-pointer flex-1"
                           >
                             <div className="font-medium">{servicioNombre}</div>
-                            <div className="text-sm text-gray-600 mt-1">
-                              <span className="font-semibold">Categoría:</span>{" "}
+                            <div className="text-sm text-amber-300 mt-1">
+                              <span className="font-semibold ">Categoría:</span> 
                               {categoria}
                               {servicio.PRECIO !== undefined && (
                                 <span className="ml-3 font-semibold text-green-600">
@@ -652,13 +677,13 @@ export default function UsuariosAdmin() {
                               )}
                             </div>
                             {servicio.DESCRIPCION && (
-                              <div className="text-xs text-gray-500 mt-1">
+                              <div className="text-xs text-amber-200 mt-1">
                                 {servicio.DESCRIPCION}
                               </div>
                             )}
                             {servicio.DURACION_MINUTOS && (
-                              <div className="text-xs text-gray-500 mt-1">
-                                ⏱️ Duración: {servicio.DURACION_MINUTOS} minutos
+                              <div className="text-xs text-amber-300  mt-1">
+                                 Duración: {servicio.DURACION_MINUTOS} minutos
                               </div>
                             )}
                           </label>
@@ -667,31 +692,7 @@ export default function UsuariosAdmin() {
                     })}
                   </div>
 
-                  <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                    <div className="flex justify-between items-center">
-                      <div className="text-sm">
-                        <p className="font-semibold">📊 Resumen:</p>
-                        <p>
-                          Servicios seleccionados:{" "}
-                          <span className="font-bold text-purple-600">
-                            {serviciosSeleccionados.length}
-                          </span>
-                        </p>
-                        <p>
-                          Servicios disponibles:{" "}
-                          <span className="font-bold">
-                            {serviciosDisponibles.length}
-                          </span>
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => setServiciosSeleccionados([])}
-                        className="px-3 py-1 text-sm border border-red-300 text-red-600 rounded hover:bg-red-50"
-                      >
-                        Limpiar selección
-                      </button>
-                    </div>
-                  </div>
+                 
                 </>
               )}
             </div>
@@ -714,12 +715,12 @@ export default function UsuariosAdmin() {
                 className={`px-4 py-2 rounded-lg font-medium ${
                   serviciosSeleccionados.length === 0 || cargandoServicios
                     ? "bg-gray-300 cursor-not-allowed text-gray-500"
-                    : "bg-purple-500 hover:bg-purple-600 text-white"
+                    : "bg-yellow-500 hover:bg-yellow-600 text-white"
                 }`}
               >
                 {cargandoServicios
                   ? "Cargando..."
-                  : `✅ Asignar ${serviciosSeleccionados.length} servicio(s)`}
+                  : `Asignar ${serviciosSeleccionados.length} servicio(s)`}
               </button>
             </div>
           </div>
@@ -728,56 +729,68 @@ export default function UsuariosAdmin() {
 
       {/* Tabla de Usuarios */}
 
-      <div className=" py-10  my-10 grid grid-cols-1 md: overflow-x-auto bg-white rounded-lg shadow">
-<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 px-4 md:px-6">          <h2 className="text-2xl font-bold"> Gestión de Usuarios</h2>
+      <div className=" py-10  my-10 grid grid-cols-1  overflow-x-auto bg-amber-200 border-2 border-amber-500 rounded-lg shadow">
+        <div className="flex flex-col  sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 px-4 md:px-6">
+           
+          <h2 className="text-2xl font-bold"> Gestión de Usuarios</h2>
           <button
             onClick={() => setModalCrear(true)}
-            className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+            className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700"
           >
             Agregar Usuario
           </button>
         </div>
-        <div>
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className=" bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <div className="">
+          <table className="w-full  divide-y divide-x   ">
+             
+            <thead className="hidden md:table-header-group ">
+              <tr className="  bg-amber-200 border-y-2 border-amber-500 max-w-full">
+                <th className="px-6 py-3 text-left text-xs  text-black font-extrabold uppercase tracking-wider">
                   ID
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs  text-black font-extrabold  uppercase tracking-wider">
                   Nombre
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs text-black font-extrabold  uppercase tracking-wider">
                   Correo
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs text-black font-extrabold  uppercase tracking-wider">
                   Rol
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs text-black font-extrabold  uppercase tracking-wider">
                   Servicios Asignados
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs text-black font-extrabold  uppercase tracking-wider">
                   Estado
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs text-black font-extrabold  uppercase tracking-wider">
                   Acciones
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className=" bg-amber divide-y divide-gray-200 ">
+               
               {usuarios.length > 0 ? (
                 usuarios.map((usuario) => (
-                  <tr key={usuario.ID} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
+                  <tr
+                    key={usuario.ID}
+                    className="hover:bg-yellow-400 max-w-6xl w-full md:table-row grid grid-cols-2   border-b"
+                  >
+                     
+                    <td className="px-6 py-4 whitespace-nowrap md:table-cell block">
+                      <span className="md:hidden font-bold mr-2">ID:</span>
                       {usuario.ID}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 whitespace-nowrap md:table-cell block">
+                      <span className="md:hidden font-bold mr-2">Nombre:</span>
                       {usuario.NOMBRE}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {usuario.CORREO}
+                    <td className="px-6 py-4 whitespace-nowrap md:table-cell block ">
+                      <span className="md:hidden font-bold pr-4">Correo:</span>
+                      <span className="text-[14px]">{usuario.CORREO}</span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 whitespace-nowrap md:table-cell block">
+                      <span className="md:hidden font-bold mr-2">Rol:</span>
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
                           usuario.ROL === "administrador"
@@ -788,7 +801,10 @@ export default function UsuariosAdmin() {
                         {usuario.ROL}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 md:table-cell block">
+                      <span className="md:hidden font-bold mr-2">
+                        Servicios:
+                      </span>
                       <div className="max-w-xs">
                         {usuario.SERVICIOS_ASIGNADOS &&
                         usuario.SERVICIOS_ASIGNADOS !== "NULL" ? (
@@ -811,7 +827,8 @@ export default function UsuariosAdmin() {
                         )}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 whitespace-nowrap md:table-cell block">
+                      <span className="md:hidden font-bold mr-2">Estado:</span>
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
                           usuario.ESTADO === "activo"
@@ -823,13 +840,16 @@ export default function UsuariosAdmin() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex- gap-2">
+                        <span className="md:hidden font-bold mr-2">
+                          Acciones:
+                        </span>
                         <button
                           onClick={() => {
                             setUsuarioSeleccionado(usuario);
                             setModalEditar(true);
                           }}
-                          className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
+                          className="flex px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
                         >
                           Editar
                         </button>

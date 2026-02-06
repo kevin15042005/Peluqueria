@@ -4,7 +4,7 @@ export default function Horario() {
   return (
     <>
       <div className="flex flex-col md:flex-row justify-center items-center gap-9 min-h-15 p-6">
-        {" "}
+         
         <div className="bg-white p-12 rounded-lg shadow-lg  max-w-md ">
           <h2 className="text-3xl  font-bold mb-3 border-b-2 border-amber-400 pb-2">
             Horario de apertura
@@ -32,7 +32,7 @@ export default function Horario() {
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
             title="Ubicación de la Peluquería"
-          ></iframe>{" "}
+          ></iframe> 
         </div>
       </div>
     </>

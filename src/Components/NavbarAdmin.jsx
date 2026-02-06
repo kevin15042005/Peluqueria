@@ -30,9 +30,7 @@ const NavbarEmpleado = () => {
           : "bg-[#000000] "
       }`}
     >
-      {" "}
       <div className="max-w-7xl mx-auto flex items-center justify-between w-full">
-        {" "}
         <div className="flex shrink-0">
           <img
             src={Logo}
@@ -46,14 +44,12 @@ const NavbarEmpleado = () => {
               className=" font-extrabold text-yellow-400  transition-colors duration-300"
               onClick={handleMenuClick}
             >
-              {" "}
               <Link to="/VistaTurno">VistaTurno</Link>
             </li>
             <li
               className=" font-extrabold text-yellow-400  transition-colors duration-300"
               onClick={handleMenuClick}
             >
-              {" "}
               <Link to="/Administrador">CRUD</Link>
             </li>
             <li
@@ -125,7 +121,7 @@ const NavbarEmpleado = () => {
             className=" font-extrabold text-yellow-400  transition-colors duration-300"
           >
             Salir
-          </Link>{" "}
+          </Link>
         </li>
       </ul>
     </nav>

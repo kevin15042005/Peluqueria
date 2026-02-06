@@ -37,7 +37,7 @@ const Navbar = () => {
           <div className="flex justify-center">
             <ul className=" hidden md:flex justify-center space-x-8 ml-auto">
               <li
-                className={` font-extrabold ${isScrolled?"text-yellow-400 transition-colors duration-300":"text-yellow-400"} `}
+                className={` font-extrabold font-cu ${isScrolled?"text-yellow-400 transition-colors duration-300":"text-yellow-400"} `}
                 onClick={handleMenuClick}
               >
                 <Link to="/">Inicio</Link>

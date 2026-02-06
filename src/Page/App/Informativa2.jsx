@@ -29,7 +29,7 @@ const Slider = () => {
             src={img}
             alt={`slider-${index}`}
             className="w-full h-full object-cover object-center"
-          />{" "}
+          /> 
         </div>
       ))}
     </div>
@@ -45,10 +45,10 @@ export default function Informativa2() {
       <div className="grid grid-cols-1 md:grid-cols-2 justify-center items-center">
         <div className=" flex flex-col justify-center items-center border-2 border-amber-300 max-h-full my-20 py-6 px-3  bg-black    text-white transform scale-105  w-11/12 max-w-lg mx-auto">
           <h5 className="text-2xl text-[18px] sm:text-[20px] md:text-[26px] ">
-            La mejor escapada{" "}
+            La mejor escapada 
           </h5>
           <h3 className="text-center text-[18px] sm:text-[20px] md:text-[26px]">
-            No es tu salon de belleza de todo los dias{" "}
+            No es tu salon de belleza de todo los dias 
           </h3>
         </div>
         <div>

@@ -46,12 +46,12 @@ export default function Home() {
           <div className="flex flex-col justify-center items-center border-[0.8px] rounded-2xl m-3 text-center">
             <h1 className="text-3xl my-4">Que experiencia quiere vivir ahora?</h1>
             <p className="">
-              Llevamos x años mejorando l abelleza y transformacion visual{" "}
-            </p>{" "}
+              Llevamos x años mejorando l abelleza y transformacion visual 
+            </p> 
             <p>
               En el grupo el <strong>EL DORADO </strong>cada servicio es una
               experiencia nueva por vivir , diseñando para vivir cadas tecnica
-              elegenacia y presicion{" "}
+              elegenacia y presicion 
             </p>
             <div className="w-full justify-center">
               <ul>
@@ -85,7 +85,7 @@ className="flex items-center justify-center gap-2 p-3 mx-auto mt-4  w-fit bg-amb
         </div>
         <div>
           <h1 className="text-amber-400 text-center mt-8 text-3xl font-sans">
-            Nuestro Servicios{" "}
+            Nuestro Servicios 
           </h1>
           <div className="w-full h-full object-cover max-w-5xl px-1 py-20">
             <Swiper
@@ -109,7 +109,7 @@ className="flex items-center justify-center gap-2 p-3 mx-auto mt-4  w-fit bg-amb
             >
               {[...servicios, ...servicios].map((servicio, index) => (
                 <SwiperSlide key={`${servicio.id}-${index}`}>
-                  {" "}
+                   
                   <div className="flex flex-col text-centerm items-center">
                     <img src={servicio.img} alt={servicio.nombre} />
 
