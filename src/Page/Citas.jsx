@@ -542,8 +542,8 @@ export default function Citas() {
       {/* INFORMACIÓN DE DURACIÓN */}
       {subservicioSeleccionado && (
         <div className="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-          <p className="text-sm text-blue-800">
-            ⏱️ <span className="font-bold">Duración:</span> {duracionServicio} minutos
+          <p className="text-sm text-black">
+             <span className="font-bold">Duración:</span> {duracionServicio} minutos
             {hora && (
               <span className="ml-2">
                 • Horario: {formatearHora(hora)} - {calcularHoraFin(hora)}
@@ -564,8 +564,8 @@ export default function Citas() {
             disabled={cargandoHorarios}
             className={`w-full p-3 rounded-lg font-semibold ${
               cargandoHorarios
-                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700 text-white'
+                ? 'bg--300 text-gray-500 cursor-not-allowed'
+                : 'bg-amber-600 hover:bg-amber-700 text-white'
             }`}
           >
             {cargandoHorarios ? (
@@ -577,7 +577,7 @@ export default function Citas() {
                 Buscando horarios...
               </span>
             ) : (
-              '🔍 Buscar Horarios Disponibles'
+              'Buscar Horarios Disponibles'
             )}
           </button>
         </div>
@@ -586,8 +586,8 @@ export default function Citas() {
       {/* HORARIOS DISPONIBLES */}
       {horariosDisponibles.length > 0 && (
         <div className="mb-6">
-          <label className="block font-semibold mb-2 text-gray-700">
-            ⏰ Horarios Disponibles *
+          <label className="block font-semibold mb-2 text-yellow-400">
+             Horarios Disponibles *
           </label>
           <div className="grid grid-cols-3 gap-2">
             {horariosDisponibles.map((horario, index) => {
@@ -603,8 +603,8 @@ export default function Citas() {
                     ocupado
                       ? 'bg-red-100 text-red-800 border-red-300 cursor-not-allowed'
                       : hora === horaStr
-                      ? 'bg-blue-600 text-white border-blue-600'
-                      : 'bg-gray-100 hover:bg-gray-200 border-gray-300'
+                      ? 'bg-amber-600 text-white border-amber-600'
+                      : 'bg-gray-100 hover:bg-amber-200 border-gray-300'
                   }`}
                   title={ocupado ? "Horario ocupado" : `Disponible: ${formatearHora(horaStr)}`}
                 >
@@ -615,8 +615,8 @@ export default function Citas() {
           </div>
           
           {hora && (
-            <div className="mt-2 p-2 bg-green-50 rounded-lg border border-green-200">
-              <p className="text-sm text-green-600">
+            <div className="mt-2 p-2 bg-amber-50 rounded-lg border border-amber-300">
+              <p className="text-sm text-amber-600">
                 <span className="font-bold">Horario seleccionado:</span> {formatearHora(hora)} - {calcularHoraFin(hora)}
               </p>
             </div>
@@ -665,7 +665,7 @@ export default function Citas() {
           w-full p-4 rounded-lg font-semibold text-lg text-white transition-colors
           ${(loading || !subservicioSeleccionado || !fecha || !hora || !clienteNombre || !clienteTelefono)
             ? 'bg-gray-400 cursor-not-allowed'
-            : 'bg-green-600 hover:bg-green-700'
+            : 'bg-amber-600 hover:bg-amber-700'
           }
         `}
       >
@@ -698,16 +698,7 @@ export default function Citas() {
       )}
 
       {/* MODO DESARROLLO INFO */}
-      {import.meta.env.DEV && horariosDisponibles.length > 0 && (
-        <div className="mt-4 p-3 bg-purple-50 border border-purple-200 rounded-lg">
-          <p className="text-sm text-purple-800 font-semibold">
-            🛠️ Modo Desarrollo Activado
-          </p>
-          <p className="text-xs text-purple-600">
-            Mostrando horarios de prueba. Verifica que tu backend en {API} esté funcionando.
-          </p>
-        </div>
-      )}
+     
     </div>
   );
 }

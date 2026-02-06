@@ -41,12 +41,7 @@ const NavbarEmpleado = () => {
               <li className=" font-extrabold text-yellow-400  transition-colors duration-300">
                 <Link to="/Empleado">Asistencia</Link>
               </li>
-              <li
-                className=" font-extrabold text-yellow-400  transition-colors duration-300"
-                onClick={handleMenuClick}
-              >
-                <Link to="/MisTurnos">MisTurnos</Link>
-              </li>
+           
               <li
                 className=" font-extrabold text-yellow-400  transition-colors duration-300"
                 onClick={handleMenuClick}
@@ -72,12 +67,7 @@ const NavbarEmpleado = () => {
            <li className=" font-extrabold text-yellow-400  transition-colors duration-300">
                 <Link to="/Empleado">Asistencia</Link>
               </li>
-              <li
-                className=" font-extrabold text-yellow-400  transition-colors duration-300"
-                onClick={handleMenuClick}
-              >
-                <Link to="/MisTurnos">MisTurnos</Link>
-              </li>
+       
           <li
             className=" font-extrabold text-yellow-400  transition-colors duration-300"
             onClick={() => {

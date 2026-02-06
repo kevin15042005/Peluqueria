@@ -16,7 +16,6 @@ import App from "./Page/App/App.jsx";
 import Citas from "./Page/Citas.jsx";
 import Ingreso from "./Page/Sesion/Ingreso.jsx";
 import TurnosEmpleado from "./Page/Empleado/Asistencia.jsx";
-import Misturnos from "./Page/Empleado/Misturnos.jsx";
 import RutaProtegida from "./Components/RutaProteguida/Index.jsx";
 import ServiciosUsuario from "./Page/ServiciosUsuario.jsx";
 //Rutas proteguidas
@@ -87,14 +86,7 @@ createRoot(document.getElementById("root")).render(
               }
             />
 
-            <Route
-              path="/MisTurnos"
-              element={
-                <RutaProtegida rolPermitido="empleado">
-                  <Misturnos />
-                </RutaProtegida>
-              }
-            />
+           
           </Route>
         </Routes>
       </BrowserRouter>
