@@ -63,20 +63,7 @@ function Cartas() {
       </HTMLFlipBook>
 
       {/* Botones inferiores */}
-      <div className="flex gap-4 mt-6">
-        <button 
-          onClick={() => flipBook.current.pageFlip().pagePrev()}
-          className="bg-zinc-800 border border-amber-400 text-amber-400 px-4 py-2 rounded-full text-sm font-bold"
-        >
-          ANTERIOR
-        </button>
-        <button 
-          onClick={() => flipBook.current.pageFlip().pageForward()}
-          className="bg-amber-400 text-black px-4 py-2 rounded-full text-sm font-bold shadow-lg"
-        >
-          SIGUIENTE
-        </button>
-      </div>
+    
     </div>
   );
 }
