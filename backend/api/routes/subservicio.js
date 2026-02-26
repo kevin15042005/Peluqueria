@@ -8,12 +8,11 @@ router.get("/obtener_subservicios", async (req, res) => {
   try {
     const db = await conectDb();
     const [rows] = await db.execute("CALL OBTENER_SUBSERVICIO()");
-    
-    res.json({ 
-      success: true, 
-      data: rows[0] 
+
+    res.json({
+      success: true,
+      data: rows[0],
     });
-    
   } catch (error) {
     console.error("❌ Error al obtener subservicios:", error.message);
     res.status(500).json({
@@ -28,96 +27,98 @@ router.get("/obtener_subservicios", async (req, res) => {
 router.post("/registrar_subservicio", async (req, res) => {
   const { servicioId, nombre, precio, descripcion, duracionMinutos } = req.body;
 
-  console.log("📥 Datos recibidos:", { 
-    servicioId, nombre, precio, descripcion, duracionMinutos 
+  console.log("📥 Datos recibidos:", {
+    servicioId,
+    nombre,
+    precio,
+    descripcion,
+    duracionMinutos,
   });
 
   // Validaciones
   if (!servicioId || !nombre || !precio) {
-    return res.status(400).json({ 
-      success: false, 
-      message: "Servicio, nombre y precio son obligatorios" 
+    return res.status(400).json({
+      success: false,
+      message: "Servicio, nombre y precio son obligatorios",
     });
   }
 
   if (isNaN(parseFloat(precio)) || parseFloat(precio) <= 0) {
-    return res.status(400).json({ 
-      success: false, 
-      message: "El precio debe ser un número positivo" 
+    return res.status(400).json({
+      success: false,
+      message: "El precio debe ser un número positivo",
     });
   }
 
   // Validar duración
   const duracion = parseInt(duracionMinutos) || 30; // 30 por defecto
   if (isNaN(duracion) || duracion < 15) {
-    return res.status(400).json({ 
-      success: false, 
-      message: "La duración debe ser al menos 15 minutos" 
+    return res.status(400).json({
+      success: false,
+      message: "La duración debe ser al menos 15 minutos",
     });
   }
 
   if (duracion > 300) {
-    return res.status(400).json({ 
-      success: false, 
-      message: "La duración no puede exceder 300 minutos" 
+    return res.status(400).json({
+      success: false,
+      message: "La duración no puede exceder 300 minutos",
     });
   }
 
   try {
     const db = await conectDb();
-    
-    // ¡IMPORTANTE! Llamar al procedimiento con 5 parámetros
+
     await db.execute("CALL REGISTRAR_SUBSERVICIO(?, ?, ?, ?, ?)", [
       parseInt(servicioId),
       nombre.trim(),
       parseFloat(precio),
       descripcion ? descripcion.trim() : null,
-      duracion  // <-- QUINTO PARÁMETRO: DURACIÓN
+      duracion,
     ]);
-    
+
     console.log(`✅ Subservicio creado: ${nombre}, Duración: ${duracion}min`);
-    
-    res.json({ 
-      success: true, 
+
+    res.json({
+      success: true,
       message: "Subservicio creado correctamente",
-      duracionGuardada: duracion
+      duracionGuardada: duracion,
     });
-    
   } catch (error) {
     console.error("❌ Error al crear subservicio:", error.message);
-    
+
     // Manejar errores específicos
-    if (error.code === 'ER_NO_REFERENCED_ROW_2') {
-      return res.status(400).json({ 
-        success: false, 
-        message: "El servicio seleccionado no existe" 
+    if (error.code === "ER_NO_REFERENCED_ROW_2") {
+      return res.status(400).json({
+        success: false,
+        message: "El servicio seleccionado no existe",
       });
     }
-    
+
     if (error.message.includes("wrong number of arguments")) {
-      return res.status(500).json({ 
-        success: false, 
-        message: "Error: El procedimiento REGISTRAR_SUBSERVICIO necesita 5 parámetros. Verifica la base de datos.",
-        error: error.message
+      return res.status(500).json({
+        success: false,
+        message:
+          "Error: El procedimiento REGISTRAR_SUBSERVICIO necesita 5 parámetros. Verifica la base de datos.",
+        error: error.message,
       });
     }
-    
-    res.status(500).json({ 
-      success: false, 
+
+    res.status(500).json({
+      success: false,
       message: "Error al crear subservicio",
-      error: error.message
+      error: error.message,
     });
   }
 });
-
-
 
 //ACTUALIZAR SUBSERVICIO
 
 router.put("/actualizar_subservicio/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { servicioId, nombre, precio, descripcion, duracionMinutos } = req.body;
+    const { servicioId, nombre, precio, descripcion, duracionMinutos } =
+      req.body;
 
     // VALIDACIONES
     if (!id || isNaN(parseInt(id))) {
@@ -125,15 +126,21 @@ router.put("/actualizar_subservicio/:id", async (req, res) => {
     }
 
     if (!servicioId || isNaN(parseInt(servicioId))) {
-      return res.status(400).json({ success: false, message: "Servicio inválido" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Servicio inválido" });
     }
 
     if (!nombre || nombre.trim().length < 3) {
-      return res.status(400).json({ success: false, message: "Nombre inválido" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Nombre inválido" });
     }
 
     if (!precio || isNaN(parseFloat(precio)) || parseFloat(precio) <= 0) {
-      return res.status(400).json({ success: false, message: "Precio inválido" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Precio inválido" });
     }
 
     const duracion = parseInt(duracionMinutos);
@@ -159,7 +166,6 @@ router.put("/actualizar_subservicio/:id", async (req, res) => {
       success: true,
       message: "Subservicio actualizado correctamente",
     });
-
   } catch (error) {
     console.error("❌ Error:", error.message);
 
@@ -170,20 +176,17 @@ router.put("/actualizar_subservicio/:id", async (req, res) => {
   }
 });
 
-
-
 // ========== OBTENER SUBSERVICIOS PARA CLIENTES ==========
 router.get("/obtener_subservicios_cliente", async (req, res) => {
   try {
     const db = await conectDb();
-    
+
     const [rows] = await db.execute("CALL OBTENER_SUBSERVICIOS_CLIENTE()");
-    
-    res.json({ 
-      success: true, 
-      data: rows[0] 
+
+    res.json({
+      success: true,
+      data: rows[0],
     });
-    
   } catch (error) {
     console.error("❌ Error al obtener subservicios cliente:", error.message);
     res.status(500).json({
@@ -197,17 +200,19 @@ router.get("/obtener_subservicios_cliente", async (req, res) => {
 // ========== OBTENER SUBSERVICIOS POR SERVICIO ==========
 router.get("/subservicios_por_servicio/:servicioId", async (req, res) => {
   const { servicioId } = req.params;
-  
+
   try {
     const db = await conectDb();
-    
-    const [rows] = await db.execute("CALL OBTENER_SUBSERVICIOS_POR_SERVICIO(?)", [servicioId]);
-    
-    res.json({ 
-      success: true, 
-      data: rows[0] 
+
+    const [rows] = await db.execute(
+      "CALL OBTENER_SUBSERVICIOS_POR_SERVICIO(?)",
+      [servicioId],
+    );
+
+    res.json({
+      success: true,
+      data: rows[0],
     });
-    
   } catch (error) {
     console.error("❌ Error:", error.message);
     res.status(500).json({
@@ -222,27 +227,30 @@ router.get("/subservicios_por_servicio/:servicioId", async (req, res) => {
 router.put("/actualizar_duracion/:id", async (req, res) => {
   const { id } = req.params;
   const { duracionMinutos } = req.body;
-  
-  if (!duracionMinutos || isNaN(parseInt(duracionMinutos)) || parseInt(duracionMinutos) < 15) {
-    return res.status(400).json({ 
-      success: false, 
-      message: "Duración inválida (mínimo 15 minutos)" 
+
+  if (
+    !duracionMinutos ||
+    isNaN(parseInt(duracionMinutos)) ||
+    parseInt(duracionMinutos) < 15
+  ) {
+    return res.status(400).json({
+      success: false,
+      message: "Duración inválida (mínimo 15 minutos)",
     });
   }
-  
+
   try {
     const db = await conectDb();
-    
+
     await db.execute(
       "UPDATE SUBSERVICIO SET DURACION_MINUTOS = ? WHERE ID = ?",
-      [parseInt(duracionMinutos), id]
+      [parseInt(duracionMinutos), id],
     );
-    
-    res.json({ 
-      success: true, 
-      message: "Duración actualizada correctamente" 
+
+    res.json({
+      success: true,
+      message: "Duración actualizada correctamente",
     });
-    
   } catch (error) {
     console.error("❌ Error al actualizar duración:", error.message);
     res.status(500).json({
@@ -256,27 +264,26 @@ router.put("/actualizar_duracion/:id", async (req, res) => {
 // ========== OBTENER DURACIÓN DE SUBSERVICIO ==========
 router.get("/duracion/:id", async (req, res) => {
   const { id } = req.params;
-  
+
   try {
     const db = await conectDb();
-    
+
     const [rows] = await db.execute(
       "SELECT DURACION_MINUTOS FROM SUBSERVICIO WHERE ID = ?",
-      [id]
+      [id],
     );
-    
+
     if (rows.length === 0) {
-      return res.status(404).json({ 
-        success: false, 
-        message: "Subservicio no encontrado" 
+      return res.status(404).json({
+        success: false,
+        message: "Subservicio no encontrado",
       });
     }
-    
-    res.json({ 
-      success: true, 
-      duracionMinutos: rows[0].DURACION_MINUTOS || 60 
+
+    res.json({
+      success: true,
+      duracionMinutos: rows[0].DURACION_MINUTOS || 60,
     });
-    
   } catch (error) {
     console.error("❌ Error al obtener duración:", error.message);
     res.status(500).json({
@@ -287,6 +294,25 @@ router.get("/duracion/:id", async (req, res) => {
   }
 });
 
+//===ELIMINAR SUBSERVICIO===//
+router.delete("/eliminar_subservicio/:id", async (req, res) => {
+  const { id } = req.params;
 
+  if (!id) {
+    return res.status(400).json({ success: false, message: "Seleccionar id" });
+  }
+  try {
+    const db = await conectDb();
+    await db.execute("CALL ELIMINAR_SUBSERVICIO(?)", [id]);
+    res.json({ success: true, message: "Subservicio eliminado correctamente" });
+  } catch (error) {
+    console.error("Error al eliminar subservicio:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error al eliminar subservicio",
+      error: error.message,
+    });
+  }
+});
 
 export default router;

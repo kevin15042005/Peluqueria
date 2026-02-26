@@ -1,9 +1,11 @@
+//Css folder
+
+
 import React, { useEffect, useState } from "react";
 import Presentacion1 from "../../assets/Presentacion1.jpg";
 import Presentacion2 from "../../assets/Presentacion2.jpg";
 import ImagenMasajesFacial from "../../assets/MasajeFacial.png";
 import ImagenMasajes from "../../assets/Masajes.png";
-
 import ImageneManicure from "../../assets/Manicure.png";
 import ImageSalonBelleza from "../../assets/SalonBelleza.png";
 const images = [Presentacion1, Presentacion2];
@@ -38,14 +40,14 @@ const Slider = () => {
 
 export default function Informativa2() {
   return (
-    <div className="my-20 rounded-2xl  bg-linear-to-r from-amber-900 to-gray-900 shadow-lg flex flex-col justify-center items-center">
+    <div className="my-20 rounded-2xl  bg-linear-to-r  to-gray-900 shadow-lg flex flex-col justify-center items-center">
       <h2 className="text-white font-extrabold font-serif text-[20px] sm:text-[20px] md:text-[40px] py-10">
         Buena Higiene
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 justify-center items-center">
         <div className=" flex flex-col justify-center items-center rounded-2xl gap-4 border-2 border-amber-300 max-h-full my-20 py-6 px-3  bg-black    text-white transform scale-105  w-11/12 max-w-lg mx-auto">
-          <h5 className="text-2xl text-[18px] sm:text-[20px] md:text-[26px] ">
-            La mejor escapada 
+          <h5 className="font-play text-2xl text-[18px] sm:text-[20px] md:text-[26px] ">
+            `La mejor escapada` 
           </h5>
           <h3 className="text-center text-[18px] sm:text-[20px] md:text-[26px]">
             No es tu salon de belleza de todo los dias 

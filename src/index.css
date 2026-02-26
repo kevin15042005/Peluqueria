@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Doto:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 
 @import "tailwindcss";
@@ -9,17 +10,28 @@
 @layer base {
   :root {
     --font-roboto: "Roboto", sans-serif;
-    --font-cursiva1 : "Cedarville Cursive", cursive
+    --font-cursiva1: "Cedarville Cursive", cursive;
+    --font-playfair: "Playfair Display", serif;
   }
 }
 
 /* Clases personalizadas */
 .font-roboto {
   font-family: var(--font-roboto);
+  font-size: 40px;
+  color:green
 }
 
 .font-cursiva {
   font-family: var(--font-cursiva);
     font-size: 30px;
     color: aquamarine;
+}
+
+
+.font-play {
+  font-family: var(--font-playfair);
+  font-size: 30px;
+  font-style: normal;
+  
 }
