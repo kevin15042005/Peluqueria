@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ionic/react": "^8.7.18",
     "@tailwindcss/vite": "^4.1.18",
     "cors": "^2.8.6",
     "date-fns": "^4.1.0",
