@@ -22,7 +22,7 @@ export default function Citas() {
   const [duracionServicio, setDuracionServicio] = useState(0);
   const [cargandoServicios, setCargandoServicios] = useState(true);
 
-  const API = import.meta.env.VITE_API_URL || "http://localhost:8080";
+  const API = import.meta.env.VITE_API_URL;
 
   //CARGAR CATEGORÍAS Y SUBSERVICIOS
 

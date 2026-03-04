@@ -16,7 +16,7 @@ export default function UsuariosAdmin() {
   const [cargandoServicios, setCargandoServicios] = useState(false);
   const [errorCarga, setErrorCarga] = useState("");
 
-  const API = import.meta.env.VITE_API_URL || "http://localhost:8080";
+  const API = import.meta.env.VITE_API_URL;
 
   // Cargar usuarios, roles y servicios
   const cargarUsuarios = async () => {
