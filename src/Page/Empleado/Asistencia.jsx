@@ -34,6 +34,7 @@ export default function Turnos() {
     return horas * 60 + minutos;
   };
 
+  
   // Cargar usuario
   useEffect(() => {
     const userData = localStorage.getItem("USER");
@@ -44,7 +45,9 @@ export default function Turnos() {
       cargarTurnosCompletados(parsedUser.ID);
     }
   }, []);
-
+useEffect(() => {
+  console.log("API URL:", API);
+}, []);
   // Cargar turnos del empleado
   const cargarTurnos = async (empleadoId) => {
     setLoading(true);
