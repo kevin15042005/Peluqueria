@@ -444,7 +444,7 @@ export default function Citas() {
 
   return (
     <div className=" max-w-86 md:max-w-lg  mx-auto  p-6 bg-black rounded-xl shadow-lg my-16 ">
-      <h2 className="text-2xl font-bold mb-6 text-center text-white">
+      <h2 className="text-2xl font-bold mb-6 text-center  bg-linear-to-b from-amber-200 to-yellow-700/90 bg-clip-text text-transparent uppercase">
         Agendar Cita
       </h2>
 

@@ -75,9 +75,8 @@ export default function Login() {
 
       <div className="relative bg-black p-8 rounded-2xl shadow-2xl w-[90%] max-w-md z-20">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-amber-400">Inicio Sesion</h1>
+          <h1 className="text-3xl font-bold  bg-linear-to-b from-amber-200 to-yellow-700/90 bg-clip-text text-transparent">Inicio Sesion</h1>
         </div>
-
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-amber-400 mb-2">

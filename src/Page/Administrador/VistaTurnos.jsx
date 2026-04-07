@@ -104,7 +104,7 @@ export default function MonitorTurnos() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             turnoId,
-            empleadoId: 1, // Admin puede completar cualquier turno
+            empleadoId: 0, // Admin puede completar cualquier turno
           }),
         });
 

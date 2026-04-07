@@ -37,26 +37,26 @@ const Navbar = () => {
           <div className="flex justify-center">
             <ul className=" hidden md:flex justify-center space-x-8 ml-auto">
               <li
-                className={` font-extrabold  ${isScrolled?"text-yellow-400 transition-colors duration-300":"text-yellow-400"} `}
+                className={`  text-amber-400/80 uppercase font-bold font-serif mvb-6 tracking-tight hover:bg-gray-400/60 p-2 rounded-2xl  ${isScrolled?"transition-colors duration-300":"text-yellow-400"} `}
                 onClick={handleMenuClick}
               >
                 <Link to="/">Inicio</Link>
               </li>
               <li
-                className={` font-extrabold ${isScrolled?"text-yellow-400 transition-colors duration-300":"text-yellow-400"} `}
+                className={` text-amber-400/80 uppercase font-bold font-serif mvb-6 tracking-tight hover:bg-gray-400/60 p-2 rounded-2xl ${isScrolled?"transition-colors duration-300":"text-yellow-400"} `}
                 onClick={handleMenuClick}
               >
                 <Link to="/ServiciosUsuarios">Servicios</Link>
               </li>
 
               <li
-                className={` font-extrabold ${isScrolled?"text-yellow-400 transition-colors duration-300":"text-yellow-400"} `}
+                className={` text-amber-400/80 uppercase font-bold font-serif mvb-6 tracking-tight hover:bg-gray-400/60 p-2 rounded-2xl ${isScrolled?"transition-colors duration-300":"text-yellow-400"} `}
                 onClick={handleMenuClick}
               >
                 <Link to="/Citas">Agenda Turno</Link>
               </li>
               <li
-                className={` font-extrabold ${isScrolled?"text-yellow-400 transition-colors duration-300":"text-yellow-400"} `}
+                className={` text-amber-400/80 uppercase font-bold font-serif mvb-6 tracking-tight hover:bg-gray-400/60 p-2 rounded-2xl ${isScrolled?"transition-colors duration-300":"text-yellow-400"} `}
                 onClick={handleMenuClick}
               >
                 <Link to="/Ingreso">Ingreso</Link>
@@ -79,26 +79,26 @@ const Navbar = () => {
           }`}
         >
           <li
-                className=" font-extrabold text-yellow-400  transition-colors duration-300"
+                className=" text-amber-400/80 uppercase font-bold font-serif mvb-6 tracking-tight hover:bg-gray-400/60 p-2 rounded-2xl  transition-colors duration-300"
                 onClick={handleMenuClick}
               >
                 <Link to="/">Inico</Link>
               </li>
               <li
-                className=" font-extrabold text-yellow-400  transition-colors duration-300"
+                className=" text-amber-400/80 uppercase font-bold font-serif mvb-6 tracking-tight hover:bg-gray-400/60 p-2 rounded-2xl  transition-colors duration-300"
                 onClick={handleMenuClick}
               >
                 <Link to="/ServiciosUsuarios">Servicios</Link>
               </li>
 
               <li
-                className=" font-extrabold text-yellow-400  transition-colors duration-300"
+                className=" text-amber-400/80 uppercase font-bold font-serif mvb-6 tracking-tight hover:bg-gray-400/60 p-2 rounded-2xl  transition-colors duration-300"
                 onClick={handleMenuClick}
               >
                 <Link to="/Citas">Agenda Turno</Link>
               </li>
               <li
-                className=" font-extrabold text-yellow-400  transition-colors duration-300"
+                className=" text-amber-400/80 uppercase font-bold font-serif mvb-6 tracking-tight hover:bg-gray-400/60 p-2 rounded-2xl  transition-colors duration-300"
                 onClick={handleMenuClick}
               >
                 <Link to="/Ingreso">Ingreso</Link>

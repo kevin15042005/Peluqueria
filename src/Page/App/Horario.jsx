@@ -1,25 +1,13 @@
-import React from "react";
-
+import Reloj from "../App/Reloj"
 export default function Horario() {
+
+
   return (
     <>
       <div className="flex flex-col md:flex-row justify-center items-center gap-9 min-h-15 p-6">
          
-        <div className="bg-white p-12 rounded-lg shadow-lg  max-w-md ">
-          <h2 className="text-3xl  font-bold mb-3 border-b-2 border-amber-400 pb-2">
-            Horario de apertura
-          </h2>
-          <p className=" text-sm text-black mb-6">
-            Donde la belleza se encuentra con la felicidad
-          </p>
-          <ul>
-            <li className="flex flex-col justify-between items-center pb-3 ">
-              <strong className="block  text-2xl">Lunes a Domingo</strong>
-              <span className="text-lg font-semibold text-amber-400">
-                06:00 - 22:00 hrs
-              </span>
-            </li>
-          </ul>
+        <div >
+      <Reloj/>
         </div>
         <div className="my-20">
           <iframe
@@ -38,3 +26,5 @@ export default function Horario() {
     </>
   );
 }
+
+
