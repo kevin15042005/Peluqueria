@@ -44,13 +44,13 @@ export default function RelojElegante() {
         
         {/* Aguja Minutos */}
         <div
-          className="absolute w-1 h-12 bg-amber-200 rounded-full origin-bottom"
+          className="absolute w-1 h-16 bg-amber-200 rounded-full"
           style={{ transform: `rotate(${rotacionMinuto}deg) translateY(-32px)`, transition: 'transform 0.5s ease-in-out' }}
         />
 
         {/* Aguja Segundos */}
         <div
-          className="absolute w-0.5 h-12 bg-amber-500 rounded-full origin-bottom"
+          className="absolute w-0.5 h-10 bg-amber-500 rounded-full "
           style={{ transform: `rotate(${rotacionSegundo}deg) translateY(-36px)` }}
         />
 

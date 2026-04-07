@@ -33,13 +33,13 @@ export default function Informacion1() {
               <h2 className="text-1 md:text-[20px] sm:text-[10px]font-bold mb-2 text-white text-center flex flex-col justify-center">
                 CAMBIA TU ESTILO CON CONFIANZA
               </h2>
-              <div className="text-center flex justify-center items-center mt-10">
+              <div className="text-center flex justify-center items-center mt-10 ">
                 <Link to="/Citas">
                   <a href="#_" class="relative inline-block text-lg group">
-                    <span class="relative z-10 block px-10 py-6 overflow-hidden font-medium leading-tight text-black transition-colors duration-300 ease-out border-2 border-gray-900 rounded-lg group-hover:text-white">
+                    <span class="relative z-10 block px-10 py-6 overflow-hidden font-medium leading-tight text-black transition-colors duration-300 ease-out border-2 border-gray-900 rounded-lg group-hover:text-white ">
                       <span class="absolute inset-0 w-full h-full px-10 py-6 rounded-lg bg-gray-50"></span>
-                      <span class="absolute left-0 w-80 h-50 -ml-1 transition-all duration-300 origin-top-right -rotate-90 -translate-x-full translate-y-12 bg-amber-600 group-hover:-rotate-180 ease"></span>
-                      <button className="relative">PIDE TU TURNO AQUI</button>
+                      <span class="absolute left-0 md:w-80 h-50 -ml-1 transition-all duration-300 origin-top-right -rotate-90 -translate-x-full translate-y-12 bg-amber-600 group-hover:-rotate-180 ease"></span>
+                      <button className="relative  text-[15px] md:text-[18px]">PIDE TU TURNO AQUI</button>
                     </span>
                     <span
                       className="absolute bottom-0 right-0 w-full h-12 -mb-1 -mr-1 transition-all duration-200 ease-linear bg-amber-600 rounded-lg group-hover:mb-0 group-hover:mr-0"
@@ -49,22 +49,21 @@ export default function Informacion1() {
                 </Link>
               </div>
             </div>
-            <div className="flex  divide-amber-300/80 gap-3 ">
-              <div className=" py-5 px-4 flex justify-center items-center border-b-4 hover:bg-linear-to-r from-amber-200 via-amber-700 to-amber-900  bg-clip-text text-transparent  ">
-                <a href="">
+            <div className="grid grid-cols-3 items-center divide-amber-300/80 gap-3  mb-3 ">
+              <div className=" border-amber-300/80  pb-2 text-yellow-300 font-bold  px-4  border-b-4  ">
+                <a className="flex justify-center items-center"  href="">
                   <MailCheck
                     size={40}
-                    className="border-amber-300/80 divide-y-3 gap-3 text-yellow-300 font-bold"
                   />
                 </a>
               </div>
-              <div className=" border-amber-300/80 divide-y-3 gap-3 py-5  px-4 flex justify-center items-center border-b-4 hover:bg-linear-to-r from-amb-from-amber-200 via-amber-700 to-amber-900   bg-clip-text text-transparen ">
-                <a href="https://www.instagram.com/peluqueriaseldorado?igsh=MXNsNmxkc2llaHY2ZA==https://www.instagram.com/peluqueriaseldorado?igsh=MXNsNmxkc2llaHY2ZA==">
+              <div className=" border-amber-300/80   pb-2  px-4 border-b-4  ">
+                <a  className="flex justify-center items-center" href="https://www.instagram.com/peluqueriaseldorado?igsh=MXNsNmxkc2llaHY2ZA==https://www.instagram.com/peluqueriaseldorado?igsh=MXNsNmxkc2llaHY2ZA==">
                   <Instagram size={40} className="text-yellow-300  font-bold" />
                 </a>
               </div>
-              <div className=" border-amber-300/80 divide-y-3 gap-3 py-5 px-4 flex justify-center items-center   border-b-4 hover:bg-linear-to-r from-amb-from-amber-200 via-amber-700 to-amber-900  bg-clip-text text-transparen ">
-                <a href="https://www.tiktok.com/@eldoradopeluquerias">
+              <div className="  border-amber-300/80 gap-3 pb-2 px-4   border-b-4  ">
+                <a className="flex justify-center items-center" href="https://www.tiktok.com/@eldoradopeluquerias">
                   <PersonStanding
                     size={40}
                     className="text-yellow-300  font-bold"

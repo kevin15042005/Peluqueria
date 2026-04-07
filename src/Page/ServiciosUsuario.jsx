@@ -88,13 +88,13 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex flex-col text-center "></div>
+        <div className="flex flex-col text-center ">
 
         <a href="#_" class="relative inline-block text-lg group">
           <span class="relative z-10 block px-10 py-6 overflow-hidden font-medium leading-tight text-gray-800 transition-colors duration-300 ease-out border-2 border-gray-900 rounded-lg group-hover:text-white">
             <span class="absolute inset-0 w-full h-full px-10 py-6 rounded-lg bg-gray-50"></span>
             <span class="absolute left-0 w-50 h-50 -ml-2 transition-all duration-300 origin-top-right -rotate-90 -translate-x-full translate-y-12 bg-amber-600 group-hover:-rotate-180 ease"></span>
-            <button className="relative" onClick={() => setIsModalOpen(true)}>
+            <button className="relative text-[15px] md:text-[18px]" onClick={() => setIsModalOpen(true)}>
               Mirar la Carta
             </button>{" "}
           </span>
@@ -102,7 +102,7 @@ export default function Home() {
             className="absolute bottom-0 right-0 w-full h-12 -mb-1 -mr-1 transition-all duration-200 ease-linear bg-amber-600 rounded-lg group-hover:mb-0 group-hover:mr-0"
             data-rounded="rounded-lg"
           ></span>
-        </a>
+        </a></div>
 
         <div className="w-full px-4">
           <h1 className=" mt-10 text-center bg-linear-to-t from-amber-200 to-yellow-700/90 bg-clip-text text-transparent uppercase font-bold font-serif mvb-6 tracking-tight  text-3xl mb-4 ">
@@ -200,7 +200,7 @@ export default function Home() {
                   <span class="relative z-10 block px-10 py-6 overflow-hidden font-medium leading-tight text-black transition-colors duration-300 ease-out border-2 border-gray-900 rounded-lg group-hover:text-white">
                     <span class="absolute inset-0 w-full h-full px-10 py-6 rounded-lg bg-gray-50"></span>
                     <span class="absolute left-0 w-80 h-50 -ml-1 transition-all duration-300 origin-top-right -rotate-90 -translate-x-full translate-y-12 bg-amber-600 group-hover:-rotate-180 ease"></span>
-                    <button className="relative">PIDE TU TURNO AQUI</button>
+                    <button className="relative text-[15px] md:text-[18px]">PIDE TU TURNO AQUI</button>
                   </span>
                   <span
                     className="absolute bottom-0 right-0 w-full h-12 -mb-1 -mr-1 transition-all duration-200 ease-linear bg-amber-600 rounded-lg group-hover:mb-0 group-hover:mr-0"
