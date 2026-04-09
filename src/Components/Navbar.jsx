@@ -65,17 +65,17 @@ const Navbar = () => {
             {/*Menu de navegacion Movil*/}
           </div>
           <button
-            className="md:hidden"
+            className="md:hidden transition-all duration-700"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X size={32} /> : <Menu size={32} />}
           </button>
         </div>
         <ul
-          className={`flex flex-col items-center  border-y-[0.8px] border-amber-400  bg-amber-300  w-full absolute top-full left-0 md:hidden transition-all duration-300 gap-y-${
+          className={`flex flex-col items-center  border-y-[0.8px] border-amber-400  bg-amber-300  w-full absolute top-full left-0 md:hidden transition-all duration-800 gap-y-${
             isMenuOpen
-              ? "max-h-screen opacity-100 bg-black"
-              : "max-h-0 opacity-0 overflow-hidden"
+              ? "translate-y-0 -z-10 duration-700 ease-in-out  bg-black"
+              : "-translate-y-full opacity-0  "  
           }`}
         >
           <li
