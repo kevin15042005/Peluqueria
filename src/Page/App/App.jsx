@@ -10,11 +10,10 @@ export default function App() {
         <section className="">
           <Informacion1 />
         </section>
-        <section className="   bg-gray-900 shadow-lg  p-4 ">
+        <section >
           <Informativa2 />
         </section>
-      
-        <section className="bg-[#222222]">
+        <section className="bg-linear-to-t from-[#000000]  to-[#364153]">
           <Horario />
         </section>
       </div>

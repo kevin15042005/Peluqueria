@@ -167,7 +167,7 @@ const Asistencia = () => {
     <>
     
      <div className="mt-12 p-4 md:p-8 max-w-6xl w-full mx-auto text-amber-300 font-bold">
-  <h1 className="text-2xl md:text-3xl mb-2">Registro de Asistencia</h1>
+  <h1 className="md:text-4xl  mvb-6  text-center bg-linear-to-b from-amber-200 to-yellow-700/90 bg-clip-text text-transparent uppercase font-bold font-serif mvb-6 tracking-tight  text-3xl mb-4">Registro de Asistencia</h1>
   <p className="mb-6 text-lg">Fecha: {hoy}</p>
 
   {mensaje && (

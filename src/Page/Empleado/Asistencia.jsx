@@ -199,12 +199,14 @@ useEffect(() => {
       if (data.success) {
         setTurnoActual(null);
         setMensaje("✅ ¡Turno completado! Cliente atendido");
+        
 
         // Recargar todos los datos después de un breve delay
         setTimeout(() => {
+          setMensaje("");
           cargarTurnos(usuario.ID);
           cargarTurnosCompletados(usuario.ID);
-        }, 1000);
+      }, 1000);
       } else {
         setMensaje(`❌ ${data.message || "Error al completar turno"}`);
       }
@@ -220,7 +222,13 @@ useEffect(() => {
       cargarTurnos(usuario.ID);
       cargarTurnosCompletados(usuario.ID);
       setMensaje("🔄 Datos actualizados");
+      
+      setTimeout(()=>{
+        setMensaje("")
+      },3000)
     }
+
+
   };
 
   // Formatear hora
@@ -234,14 +242,14 @@ useEffect(() => {
     <div className="min-h-screen grow pt-20 flex items-center justify-center bg-gray-700 p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="mt-10 mb-8 p-6 border-2 border-amber-500 rounded-xl bg-linear-to-br from-black to-gray-900 shadow-lg ">
+        <div className="mt-10 mb-8 p-6 border-2 border-yellow-500 rounded-xl bg-linear-to-br from-black to-gray-900 shadow-lg ">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-amber-400">
+              <h1 className="text-3xl font-bold text-yellow-400">
                 Panel de Turnos - Empleado
               </h1>
-              <p className="text-amber-500 mt-2">
-                <span>{usuario?.NOMBRE}</span> - Gestiona tus turnos del día
+              <p className="text-yellow-500 mt-2">
+                <span className="font-extrabold">"{usuario?.NOMBRE}"</span> Gestiona tus turnos del día
               </p>
             </div>
             <div className="flex items-center space-x-4 mt-4 md:mt-0">
@@ -256,9 +264,12 @@ useEffect(() => {
                   })}
                 </span>
               </div>
+              <div>
+                
+              </div>
               <button
                 onClick={recargarTodo}
-                className="flex items-center space-x-2 px-4 py-2 bg-amber-400 hover:bg-amber-200 rounded-lg text-gray-700 transition-colors"
+                className="flex items-center space-x-2 px-4 py-2 bg-yellow-300 hover:bg-yellow-400 rounded-lg text-gray-700 transition-colors"
               >
                 <RefreshCw
                   size={20}
@@ -271,27 +282,25 @@ useEffect(() => {
         </div>
 
         {/* Mensajes */}
-        {mensaje && (
           <div
-            className={`mb-6 p-4 rounded-lg animate-pulse ${
-              mensaje.includes("✅") || mensaje.includes("🔄")
-                ? "bg-green-100 text-green-800"
-                : "bg-red-100 text-red-800"
+          
+            className={`m-2 p-4 rounded-lg  transition-all duration-2000 ease-in-out ${
+                      mensaje 
+                ? "bg-green-100 text-green-800 traslate-y-0 "
+                : "bg-red-100 text-red-800 opacity-0 scale-95 -traslate-y-2 pointer-events-none"
             }`}
           >
-            {mensaje}
+            {mensaje || "Cargado..."}
           </div>
-        )}
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="mt-10 mb-8 p-6 border-2 border-amber-500 rounded-xl bg-linear-to-br from-black to-gray-900 shadow-lg">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 transition-opacity duration-2000 ease-in-out">
+          <div className="mt-10 mb-8 p-6 border-2 border-yellow-500 rounded-xl bg-linear-to-br from-black to-gray-900 shadow-lg">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-amber-400 flex items-center">
-                <Play className="mr-2 text-amber-600" />
+              <h2 className="text-2xl font-bold text-yellow-300 flex items-center">
+                <Play className="mr-2 text-yellow-300" />
                 Turno en Atención
               </h2>
               {turnoActual && (
-                <span className="px-3 py-1 bg-green-100 text-amber-800 rounded-full text-sm font-bold">
+                <span className="px-3 py-1 text-white bg-green-900/20 p-3 md:p-4 rounded-xl border border-green-500 hover:bg-green-800 text-sm font-bold">
                   EN ATENCIÓN
                 </span>
               )}
@@ -304,15 +313,15 @@ useEffect(() => {
               </div>
             ) : turnoActual ? (
               <div className="space-y-6">
-                <div className="bg-linear-to-r from-blue-50 to-green-50 rounded-lg p-6 border border-blue-200">
+                <div className=" rounded-lg p-6 border border-yellow-400">
                   <div className="flex items-center mb-4">
                     <User className="text-blue-600 mr-3" size={24} />
                     <div>
-                      <h3 className="text-xl font-bold text-gray-800">
+                      <h3 className="text-xl font-extrabold text-yellow-300">
                         {turnoActual.CLIENTE_NOMBRE || "Cliente"}
                       </h3>
                       {turnoActual.CLIENTE_TELEFONO && (
-                        <p className="text-gray-600 flex items-center mt-1">
+                        <p className="text-yellow-600 flex items-center mt-1">
                           <Phone size={16} className="mr-2" />
                           {turnoActual.CLIENTE_TELEFONO}
                         </p>
@@ -325,10 +334,10 @@ useEffect(() => {
                     <div className="flex items-center mb-3">
                       <Scissors className="text-purple-600 mr-3" size={20} />
                       <div>
-                        <p className="font-semibold text-gray-800">
+                        <p className="font-semibold text-yellow-300">
                           {turnoActual.SERVICIO} - {turnoActual.SUBSERVICIO}
                         </p>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-yellow-600">
                           Duración estimada:{" "}
                           {turnoActual.DURACION_MINUTOS || 60} min
                         </p>
@@ -337,17 +346,17 @@ useEffect(() => {
 
                     {/* Horario */}
                     <div className="grid grid-cols-2 gap-4 mt-4">
-                      <div className="bg-white p-3 rounded-lg border">
+                      <div className="p-3  rounded-lg border border-yellow-200">
                         <p className="text-sm text-gray-600">Hora Programada</p>
-                        <p className="font-bold text-blue-700">
+                        <p className="font-bold text-blue-700 ">
                           {formatearHora(turnoActual.HORA_INICIO)}
                         </p>
                       </div>
-                      <div className="bg-white p-3 rounded-lg border">
-                        <p className="text-sm text-gray-600">
+                      <div className=" p-3  rounded-lg border border-yellow-200">
+                        <p className="text-sm text-gray-600 ">
                           Hora Estimada Fin
                         </p>
-                        <p className="font-bold text-green-700">
+                        <p className="font-bold text-green-700  ">
                           {formatearHora(turnoActual.HORA_FIN)}
                         </p>
                       </div>
@@ -356,7 +365,7 @@ useEffect(() => {
                     {/* Horas reales */}
                     <div className="mt-4 grid grid-cols-2 gap-4">
                       {turnoActual.HORA_INICIO_REAL && (
-                        <div className="p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                        <div className="p-3  rounded-lg border border-yellow-200">
                           <p className="text-sm text-gray-600">Inicio Real</p>
                           <p className="font-bold text-yellow-700">
                             {formatearHora(turnoActual.HORA_INICIO_REAL)}
@@ -384,16 +393,16 @@ useEffect(() => {
                   <span>Marcar como Completado</span>
                 </button>
 
-                <p className="text-sm text-amber-500 text-center">
+                <p className="text-sm text-yellow-300 text-center">
                   Al completar, se mostrará automáticamente el siguiente cliente
                 </p>
               </div>
             ) : (
               <div className="text-center py-12">
-                <h3 className="text-xl font-bold text-amber-500 mb-2">
+                <h3 className="text-xl font-bold text-yellow-300 mb-2">
                   Sin turnos en atención
                 </h3>
-                <p className="text-amber-500 mb-6">
+                <p className="text-yellow-300 mb-6">
                   No hay ningún cliente siendo atendido actualmente
                 </p>
                 {siguienteTurno && (
@@ -411,12 +420,12 @@ useEffect(() => {
           {/* COLUMNA DERECHA: SIGUIENTE TURNO */}
           <div className="mt-10 mb-8 p-6 border-2 border-amber-500 rounded-xl bg-linear-to-br from-black to-gray-900 shadow-lg">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-yellow-500 flex items-center">
-                <Clock className="mr-2 text-yellow-600" />
+              <h2 className="text-2xl font-bold text-yellow-300 flex items-center">
+                <Clock className="mr-2 text-yellow-300" />
                 Próximo Turno
               </h2>
               {siguienteTurno && (
-                <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-bold">
+                <span className="px-3 py-1 text-white bg-yellow-900/20 p-3 md:p-4 rounded-xl border border-yellow-500 hover:bg-yellow-800 text-sm font-bold">
                   PENDIENTE
                 </span>
               )}
@@ -429,15 +438,15 @@ useEffect(() => {
             ) : siguienteTurno ? (
               <div className="space-y-6">
                 {/* Info Siguiente Cliente */}
-                <div className="bg-linear-to-r from-yellow-50 to-orange-50 rounded-lg p-6 border border-yellow-200">
+                <div className=" rounded-lg p-6 border border-yellow-200">
                   <div className="flex items-center mb-4">
-                    <User className="text-yellow-600 mr-3" size={24} />
+                    <User className="text-yellow-400 mr-3" size={24} />
                     <div>
-                      <h3 className="text-xl font-bold text-gray-800">
+                      <h3 className="text-xl font-bold text-yellow-300">
                         {siguienteTurno.CLIENTE_NOMBRE || "Cliente"}
                       </h3>
                       {siguienteTurno.CLIENTE_TELEFONO && (
-                        <p className="text-gray-600 flex items-center mt-1">
+                        <p className="text-yellow-600 flex items-center mt-1">
                           <Phone size={16} className="mr-2" />
                           {siguienteTurno.CLIENTE_TELEFONO}
                         </p>
@@ -450,11 +459,11 @@ useEffect(() => {
                     <div className="flex items-center mb-3">
                       <Scissors className="text-purple-600 mr-3" size={20} />
                       <div>
-                        <p className="font-semibold text-gray-800">
+                        <p className="font-semibold text-yellow-300">
                           {siguienteTurno.SERVICIO} -{" "}
                           {siguienteTurno.SUBSERVICIO}
                         </p>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-yellow-600">
                           Duración: {siguienteTurno.DURACION_MINUTOS || 60} min
                         </p>
                       </div>
@@ -462,15 +471,15 @@ useEffect(() => {
 
                     {/* Horario */}
                     <div className="grid grid-cols-2 gap-4 mt-4">
-                      <div className="bg-white p-3 rounded-lg border">
-                        <p className="text-sm text-gray-600">Horario Cita</p>
-                        <p className="font-bold text-gray-800">
+                      <div className="border-yellow-200 p-3 rounded-lg border">
+                        <p className="text-sm text-yellow-600">Horario Cita</p>
+                        <p className="font-extrabold text-yellow-400">
                           {formatearHora(
                             siguienteTurno.HORA_INICIO ||
                               siguienteTurno.HORA_SELECCIONADA,
                           )}
                         </p>
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-yellow-300 mt-1">
                           {siguienteTurno.FECHA
                             ? new Date(siguienteTurno.FECHA).toLocaleDateString(
                                 "es-ES",
@@ -478,9 +487,9 @@ useEffect(() => {
                             : ""}
                         </p>
                       </div>
-                      <div className="bg-white p-3 rounded-lg border">
-                        <p className="text-sm text-gray-600">Orden del día</p>
-                        <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-bold">
+                      <div className="border-yellow-200 p-3 rounded-lg border">
+                        <p className="text-sm text-yellow-600">Orden del día</p>
+                        <span className="inline-block px-3 py-1 bg-blue-900/20 text-blue-800 rounded-full text-sm font-bold">
                           #1
                         </span>
                       </div>
@@ -495,7 +504,7 @@ useEffect(() => {
                   className={`w-full py-4 font-bold rounded-lg flex items-center justify-center space-x-2 transition-all duration-300 shadow-lg ${
                     turnoActual
                       ? "bg-gray-400 cursor-not-allowed text-gray-600"
-                      : "bg-linear-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-indigo-700 text-white"
+                      : "bg-linear-to-r from-yellow-500/60 to-amber-600/60 hover:from-amber-600/60 hover:to-yellow-700 text-white"
                   }`}
                 >
                   <Play size={24} />
@@ -518,10 +527,10 @@ useEffect(() => {
               </div>
             ) : (
               <div className="text-center py-12">
-                <h3 className="text-xl font-bold text-amber-500 mb-2">
+                <h3 className="text-xl font-bold text-yellow-300 mb-2">
                   No hay turnos pendientes
                 </h3>
-                <p className="text-amber-500">
+                <p className="text-yellow-300">
                   Todos los turnos del día han sido atendidos o no hay citas
                   programadas
                 </p>
@@ -531,21 +540,21 @@ useEffect(() => {
         </div>
 
         {/* Turnos Completados Hoy */}
-        <div className="mt-10 mb-8 p-6 border-2 border-amber-500 rounded-xl bg-linear-to-br from-black to-gray-900 shadow-lg">
+        <div className="mt-10 mb-8 p-6 border-2 border-yellow-500 rounded-xl bg-linear-to-br from-black to-gray-900 shadow-lg">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-yellow-500 flex items-center">
+            <h2 className="text-2xl font-bold text-yellow-300 flex items-center">
               <CheckCircle className="mr-2 text-green-600" />
               Turnos Completados Hoy
             </h2>
             <div className="flex flex-col md:flex-row gap-4 items-center space-x-2">
-              <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-bold">
+              <span className="px-3 py-1  text-green-300 bg-green-900/20 p-3 md:p-4 rounded-xl border border-green-500 hover:bg-green-800 text-sm">
                 {turnosCompletados.length}{" "}
                 {turnosCompletados.length === 1 ? "turno" : "turnos"}
               </span>
               <button
                 onClick={() => cargarTurnosCompletados(usuario?.ID)}
                 disabled={loadingCompletados}
-                className="flex items-center space-x-1 px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded text-sm text-gray-700"
+                className="flex items-center space-x-1 px-3 py-1 text-blue-300 bg-blue-900/20 p-3 md:p-4 rounded-xl border border-blue-500 hover:bg-blue-800 text-sm"
               >
                 <RefreshCw
                   size={14}
@@ -565,55 +574,55 @@ useEffect(() => {
             </div>
           ) : turnosCompletados.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-amber-500">
+              <p className="text-yellow-300">
                 Aún no has completado ningún turno hoy
               </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full divide-y ">
+                <thead className="">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-yellow-300 uppercase tracking-wider">
                       Orden
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-yellow-300 uppercase tracking-wider">
                       Cliente
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-yellow-300 uppercase tracking-wider">
                       Servicio
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-yellow-300 uppercase tracking-wider">
                       Hora Cita
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-yellow-300 uppercase tracking-wider">
                       Inicio Real
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-yellow-300 uppercase tracking-wider">
                       Fin Real
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-yellow-300 uppercase tracking-wider">
                       Duración
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className=" divide-y divide-gray-200">
                   {turnosCompletados.map((turno, index) => (
-                    <tr key={turno.ID} className="hover:bg-gray-50">
+                    <tr key={turno.ID} className="hover:bg-gray-50/20">
                       <td className="px-6 py-4 whitespace-nowrap text-center">
-                        <span className="inline-block w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-sm font-bold">
+                        <span className="inline-block w-6 h-6 bg-gray-100 rounded-full  items-center justify-center text-sm font-bold">
                           {index + 1}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <User size={16} className="text-gray-400 mr-2" />
+                          <User size={16} className="text-yellow-400 mr-2" />
                           <div>
-                            <div className="font-medium text-gray-900">
+                            <div className="font-bold  text-yellow-600">
                               {turno.CLIENTE_NOMBRE || "Cliente"}
                             </div>
                             {turno.CLIENTE_TELEFONO && (
-                              <div className="text-xs text-gray-500">
+                              <div className="text-xs text-yellow-300">
                                 {turno.CLIENTE_TELEFONO}
                               </div>
                             )}
@@ -621,27 +630,27 @@ useEffect(() => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
+                        <div className="font-bold  text-yellow-600">
                           {turno.SUBSERVICIO}
                         </div>
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-yellow-300">
                           {turno.SERVICIO}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
+                        <div className="font-bold  text-yellow-600">
                           {formatearHora(
                             turno.HORA_INICIO || turno.HORA_SELECCIONADA,
                           )}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
+                        <div className="text-sm font-bold  text-yellow-600">
                           {formatearHora(turno.HORA_INICIO_REAL) || "--:--"}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
+                        <div className="text-sm font-bold  text-yellow-600">
                           {formatearHora(turno.HORA_FIN_REAL) || "--:--"}
                         </div>
                       </td>

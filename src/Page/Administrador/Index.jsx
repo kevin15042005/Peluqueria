@@ -14,7 +14,7 @@ export default function UsuariosAdmin() {
   const [modalAsignarServicios, setModalAsignarServicios] = useState(false);
   const [serviciosSeleccionados, setServiciosSeleccionados] = useState([]);
   const [cargandoServicios, setCargandoServicios] = useState(false);
-  const [errorCarga, setErrorCarga] = useState("");
+  const [, setErrorCarga] = useState("");
 
   const API = import.meta.env.VITE_API_URL;
 
@@ -450,292 +450,267 @@ export default function UsuariosAdmin() {
 
       {/* Modal Editar */}
       {modalEditar && usuarioSeleccionado && (
-        <div className="fixed inset-0  bg-current/30 flex items-center justify-center z-50">
-          <div className="bg-black rounded-lg shadow-xl p-6 w-full max-w-md">
-            <div className="flex justify-between  items-center mb-4">
-              <h3 className="text-xl font-bold text-amber-300">
-                Editar Usuario
-              </h3>
-              <button
-                onClick={() => setModalEditar(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <X size={24} />
-              </button>
-            </div>
+       <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+  {/* Ajustado max-w-md y añadido border sutil para estilo premium */}
+  <div className="bg-black rounded-lg shadow-2xl p-5 w-full max-w-sm border border-white/10">
+    <div className="flex justify-between items-center mb-4">
+      <h3 className="text-lg font-bold text-amber-300">
+        Editar Usuario
+      </h3>
+      <button
+        onClick={() => setModalEditar(false)}
+        className="text-gray-400 hover:text-white transition-colors"
+      >
+        <X size={20} />
+      </button>
+    </div>
 
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm text-gray-600 mb-1">
-                  Correo
-                </label>
-                <input
-                  value={usuarioSeleccionado.CORREO || ""}
-                  onChange={(e) =>
-                    setUsuarioSeleccionado({
-                      ...usuarioSeleccionado,
-                      CORREO: e.target.value,
-                    })
-                  }
-                  className="w-full p-3 border text-amber-300 border-amber-300 rounded-lg "
-                  disabled
-                />
-              </div>
-              <div>
-                <label className="block text-sm text-gray-600 mb-1">
-                  Nueva Contraseña *
-                </label>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={usuarioSeleccionado.PASSWORD || ""}
-                  onChange={(e) =>
-                    setUsuarioSeleccionado({
-                      ...usuarioSeleccionado,
-                      PASSWORD: e.target.value,
-                    })
-                  }
-                  placeholder="Nueva contraseña"
-                  className="w-full p-3 border text-amber-300 border-amber-300 rounded-lg "
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm text-gray-600 mb-1">
-                  PIN *
-                </label>
-                <input
-                  value={usuarioSeleccionado.PIN || ""}
-                  onChange={(e) =>
-                    setUsuarioSeleccionado({
-                      ...usuarioSeleccionado,
-                      PIN: e.target.value,
-                    })
-                  }
-                  type={showPassword?"text":"password"}
-                  placeholder="6 dígitos"
-                  maxLength={6}
-                  pattern="\d{6}"
-                  className="w-full p-3 border text-amber-300 border-amber-300 rounded-lg "
-                  required
-                />
-              </div>
+    <div className="space-y-3"> {/* Reducido espacio entre campos */}
+      {/* Campo Correo */}
+      <div>
+        <label className="block text-[11px] uppercase tracking-wider text-gray-500 mb-1 ml-1">
+          Correo
+        </label>
+        <input
+          value={usuarioSeleccionado.CORREO || ""}
+          className="w-full p-2.5 bg-white/5 border border-amber-300/30 text-amber-300/50 rounded-lg text-sm cursor-not-allowed"
+          disabled
+        />
+      </div>
 
-              <div className="flex items-center">
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="flex items-center text-orange-500 hover:text-orange-400 transition-colors"
-                >
-                  {showPassword?<Eye/>:<EyeClosed/>}
-                  <span
-                    className="text-amber-300 border-amber-300"
-                    htmlFor="showPassword"
-                  >
-                    Mostrar contraseña
-                  </span>
-                </button>
-              </div>
-              <div className="flex justify-end space-x-3 pt-4">
-                <button
-                  onClick={() => setModalEditar(false)}
-                  className="px-4 py-2 border rounded-lg text-amber-300 border-amber-300 hover:bg-white/30"
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={editarUsuario}
-                  className="px-4 py-2 border rounded-lg text-amber-300 border-amber-300 hover:bg-white/30"
-                >
-                  Guardar Cambios
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* Campo Nueva Contraseña */}
+      <div>
+        <label className="block text-[11px] uppercase tracking-wider text-gray-500 mb-1 ml-1">
+          Nueva Contraseña *
+        </label>
+        <input
+          type={showPassword ? "text" : "password"}
+          value={usuarioSeleccionado.PASSWORD || ""}
+          onChange={(e) =>
+            setUsuarioSeleccionado({
+              ...usuarioSeleccionado,
+              PASSWORD: e.target.value,
+            })
+          }
+          placeholder="Mínimo 8 caracteres"
+          className="w-full p-2.5 bg-transparent border border-amber-300 text-amber-300 rounded-lg text-sm focus:ring-1 focus:ring-amber-300 outline-none"
+          required
+        />
+      </div>
+
+      {/* Campo PIN */}
+      <div>
+        <label className="block text-[11px] uppercase tracking-wider text-gray-500 mb-1 ml-1">
+          PIN de Seguridad *
+        </label>
+        <input
+          value={usuarioSeleccionado.PIN || ""}
+          onChange={(e) =>
+            setUsuarioSeleccionado({
+              ...usuarioSeleccionado,
+              PIN: e.target.value,
+            })
+          }
+          type={showPassword ? "text" : "password"}
+          placeholder="6 dígitos"
+          maxLength={6}
+          className="w-full p-2.5 bg-transparent border border-amber-300 text-amber-300 rounded-lg text-sm focus:ring-1 focus:ring-amber-300 outline-none"
+          required
+        />
+      </div>
+
+      {/* Toggle Mostrar Contraseña */}
+      <div className="flex items-center pt-1">
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="flex items-center gap-2 text-xs text-amber-300/80 hover:text-amber-300 transition-colors"
+        >
+          {showPassword ? <Eye size={16} /> : <EyeClosed size={16} />}
+          <span>Mostrar datos sensibles</span>
+        </button>
+      </div>
+
+      {/* Botones de Acción */}
+      <div className="flex justify-end space-x-2 pt-4">
+        <button
+          onClick={() => setModalEditar(false)}
+          className="px-4 py-2 text-xs font-medium rounded-lg text-amber-300 border border-amber-300/50 hover:bg-white/5 transition-colors"
+        >
+          Cancelar
+        </button>
+        <button
+          onClick={editarUsuario}
+          className="px-4 py-2 text-xs font-bold rounded-lg bg-amber-300 text-black hover:bg-amber-400 transition-transform active:scale-95"
+        >
+          Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
       )}
 
       {/* Modal Eliminar */}
       {modalEliminar && usuarioSeleccionado && (
-        <div className="fixed inset-0 bg-current/30 flex items-center justify-center z-50">
-          <div className="bg-black rounded-lg shadow-xl p-6 w-full max-w-md">
-            <h3 className="text-xl font-bold text-amber-300 mb-4">Confirmar Eliminación</h3>
-            <p className="mb-6  text-amber-300">
-              ¿Estás seguro de eliminar al usuario 
-              <span className="font-bold">{usuarioSeleccionado.NOMBRE}</span>?
-            </p>
-            <div className="flex justify-end space-x-3">
-              <button
-                onClick={() => setModalEliminar(false)}
-                  className="px-4 py-2 border rounded-lg text-amber-300 border-amber-300 hover:bg-white/30"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={eliminarUsuario}
-                  className="px-4 py-2 border rounded-lg text-amber-300 border-amber-300 hover:bg-white/30"
-              >
-                Eliminar
-              </button>
-            </div>
-          </div>
-        </div>
+       <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-6">
+  {/* max-w-xs para que sea un cuadro pequeño y centrado, típico de alertas de sistema */}
+  <div className="bg-black border border-white/10 rounded-2xl shadow-2xl p-6 w-full max-w-xs animate-in fade-in zoom-in duration-200">
+    
+    <div className="text-center">
+      {/* Icono de advertencia opcional para reforzar visualmente */}
+      <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-900/20 mb-4">
+        <span className="text-red-500 text-2xl">⚠️</span>
+      </div>
+      
+      <h3 className="text-lg font-bold text-amber-300 mb-2">
+        ¿Eliminar usuario?
+      </h3>
+      
+      <p className="text-sm text-gray-400 mb-6 leading-relaxed">
+        Esta acción eliminará a <span className="text-amber-200 font-semibold">{usuarioSeleccionado.NOMBRE}</span>. No se puede deshacer.
+      </p>
+    </div>
+
+    <div className="flex flex-col space-y-2"> {/* Botones en columna para mejor alcance del pulgar en móvil */}
+      <button
+        onClick={eliminarUsuario}
+        className="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-white font-bold rounded-xl transition-colors active:scale-95"
+      >
+        Sí, eliminar
+      </button>
+      
+      <button
+        onClick={() => setModalEliminar(false)}
+        className="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-white font-bold rounded-xl transition-colors active:scale-95"
+      >
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>
       )}
 
       {/* Modal Asignar Servicios */}
       {modalAsignarServicios && usuarioSeleccionado && (
-        <div className="fixed inset-0  pt-5  bg-current/30 flex items-center justify-center z-50">
-          <div className="bg-black rounded-lg shadow-xl p-6 w-94 max-w-lg max-h-[90vh]  overflow-hidden flex flex-col">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold text-amber-300">
-                Asignar Servicios a {usuarioSeleccionado.NOMBRE}
-              </h3>
-              <button
-                onClick={() => {
-                  setModalAsignarServicios(false);
-                  setServiciosSeleccionados([]);
-                }}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <X size={24} />
-              </button>
-            </div>
+      <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"> {/* Añadido p-4 para margen externo en móvil */}
+  <div className="bg-black rounded-lg shadow-xl w-full max-w-md max-h-[85vh] overflow-hidden flex flex-col border border-white/10"> 
+    {/* Cambiado w-94 por w-full y max-w-md para que se adapte al ancho móvil */}
+    
+    <div className="flex justify-between items-center p-4 border-b border-white/10"> {/* Padding reducido */}
+      <h3 className="text-lg font-bold text-amber-300 truncate mr-2"> {/* text-lg y truncate para nombres largos */}
+        Asignar a {usuarioSeleccionado.NOMBRE}
+      </h3>
+      <button
+        onClick={() => {
+          setModalAsignarServicios(false);
+          setServiciosSeleccionados([]);
+        }}
+        className="text-gray-400 hover:text-white"
+      >
+        <X size={20} /> {/* Icono un poco más pequeño */}
+      </button>
+    </div>
 
-            <div className="mb-4 flex-1 overflow-hidden">
-              <p className="text-sm text-amber-300 mb-4">
-                Seleccione los subservicios que puede realizar este empleado:
-              </p>
+    <div className="p-4 flex-1 overflow-hidden flex flex-col">
+      <p className="text-xs text-amber-300/80 mb-3">
+        Seleccione los subservicios:
+      </p>
 
-              {cargandoServicios ? (
-                <div className="text-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500 mx-auto"></div>
-                  <p className="mt-2 text-amber-500">Cargando servicios...</p>
-                </div>
-              ) : serviciosDisponibles.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                  <p> No hay servicios disponibles para asignar</p>
-                  {errorCarga && <p className="text-sm mt-2">{errorCarga}</p>}
-                  <button
-                    onClick={cargarServiciosDisponibles}
-                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                  >
-                    Reintentar
-                  </button>
-                </div>
-              ) : (
-                <>
-                  <div className="space-y-3 max-h-[40vh] overflow-y-auto p-2 border rounded-lg">
-                    {serviciosDisponibles.map((servicio, index) => {
-                      const servicioId = obtenerIdServicio(servicio);
-                      const servicioNombre = obtenerNombreServicio(servicio);
-                      const categoria = obtenerCategoriaServicio(servicio);
-
-                      if (!servicioId) {
-                        console.warn("Servicio sin ID:", servicio);
-                        return null;
-                      }
-
-                      return (
-                        <div
-                          key={`servicio-${servicioId}-${index}`}
-                          className="flex items-start text-amber-300 p-3 hover:bg-white/30 rounded border-b last:border-b-0"
-                        >
-                          <input
-                            type="checkbox"
-                            id={`servicio-${servicioId}`}
-                            checked={serviciosSeleccionados.includes(
-                              servicioId.toString(),
-                            )}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                setServiciosSeleccionados([
-                                  ...serviciosSeleccionados,
-                                  servicioId.toString(),
-                                ]);
-                              } else {
-                                setServiciosSeleccionados(
-                                  serviciosSeleccionados.filter(
-                                    (id) => id !== servicioId.toString(),
-                                  ),
-                                );
-                              }
-                            }}
-                            className="mr-3 mt-1 h-5 w-5 text-amber-300"
-                          />
-                          <label
-                            htmlFor={`servicio-${servicioId}`}
-                            className="cursor-pointer flex-1"
-                          >
-                            <div className="font-medium">{servicioNombre}</div>
-                            <div className="text-sm text-amber-300 mt-1">
-                              <span className="font-semibold ">Categoría:</span> 
-                              {categoria}
-                              {servicio.PRECIO !== undefined && (
-                                <span className="ml-3 font-semibold text-green-600">
-                                  $
-                                  {parseFloat(servicio.PRECIO).toLocaleString()}
-                                </span>
-                              )}
-                            </div>
-                            {servicio.DESCRIPCION && (
-                              <div className="text-xs text-amber-200 mt-1">
-                                {servicio.DESCRIPCION}
-                              </div>
-                            )}
-                            {servicio.DURACION_MINUTOS && (
-                              <div className="text-xs text-amber-300  mt-1">
-                                 Duración: {servicio.DURACION_MINUTOS} minutos
-                              </div>
-                            )}
-                          </label>
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                 
-                </>
-              )}
-            </div>
-
-            <div className="flex justify-end space-x-3 pt-4 border-t">
-              <button
-                onClick={() => {
-                  setModalAsignarServicios(false);
-                  setServiciosSeleccionados([]);
-                }}
-                className="px-4 py-2 border rounded-lg hover:bg-gray-100"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={asignarServiciosEmpleado}
-                disabled={
-                  serviciosSeleccionados.length === 0 || cargandoServicios
-                }
-                className={`px-4 py-2 rounded-lg font-medium ${
-                  serviciosSeleccionados.length === 0 || cargandoServicios
-                    ? "bg-gray-300 cursor-not-allowed text-gray-500"
-                    : "bg-yellow-500 hover:bg-yellow-600 text-white"
-                }`}
-              >
-                {cargandoServicios
-                  ? "Cargando..."
-                  : `Asignar ${serviciosSeleccionados.length} servicio(s)`}
-              </button>
-            </div>
-          </div>
+      {cargandoServicios ? (
+        <div className="text-center py-6">
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-amber-500 mx-auto"></div>
         </div>
+      ) : serviciosDisponibles.length === 0 ? (
+        <div className="text-center py-6 text-gray-500 text-sm">
+          <p>No hay servicios disponibles</p>
+          <button
+            onClick={cargarServiciosDisponibles}
+            className="mt-3 px-3 py-1 bg-blue-600 text-white rounded text-xs"
+          >
+            Reintentar
+          </button>
+        </div>
+      ) : (
+        <div className="space-y-2 overflow-y-auto pr-1 custom-scrollbar"> {/* Altura automática gracias al flex-1 del padre */}
+          {serviciosDisponibles.map((servicio, index) => {
+            const servicioId = obtenerIdServicio(servicio);
+            const servicioNombre = obtenerNombreServicio(servicio);
+            const categoria = obtenerCategoriaServicio(servicio);
+
+            if (!servicioId) return null;
+
+            return (
+              <div
+                key={`servicio-${servicioId}-${index}`}
+                className="flex items-center text-amber-300 p-2 hover:bg-white/10 rounded border border-white/5 bg-white/5"
+              >
+                <input
+                  type="checkbox"
+                  id={`servicio-${servicioId}`}
+                  checked={serviciosSeleccionados.includes(servicioId.toString())}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setServiciosSeleccionados([...serviciosSeleccionados, servicioId.toString()]);
+                    } else {
+                      setServiciosSeleccionados(serviciosSeleccionados.filter((id) => id !== servicioId.toString()));
+                    }
+                  }}
+                  className="mr-3 h-4 w-4 accent-amber-500"
+                />
+                <label htmlFor={`servicio-${servicioId}`} className="cursor-pointer flex-1 min-w-0">
+                  <div className="text-sm font-medium truncate">{servicioNombre}</div>
+                  <div className="text-[11px] text-amber-300/60 flex justify-between items-center">
+                    <span className="truncate italic">{categoria}</span>
+                    {servicio.PRECIO !== undefined && (
+                      <span className="font-bold text-green-500 ml-2">
+                        ${parseFloat(servicio.PRECIO).toLocaleString()}
+                      </span>
+                    )}
+                  </div>
+                </label>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+
+    <div className="flex justify-end space-x-2 p-4 border-t border-white/10 bg-black/50">
+      <button
+        onClick={() => {
+          setModalAsignarServicios(false);
+          setServiciosSeleccionados([]);
+        }}
+        className="px-3 py-1.5 text-sm border border-white/20 rounded-lg text-white hover:bg-white/10"
+      >
+        Cancelar
+      </button>
+      <button
+        onClick={asignarServiciosEmpleado}
+        disabled={serviciosSeleccionados.length === 0 || cargandoServicios}
+        className={`px-3 py-1.5 rounded-lg text-sm font-bold transition-colors ${
+          serviciosSeleccionados.length === 0 || cargandoServicios
+            ? "bg-gray-700 text-gray-500 cursor-not-allowed"
+            : "bg-amber-500 hover:bg-amber-600 text-black"
+        }`}
+      >
+        {cargandoServicios ? "..." : `Asignar (${serviciosSeleccionados.length})`}
+      </button>
+    </div>
+  </div>
+</div>
       )}
 
       {/* Tabla de Usuarios */}
 
-      <div className=" py-10  my-10 grid grid-cols-1  overflow-x-auto bg-amber-200 border-2 border-amber-500 rounded-lg shadow">
+      <div className=" py-10  my-10 grid grid-cols-1  overflow-x-auto  bg-linear-to-br from-black to-gray-900 shadow-lg border-2 border-amber-500 rounded-lg ">
         <div className="flex flex-col  sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 px-4 md:px-6">
            
-          <h2 className="text-2xl font-bold"> Gestión de Usuarios</h2>
+          <h2 className="text-2xl font-bold text-amber-300"> Gestión de Usuarios</h2>
           <button
             onClick={() => setModalCrear(true)}
-            className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700"
+            className="px-4 py-2 bg-yellow-400 text-black  font-bold rounded-lg hover:bg-yellow-500"
           >
             Agregar Usuario
           </button>
@@ -744,26 +719,26 @@ export default function UsuariosAdmin() {
           <table className="w-full  divide-y divide-x   ">
              
             <thead className="hidden md:table-header-group ">
-              <tr className="  bg-amber-200 border-y-2 border-amber-500 max-w-full">
-                <th className="px-6 py-3 text-left text-xs  text-black font-extrabold uppercase tracking-wider">
+              <tr className="   max-w-full">
+                <th className="px-6 py-3 text-left text-xs text-amber-300 font-extrabold uppercase tracking-wider">
                   ID
                 </th>
-                <th className="px-6 py-3 text-left text-xs  text-black font-extrabold  uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs text-amber-300 font-extrabold  uppercase tracking-wider">
                   Nombre
                 </th>
-                <th className="px-6 py-3 text-left text-xs text-black font-extrabold  uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs text-amber-300 font-extrabold  uppercase tracking-wider">
                   Correo
                 </th>
-                <th className="px-6 py-3 text-left text-xs text-black font-extrabold  uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs text-amber-300 font-extrabold  uppercase tracking-wider">
                   Rol
                 </th>
-                <th className="px-6 py-3 text-left text-xs text-black font-extrabold  uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs text-amber-300 font-extrabold  uppercase tracking-wider">
                   Servicios Asignados
                 </th>
-                <th className="px-6 py-3 text-left text-xs text-black font-extrabold  uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs text-amber-300 font-extrabold  uppercase tracking-wider">
                   Estado
                 </th>
-                <th className="px-6 py-3 text-left text-xs text-black font-extrabold  uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs text-amber-300 font-extrabold  uppercase tracking-wider">
                   Acciones
                 </th>
               </tr>
@@ -774,23 +749,23 @@ export default function UsuariosAdmin() {
                 usuarios.map((usuario) => (
                   <tr
                     key={usuario.ID}
-                    className="hover:bg-yellow-400 max-w-6xl w-full md:table-row grid grid-cols-2   border-b"
+                    className="hover:bg-amber-50/25 max-w-6xl w-full md:table-row grid grid-cols-2   border-b"
                   >
                      
-                    <td className="px-6 py-4 whitespace-nowrap md:table-cell block">
-                      <span className="md:hidden font-bold mr-2">ID:</span>
+                    <td className="px-6 py-4 whitespace-nowrap md:table-cell block text-white">
+                      <span className="md:hidden font-bold mr-2 ">ID:</span>
                       {usuario.ID}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap md:table-cell block">
-                      <span className="md:hidden font-bold mr-2">Nombre:</span>
+                    <td className="px-6 py-4 whitespace-nowrap md:table-cell block text-white">
+                      <span className="md:hidden font-bold mr-2 ">Nombre:</span>
                       {usuario.NOMBRE}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap md:table-cell block ">
+                    <td className="px-6 py-4 whitespace-nowrap md:table-cell block text-white ">
                       <span className="md:hidden font-bold pr-2">Correo:</span>
                       <span className="text-[14px]">{usuario.CORREO}</span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap md:table-cell block">
-                      <span className="md:hidden font-bold mr-2">Rol:</span>
+                    <td className="px-6 py-4 whitespace-nowrap md:table-cell block text-white">
+                      <span className="md:hidden font-bold mr-2 ">Rol:</span>
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
                           usuario.ROL === "administrador"
@@ -801,8 +776,8 @@ export default function UsuariosAdmin() {
                         {usuario.ROL}
                       </span>
                     </td>
-                    <td className="px-6 py-4 md:table-cell block">
-                      <span className="md:hidden font-bold mr-2">
+                    <td className="px-6 py-4 md:table-cell block text-white">
+                      <span className="md:hidden font-bold mr-2 ">
                         Servicios:
                       </span>
                       <div className="max-w-xs">
@@ -821,14 +796,14 @@ export default function UsuariosAdmin() {
                             )}
                           </div>
                         ) : (
-                          <span className="text-gray-400 text-sm">
+                          <span className="text-amber-200 text-sm">
                             Sin servicios
                           </span>
                         )}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap md:table-cell block">
-                      <span className="md:hidden font-bold mr-2">Estado:</span>
+                    <td className="px-6 py-4 whitespace-nowrap md:table-cell block text-white">
+                      <span className="md:hidden font-bold mr-2 ">Estado:</span>
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
                           usuario.ESTADO === "activo"
@@ -841,7 +816,7 @@ export default function UsuariosAdmin() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex flex- gap-2">
-                        <span className="md:hidden font-bold mr-2">
+                        <span className="md:hidden font-bold mr-2 ">
                           Acciones:
                         </span>
                         <button
@@ -849,7 +824,7 @@ export default function UsuariosAdmin() {
                             setUsuarioSeleccionado(usuario);
                             setModalEditar(true);
                           }}
-                          className="flex px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
+                          className="flex px-3 py-1 text-blue-300 bg-blue-900/20 p-3 md:p-4 rounded-xl border border-blue-500 hover:bg-blue-800 text-sm"
                         >
                           Editar
                         </button>
@@ -857,7 +832,7 @@ export default function UsuariosAdmin() {
                         {usuario.ROL === "empleado" && (
                           <button
                             onClick={() => abrirModalAsignarServicios(usuario)}
-                            className="px-3 py-1 bg-purple-500 text-white rounded hover:bg-purple-600 text-sm"
+                            className="px-3 py-1 text-purple-300 bg-purple-900/20 p-3 md:p-4 rounded-xl border border-purple-500 hover:bg-purple-800 text-sm"
                           >
                             Servicios
                           </button>
@@ -868,7 +843,7 @@ export default function UsuariosAdmin() {
                             setUsuarioSeleccionado(usuario);
                             setModalEliminar(true);
                           }}
-                          className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
+                          className="px-3 py-1 text-red-300 bg-red-900/20 p-3 md:p-4 rounded-xl border border-red-500 hover:bg-red-800 text-sm"
                         >
                           Eliminar
                         </button>

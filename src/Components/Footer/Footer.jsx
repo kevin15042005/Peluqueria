@@ -4,7 +4,7 @@ import { MailCheck, Instagram } from "lucide-react";
 export default function Footer() {
   return (
     <>
-      <footer className="bg-linear-to-t from-gray-800  to-[#050505] p-7 text-white">
+      <footer className="bg-linear-to-b from-gray-800  to-[#050505] p-7 text-white">
         <div className="max-w-8xl max-auto grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8 text-center  ">
           <div>
             <h3 className="font-bold text-[16px] sm:text-[17px]  ">Contacto</h3>

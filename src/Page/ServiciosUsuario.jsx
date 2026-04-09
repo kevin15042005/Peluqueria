@@ -183,7 +183,7 @@ export default function Home() {
                     ✕
                   </button>
 
-                  <h2 className="text-3xl font-bold text-amber-400 mb-6 text-center">
+                  <h2 className="bg-linear-to-b from-amber-200 to-yellow-700/90 bg-clip-text text-transparent uppercase font-bold font-serif mvb-6 tracking-tight  text-[16px] md:text-2xl mb-4 items-center flex justify-center">
                     Nuestra Carta de Servicios
                   </h2>
 

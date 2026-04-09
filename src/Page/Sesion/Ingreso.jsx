@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FondoInicio from "../../assets/FondoInicio.webp";
-import { EyeClosed , Eye } from 'lucide-react';
+import { EyeClosed, Eye } from "lucide-react";
 
 export default function Login() {
   const [correo, setCorreo] = useState("");
@@ -38,10 +38,10 @@ export default function Login() {
         localStorage.setItem("USER", JSON.stringify(data.usuario));
         localStorage.setItem("isLoggedIn", "true");
 
-        // Redirigir según el rol
+        // Redirigir según el rol y redirigue con Asistencia
         if (data.usuario.ROL === "administrador" || data.usuario.ROL === "2") {
           console.log("✅ Redirigiendo a /Administrador");
-          navigate("/Administrador");
+          navigate("/Asistencia");
         } else if (
           data.usuario.ROL === "empleado" ||
           data.usuario.ROL === "1"
@@ -73,45 +73,56 @@ export default function Login() {
       />
       <div className="absolute inset-0 bg-gray-900 opacity-[0.6] z-10"> </div>
 
-      <div className="relative bg-black p-8 rounded-2xl shadow-2xl w-[90%] max-w-md z-20">
+      <div className="flex flex-col justify-center items-center bg-black/68 p-8 rounded-2xl shadow-2xl w-[90%] md:w-130 md:h-120 z-20">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold  bg-linear-to-b from-amber-200 to-yellow-700/90 bg-clip-text text-transparent">Inicio Sesion</h1>
+          <h1 className="text-3xl font-bold  bg-linear-to-b from-yellow-200 to-yellow-700/90 bg-clip-text text-transparent">
+            Inicio Sesion
+          </h1>
         </div>
         <form onSubmit={handleLogin} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-amber-400 mb-2">
+          <div className="w-60">
+            <label className="block text-sm font-medium text-yellow-300 mb-2">
               Correo Electrónico
             </label>
             <input
               type="email"
               value={correo}
               onChange={(e) => setCorreo(e.target.value)}
-className="w-full p-3 bg-transparent border border-gray-300 text-amber-400 rounded-lg appearance-none"              placeholder="admin@gmail.com"
+              className="w-full p-3 bg-transparent border border-gray-300 text-yellow-300 rounded-lg appearance-none"
+              placeholder="admin@gmail.com"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-amber-400 mb-2">
+            <label className="block text-sm font-medium text-yellow-300 mb-2 ">
               Contraseña
             </label>
             <div className="relative">
               <input
-                type={showPassword ? "text":"password"}
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3  bg-transaprent-500 border-gray-300 text-amber-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full p-3 bg-transparent border border-gray-300 text-yellow-300 rounded-lg appearance-none"
                 placeholder="••••••••"
                 required
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-orange-500 hover:text-orange-400 transition-colors"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-yellow-300 hover:text-yellow-400 transition-colors"
               >
-                {showPassword ? <span> <Eye />   
-</span> : <span>  <EyeClosed />   
-</span>}
+                {showPassword ? (
+                  <span>
+                    {" "}
+                    <Eye />
+                  </span>
+                ) : (
+                  <span>
+                    {" "}
+                    <EyeClosed />
+                  </span>
+                )}
               </button>
             </div>
           </div>
@@ -120,11 +131,11 @@ className="w-full p-3 bg-transparent border border-gray-300 text-amber-400 round
             type="submit"
             disabled={loading}
             className={`
-              w-full py-3 px-4 rounded-lg font-semibold text-black 
+              w-full py-3 px-4 rounded-lg font-bold text-  
               ${
                 loading
                   ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-amber-600 hover:bg-amber-700"
+                  : "bg-yellow-400 hover:bg-yellow-500"
               }
             `}
           >

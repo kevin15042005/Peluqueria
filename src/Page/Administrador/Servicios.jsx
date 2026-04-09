@@ -182,7 +182,7 @@ export default function ServiciosAdmin() {
 
               <button
                 onClick={cargarServicios}
-                className="px-4 py-3 borderbg-linear-to-r bg-amber-700 from-amber-700/50 to-amber-800/50 text-black shadow-lg hover:shadow-xl rounded-lg hover:bg-amber-500 transition-colors flex items-center space-x-2"
+                className="px-4 py-3 borderbg-linear-to-r bg-yellow-400  text-black shadow-lg hover:shadow-xl rounded-lg hover:bg-yellow-500 transition-colors flex items-center space-x-2"
               >
                 <span className="text-white">🔄</span>
                 <span>Actualizar Lista</span>
@@ -190,14 +190,14 @@ export default function ServiciosAdmin() {
             </div>
           </div>
           {/* Lista de Servicios Existentes */}
-          <div className="bg-linear-to-br from-black to-gray-900 rounded-2xl shadow-xl border-2 border-amber-500/30  p-6">
+          <div className="bg-linear-to-br from-black to-gray-900 rounded-2xl shadow-xl border-2  p-6">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-xl font-bold text-amber-300">
                 Servicios Registrados
               </h3>
               <div className="text-sm text-amber-300">
                 Total:{" "}
-                <span className="font-bold text-amber-600">
+                <span className="font-bold text--600">
                   {servicios.length}
                 </span>
               </div>
@@ -216,10 +216,10 @@ export default function ServiciosAdmin() {
                 {servicios.map((servicio) => (
                   <div
                     key={servicio.ID}
-                    className="border  border-gray-200 rounded-lg p-5 hover:shadow-lg transition-all duration-300  bg-amber-500 group"
+                    className="border  border-gray-200 rounded-lg p-5 hover:shadow-lg transition-all duration-300   "
                   >
                     <div className="flex  justify-between items-start mb-3">
-                      <h4 className="font-bold  text-lg text-gray-800 group-hover:text-amber-00 transition-colors">
+                      <h4 className="font-bold  text-lg text-yellow-400 group-hover:text-amber-00 transition-colors">
                         {servicio.NOMBRE}
                       </h4>
                       <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-medium">
@@ -228,11 +228,11 @@ export default function ServiciosAdmin() {
                     </div>
 
                     {servicio.DESCRIPCION ? (
-                      <p className="text-black text-sm mb-4 line-clamp-2">
+                      <p className="text-amber-300 text-sm mb-4 line-clamp-2">
                         {servicio.DESCRIPCION}
                       </p>
                     ) : (
-                      <p className="text-black text-sm mb-4 italic">
+                      <p className="text-amber-300 text-sm mb-4 italic">
                         Sin descripción
                       </p>
                     )}

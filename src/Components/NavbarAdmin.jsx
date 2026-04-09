@@ -39,31 +39,37 @@ const NavbarEmpleado = () => {
           />
         </div>
         <div>
-          <ul className=" hidden md:flex justify-center space-x-8 ml-auto ">
-            <li
-              className=" font-extrabold text-yellow-400  transition-colors duration-300"
-              onClick={handleMenuClick}
-            >
-              <Link to="/VistaTurno">VistaTurno</Link>
-            </li>
-            <li
-              className=" font-extrabold text-yellow-400  transition-colors duration-300"
-              onClick={handleMenuClick}
-            >
-              <Link to="/Administrador">CRUD</Link>
-            </li>
+          <ul className=" uppercase hidden md:flex justify-center space-x-8 ml-auto ">
+           <li className="font-extrabold text-yellow-400  transition-colors duration-300" onClick={handleMenuClick}>
+            <Link to="/Turnos">Turno</Link>
+           </li>
             <li
               className=" font-extrabold text-yellow-400  transition-colors duration-300"
               onClick={handleMenuClick}
             >
               <Link to="/Asistencia">Asistencia</Link>
             </li>
-            <li
+              <li
+              className=" font-extrabold text-yellow-400  transition-colors duration-300"
+              onClick={handleMenuClick}
+            >
+              <Link to="/Administrador">CRUD</Link>
+            </li>
+              <li
               className=" font-extrabold text-yellow-400  transition-colors duration-300"
               onClick={handleMenuClick}
             >
               <Link to="/Servicios">Servicios</Link>
             </li>
+            <li
+              className=" font-extrabold text-yellow-400  transition-colors duration-300"
+              onClick={handleMenuClick}
+            >
+              <Link to="/VistaTurno">VistaTurno</Link>
+            </li>
+          
+           
+          
 
             <li
               className=" font-extrabold text-yellow-400  transition-colors duration-300"

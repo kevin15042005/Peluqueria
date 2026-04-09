@@ -23,7 +23,7 @@ const VideoPlayer = () => {
 export default function Informacion1() {
   return (
     <>
-      <div className="mt-15 relative h-160 sm:h-170 md:h-130 bg-black">
+      <div className="mt-15 relative h-160 sm:h-170 md:h-130 bg-linear-to-b from-[#000000]  to-[#364153]  ">
         <div className="relative z-10 grid grid-cols-1 justify-center  md:grid-cols-[1fr_1fr] mt-8  p-6 pt-4  md:pt-10">
           <div>
             <VideoPlayer />

@@ -23,7 +23,7 @@ import Administrador from "./Page/Administrador/Index.jsx";
 import Asistencia from "./Page/Administrador/Asistenica.jsx";
 import Servicios from "./Page/Administrador/Servicios.jsx";
 import VistaTurno from "./Page/Administrador/VistaTurnos.jsx";
-
+import Turnos from "../src/Page/Turnos.jsx"
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
@@ -39,6 +39,16 @@ createRoot(document.getElementById("root")).render(
             ></Route>
           </Route>
           <Route element={<LayoutAdmin />}>
+            
+  <Route
+              path="/Turnos"
+              element={
+                <RutaProtegida rolPermitido="administrador">
+                  <Turnos />
+                </RutaProtegida>
+              }
+            />
+
             <Route
               path="/VistaTurno"
               element={

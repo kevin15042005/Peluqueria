@@ -37,13 +37,13 @@ const NavbarEmpleado = () => {
           </div>
 
           <div className="flex justify-center">
-            <ul className=" hidden md:flex justify-center space-x-8 ml-auto">
-              <li className=" font-extrabold text-yellow-400  transition-colors duration-300">
+            <ul className=" hidden md:flex text-yellow-400 uppercase justify-center space-x-8 ml-auto">
+              <li className=" font-extrabold  transition-colors duration-300">
                 <Link to="/Empleado">Asistencia</Link>
               </li>
            
               <li
-                className=" font-extrabold text-yellow-400  transition-colors duration-300"
+                className=" font-extrabold transition-colors duration-300"
                 onClick={handleMenuClick}
               >
                 <Link to="/">Salir</Link>
@@ -64,12 +64,12 @@ const NavbarEmpleado = () => {
               : "max-h-0 opacity-0 overflow-hidden pointer-events-none"
           }`}
         >
-           <li className=" font-extrabold text-yellow-400  transition-colors duration-300">
+           <li className=" font-extrabold transition-colors duration-300">
                 <Link to="/Empleado">Asistencia</Link>
               </li>
        
           <li
-            className=" font-extrabold text-yellow-400  transition-colors duration-300"
+            className=" font-extrabold transition-colors duration-300"
             onClick={() => {
               handleMenuClick();
               setIsMenuOpen(false);
