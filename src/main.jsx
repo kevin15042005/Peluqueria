@@ -5,16 +5,15 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
 import { AuthProvider } from "./Components/RutaProteguida/AutoContext.jsx";
 
-//Layout o
-import Layout from "./Components/Layout.jsx";
-//LayoutAdmin
-import LayoutAdmin from "./Components/LayoutAdmin.jsx";
-//Layout Empleado
-import LayouEmpleado from "./Components/LayoutEmpleado.jsx";
+//Layout
+import Layout from "./Components/Layout/Layout.jsx";
+import LayoutAdmin from "./Components/Layout/LayoutEmpleado";
+import LayouEmpleado from "./Components/Layout/LayoutEmpleado.jsx";
 
 import App from "./Page/App/App.jsx";
 import Citas from "./Page/Citas.jsx";
 import Ingreso from "./Page/Sesion/Ingreso.jsx";
+import Contacto from "./Page/Politica/Index.jsx"
 import TurnosEmpleado from "./Page/Empleado/Asistencia.jsx";
 import RutaProtegida from "./Components/RutaProteguida/Index.jsx";
 import ServiciosUsuario from "./Page/ServiciosUsuario.jsx";
@@ -23,7 +22,7 @@ import Administrador from "./Page/Administrador/Index.jsx";
 import Asistencia from "./Page/Administrador/Asistenica.jsx";
 import Servicios from "./Page/Administrador/Servicios.jsx";
 import VistaTurno from "./Page/Administrador/VistaTurnos.jsx";
-import Turnos from "../src/Page/Turnos.jsx"
+import Turnos from "../src/Page/Turnos.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
@@ -37,10 +36,13 @@ createRoot(document.getElementById("root")).render(
               path="/ServiciosUsuarios"
               element={<ServiciosUsuario />}
             ></Route>
+            <Route
+              path="/Contacto"
+              element={<Contacto />}
+            ></Route>
           </Route>
           <Route element={<LayoutAdmin />}>
-            
-  <Route
+            <Route
               path="/Turnos"
               element={
                 <RutaProtegida rolPermitido="administrador">
@@ -94,9 +96,7 @@ createRoot(document.getElementById("root")).render(
                   <TurnosEmpleado />
                 </RutaProtegida>
               }
-            />
-
-           
+            />{" "}
           </Route>
         </Routes>
       </BrowserRouter>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Turnos from "./Turnos"
+import { CalendarDays, Clock, User, Phone, Sparkles, Loader2, CheckCircle2, AlertCircle, Info } from "lucide-react";
 export default function Citas() {
   const [servicios, setServicios] = useState({});
   const [categorias, setCategorias] = useState([]);
@@ -16,7 +16,7 @@ export default function Citas() {
   const [clienteTelefono, setClienteTelefono] = useState("");
 
   const [mensaje, setMensaje] = useState("");
-  const [ setTurnoCreado] = useState(false);
+  const [, setTurnoCreado] = useState(false);
   const [loading, setLoading] = useState(false);
   const [cargandoHorarios, setCargandoHorarios] = useState(false);
   const [duracionServicio, setDuracionServicio] = useState(0);
@@ -485,328 +485,338 @@ export default function Citas() {
     return null;
   };
 
+  const infoSeleccionado = obtenerSubservicioInfo(subservicioSeleccionado);
+  const precioSeleccionado = parseFloat(
+    infoSeleccionado?.PRECIO || infoSeleccionado?.precio || 0,
+  );
+  const formularioIncompleto =
+    !subservicioSeleccionado || !fecha || !hora || !clienteNombre || !clienteTelefono;
+
+  const tipoMensaje = mensaje.includes("✅")
+    ? "ok"
+    : mensaje.includes("❌")
+      ? "error"
+      : "info";
+
+  // Quitar el emoji inicial del mensaje (ya se muestra un ícono)
+  const textoMensaje = mensaje.replace(/^(✅|❌|⚠️|ℹ️|🛠️)\s*/u, "");
+
   return (
-    <>
-    <div className=" max-w-86 md:max-w-lg  mx-auto  p-6 bg-black/10 rounded-xl shadow-lg my-16 ">
-      <h2 className="text-2xl font-bold mb-6 text-center  bg-linear-to-b from-amber-200 to-yellow-700/90 bg-clip-text text-transparent uppercase">
-        Agendar Cita
-      </h2>
-
-      {/* FECHA */}
-      <div className="mb-4">
-        <label className="block font-semibold mb-2 text-yellow-300">
-          📅 Fecha *
-        </label>
-        <input
-          type="date"
-          value={fecha}
-          min={new Date().toISOString().split("T")[0]}
-          onChange={(e) => setFecha(e.target.value)}
-          className="w-full border text-yellow-300 border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
-          required
-        />
-        <p className="text-xs text-yellow-300 mt-1">
-          Selecciona una fecha para ver horarios disponibles
-        </p>
-      </div>
-
-      {/* CATEGORÍA DE SERVICIO */}
-      <div className="mb-4">
-        <label className="block font-semibold mb-2 text-yellow-300">
-          Categoría de Servicio
-        </label>
-        <select
-          value={servicioSeleccionado}
-          onChange={(e) => setServicioSeleccionado(e.target.value)}
-          className="w-full border text-yellow-300 border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
-          disabled={cargandoServicios || categorias.length === 0}
-        >
-          <option value="">
-            {cargandoServicios
-              ? "Cargando categorías..."
-              : categorias.length === 0
-                ? "No hay categorías disponibles"
-                : "Selecciona una categoría"}
-          </option>
-          {categorias.map((categoria) => (
-            <option
-              className="bg-black text-yellow-300"
-              key={categoria}
-              value={categoria}
-            >
-              {categoria}
-            </option>
-          ))}
-        </select>
-        {categorias.length > 0 && (
-          <p className="text-xs text-yellow-300 mt-1">
-            {categorias.length} categoría(s) disponible(s)
+    <div className="min-h-screen bg-ink text-white">
+      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20">
+        {/* Encabezado */}
+        <div className="mb-12 text-center">
+          <p className="mb-4 flex items-center justify-center gap-3 text-xs uppercase tracking-[0.35em] text-gold">
+            <span className="h-px w-8 bg-gold" />
+            Reserva en línea
+            <span className="h-px w-8 bg-gold" />
           </p>
-        )}
-      </div>
-
-      {/* SERVICIO ESPECÍFICO */}
-      <div className="mb-4">
-        <label className=" block font-semibold mb-2 text-yellow-300">
-          Servicio Específico *
-        </label>
-        <select
-          value={subservicioSeleccionado}
-          onChange={(e) => setSubservicioSeleccionado(e.target.value)}
-          className="w-full border border-gray-300 p-3   text-yellow-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-          disabled={!servicioSeleccionado || subservicios.length === 0}
-        >
-          <option value="">
-            {!servicioSeleccionado
-              ? "Primero selecciona una categoría"
-              : subservicios.length === 0
-                ? "No hay servicios en esta categoría"
-                : "Selecciona un servicio"}
-          </option>
-          {subservicios.map((s, index) => {
-            const itemId = s.SUBSERVICIO_ID || s.id || s.ID || `temp-${index}`;
-            const itemNombre = s.NOMBRE || s.nombre || `Servicio ${index + 1}`;
-            const itemPrecio = parseFloat(s.PRECIO || s.precio || 0);
-            const itemDuracion =
-              s.DURACION_MINUTOS || s.duracionMinutos || s.duracion || 60;
-
-            return (
-              <option
-                className="bg-black"
-                key={`${itemId}-${index}`}
-                value={itemId}
-              >
-                {itemNombre} - ${itemPrecio.toLocaleString()} - {itemDuracion}{" "}
-                min
-              </option>
-            );
-          })}
-        </select>
-
-        {subservicios.length > 0 && (
-          <p className="text-xs  text-yellow-300  mt-1">
-            {subservicios.length} servicio(s) disponible(s)
-          </p>
-        )}
-      </div>
-
-      {/* INFORMACIÓN DE DURACIÓN */}
-      {subservicioSeleccionado && (
-        <div className="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-          <p className="text-sm text-black">
-            <span className="font-bold">Duración:</span> {duracionServicio}{" "}
-            minutos
-            {hora && (
-              <span className="ml-2">
-                • Horario: {formatearHora(hora)} - {calcularHoraFin(hora)}
-              </span>
-            )}
-          </p>
-          <p className="text-xs text-gray-600 mt-1">
-            * Se bloquearán {Math.ceil(duracionServicio / 30)} horario(s)
-            consecutivo(s)
+          <h1 className="font-display text-4xl md:text-5xl">
+            Agenda tu <span className="text-gradient-gold italic">turno</span>
+          </h1>
+          <p className="mx-auto mt-4 max-w-xl text-white/60">
+            Elige el servicio, la fecha y la hora que prefieras. Te esperamos.
           </p>
         </div>
-      )}
 
-      {/* BOTÓN BUSCAR HORARIOS */}
-      {subservicioSeleccionado && fecha && (
-        <div className="mb-6">
-          <button
-            onClick={cargarHorariosDisponibles}
-            disabled={cargandoHorarios}
-            className={`w-full p-3 rounded-lg font-bold ${
-              cargandoHorarios
-                ? " text-gray-500 cursor-not-allowed"
-                : "bg-yellow-400 hover:bg-yellow-500 text-black "
-            }`}
-          >
-            {cargandoHorarios ? (
-              <span className="flex items-center justify-center">
-                <svg
-                  className="animate-spin h-5 w-5 mr-2 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-                Buscando horarios...
-              </span>
-            ) : (
-              "Buscar Horarios Disponibles"
-            )}
-          </button>
-        </div>
-      )}
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_340px]">
+          <div className="space-y-6">
+            {/* PASO 1: SERVICIO */}
+            <Paso numero="1" titulo="Elige tu servicio">
+              <Etiqueta>Categoría</Etiqueta>
+              {cargandoServicios ? (
+                <p className="flex items-center gap-2 text-sm text-white/50">
+                  <Loader2 size={16} className="animate-spin text-gold" />
+                  Cargando categorías...
+                </p>
+              ) : categorias.length === 0 ? (
+                <p className="text-sm text-white/50">No hay categorías disponibles.</p>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {categorias.map((categoria) => (
+                    <button
+                      key={categoria}
+                      type="button"
+                      onClick={() => setServicioSeleccionado(categoria)}
+                      className={`rounded-full border px-5 py-2.5 text-sm transition-all duration-300 ${
+                        servicioSeleccionado === categoria
+                          ? "border-gold bg-gold font-semibold text-ink"
+                          : "border-white/15 text-white/75 hover:border-gold/60 hover:text-gold"
+                      }`}
+                    >
+                      {categoria}
+                    </button>
+                  ))}
+                </div>
+              )}
 
-      {/* HORARIOS DISPONIBLES */}
-      {horariosDisponibles.length > 0 && (
-        <div className="mb-6">
-          <label className="block font-semibold mb-2 text-yellow-400">
-            Horarios Disponibles *
-          </label>
-          <div className="grid grid-cols-3 gap-2">
-            {horariosDisponibles.map((horario, index) => {
-              const horaStr = horario.HORA || horario;
-              const ocupado = estaHorarioOcupado(horario);
+              {servicioSeleccionado && (
+                <div className="mt-8">
+                  <Etiqueta>Servicio específico</Etiqueta>
+                  {subservicios.length === 0 ? (
+                    <p className="text-sm text-white/50">
+                      No hay servicios en esta categoría.
+                    </p>
+                  ) : (
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                      {subservicios.map((s, index) => {
+                        const itemId = s.SUBSERVICIO_ID || s.id || s.ID || `temp-${index}`;
+                        const itemNombre = s.NOMBRE || s.nombre || `Servicio ${index + 1}`;
+                        const itemPrecio = parseFloat(s.PRECIO || s.precio || 0);
+                        const itemDuracion =
+                          s.DURACION_MINUTOS || s.duracionMinutos || s.duracion || 60;
+                        const activo = String(subservicioSeleccionado) === String(itemId);
 
-              return (
+                        return (
+                          <button
+                            key={`${itemId}-${index}`}
+                            type="button"
+                            onClick={() => setSubservicioSeleccionado(String(itemId))}
+                            className={`rounded-2xl border p-4 text-left transition-all duration-300 ${
+                              activo
+                                ? "border-gold bg-gold/10 shadow-lg shadow-gold/10"
+                                : "border-white/10 hover:border-gold/50 hover:bg-white/[0.03]"
+                            }`}
+                          >
+                            <span className="block font-semibold text-white">{itemNombre}</span>
+                            <span className="mt-2 flex items-center justify-between text-sm">
+                              <span className="text-gold">${itemPrecio.toLocaleString()}</span>
+                              <span className="flex items-center gap-1 text-white/50">
+                                <Clock size={14} />
+                                {itemDuracion} min
+                              </span>
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
+            </Paso>
+
+            {/* PASO 2: FECHA Y HORA */}
+            <Paso numero="2" titulo="Fecha y hora">
+              <Etiqueta htmlFor="fecha">Fecha</Etiqueta>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <input
+                  id="fecha"
+                  type="date"
+                  value={fecha}
+                  min={new Date().toISOString().split("T")[0]}
+                  onChange={(e) => setFecha(e.target.value)}
+                  className={`${inputClass} sm:max-w-xs`}
+                  required
+                />
                 <button
-                  key={index}
-                  onClick={() => !ocupado && setHora(horaStr)}
-                  disabled={ocupado}
-                  className={`p-3 border rounded-lg text-center transition-colors ${
-                    ocupado
-                      ? "bg-red-100 text-red-800 border-red-300 cursor-not-allowed"
-                      : hora === horaStr
-                        ? "bg-yellow-300 text-white border-amber-600"
-                        : "bg-gray-100 hover:bg-amber-200 border-gray-300"
-                  }`}
-                  title={
-                    ocupado
-                      ? "Horario ocupado"
-                      : `Disponible: ${formatearHora(horaStr)}`
-                  }
+                  type="button"
+                  onClick={cargarHorariosDisponibles}
+                  disabled={cargandoHorarios || !subservicioSeleccionado || !fecha}
+                  className="flex items-center justify-center gap-2 rounded-xl border border-gold/60 px-6 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-gold transition-colors duration-300 hover:bg-gold hover:text-ink disabled:cursor-not-allowed disabled:border-white/10 disabled:text-white/30 disabled:hover:bg-transparent"
                 >
-                  {formatearHora(horaStr)}
+                  {cargandoHorarios ? (
+                    <Loader2 size={18} className="animate-spin" />
+                  ) : (
+                    <CalendarDays size={18} />
+                  )}
+                  {cargandoHorarios ? "Buscando..." : "Ver horarios"}
                 </button>
-              );
-            })}
+              </div>
+              {(!subservicioSeleccionado || !fecha) && (
+                <p className="mt-2 text-xs text-white/40">
+                  Selecciona un servicio y una fecha para ver los horarios disponibles.
+                </p>
+              )}
+
+              {horariosDisponibles.length > 0 && (
+                <div className="mt-8">
+                  <Etiqueta>Horarios disponibles</Etiqueta>
+                  <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6">
+                    {horariosDisponibles.map((horario, index) => {
+                      const horaStr = horario.HORA || horario;
+                      const ocupado = estaHorarioOcupado(horario);
+                      const activo = hora === horaStr;
+
+                      return (
+                        <button
+                          key={index}
+                          type="button"
+                          onClick={() => !ocupado && setHora(horaStr)}
+                          disabled={ocupado}
+                          title={ocupado ? "Horario ocupado" : `Disponible: ${formatearHora(horaStr)}`}
+                          className={`rounded-xl border py-2.5 text-sm font-medium transition-all duration-200 ${
+                            ocupado
+                              ? "cursor-not-allowed border-white/5 text-white/20 line-through"
+                              : activo
+                                ? "border-gold bg-gold text-ink"
+                                : "border-white/15 text-white/80 hover:border-gold hover:text-gold"
+                          }`}
+                        >
+                          {formatearHora(horaStr)}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {duracionServicio > 0 && (
+                    <p className="mt-3 text-xs text-white/40">
+                      Este servicio ocupa {Math.ceil(duracionServicio / 30)} bloque(s) de 30 minutos.
+                    </p>
+                  )}
+                </div>
+              )}
+            </Paso>
+
+            {/* PASO 3: DATOS */}
+            <Paso numero="3" titulo="Tus datos">
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div>
+                  <Etiqueta htmlFor="nombre">Nombre completo</Etiqueta>
+                  <input
+                    id="nombre"
+                    type="text"
+                    autoComplete="name"
+                    value={clienteNombre}
+                    onChange={(e) => setClienteNombre(e.target.value)}
+                    placeholder="Ej: Ana Pérez"
+                    className={inputClass}
+                    required
+                  />
+                </div>
+                <div>
+                  <Etiqueta htmlFor="telefono">Teléfono</Etiqueta>
+                  <input
+                    id="telefono"
+                    type="tel"
+                    autoComplete="tel"
+                    inputMode="numeric"
+                    value={clienteTelefono}
+                    onChange={(e) => setClienteTelefono(e.target.value)}
+                    placeholder="Ej: 3001234567"
+                    className={inputClass}
+                    required
+                  />
+                </div>
+              </div>
+            </Paso>
           </div>
 
-          {hora && (
-            <div className="mt-2 p-2 bg-amber-50 rounded-lg border border-amber-300">
-              <p className="text-sm text-amber-400">
-                <span className="font-bold text-yellow-400">
-                  Horario seleccionado:
-                </span>{" "}
-                <span className="text-amber-800 font-extrabold">
-                  {formatearHora(hora)} - {calcularHoraFin(hora)}
-                </span>
-              </p>
+          {/* RESUMEN */}
+          <aside className="lg:sticky lg:top-28 lg:self-start">
+            <div className="rounded-3xl border border-gold/30 bg-linear-to-b from-gold/10 to-transparent p-6 md:p-8">
+              <h2 className="mb-6 flex items-center gap-2 font-display text-xl">
+                <Sparkles size={20} className="text-gold" />
+                Resumen
+              </h2>
+
+              <dl className="space-y-4 text-sm">
+                <FilaResumen titulo="Servicio">
+                  {infoSeleccionado?.NOMBRE || infoSeleccionado?.nombre || "—"}
+                </FilaResumen>
+                <FilaResumen titulo="Fecha">{fecha || "—"}</FilaResumen>
+                <FilaResumen titulo="Horario">
+                  {hora ? `${formatearHora(hora)} - ${calcularHoraFin(hora)}` : "—"}
+                </FilaResumen>
+                <FilaResumen titulo="Duración">
+                  {duracionServicio ? `${duracionServicio} min` : "—"}
+                </FilaResumen>
+                <div className="flex items-baseline justify-between gap-4">
+                  <dt className="text-white/50">Total</dt>
+                  <dd className="font-display text-2xl text-gold">
+                    {precioSeleccionado ? `$${precioSeleccionado.toLocaleString()}` : "—"}
+                  </dd>
+                </div>
+              </dl>
+
+              {(clienteNombre || clienteTelefono) && (
+                <div className="mt-6 space-y-2 rounded-2xl bg-white/[0.04] p-4 text-sm text-white/70">
+                  {clienteNombre && (
+                    <p className="flex items-center gap-2">
+                      <User size={14} className="text-gold" />
+                      {clienteNombre}
+                    </p>
+                  )}
+                  {clienteTelefono && (
+                    <p className="flex items-center gap-2">
+                      <Phone size={14} className="text-gold" />
+                      {clienteTelefono}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              <button
+                type="button"
+                onClick={registrarTurno}
+                disabled={loading || formularioIncompleto}
+                className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-gold py-4 text-sm font-semibold uppercase tracking-[0.15em] text-ink transition-all duration-300 hover:bg-gold-light disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/30"
+              >
+                {loading && <Loader2 size={18} className="animate-spin" />}
+                {loading ? "Agendando..." : "Confirmar cita"}
+              </button>
+
+              {mensaje && (
+                <div
+                  className={`mt-4 flex items-start gap-2 rounded-xl border px-4 py-3 text-sm ${
+                    tipoMensaje === "ok"
+                      ? "border-green-500/30 bg-green-500/10 text-green-300"
+                      : tipoMensaje === "error"
+                        ? "border-red-500/30 bg-red-500/10 text-red-300"
+                        : "border-gold/30 bg-gold/10 text-gold-light"
+                  }`}
+                >
+                  {tipoMensaje === "ok" ? (
+                    <CheckCircle2 size={18} className="mt-0.5 shrink-0" />
+                  ) : tipoMensaje === "error" ? (
+                    <AlertCircle size={18} className="mt-0.5 shrink-0" />
+                  ) : (
+                    <Info size={18} className="mt-0.5 shrink-0" />
+                  )}
+                  <span>{textoMensaje}</span>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      )}
-
-      {/* DATOS DEL CLIENTE */}
-      <div className="mb-6">
-        <h3 className="font-semibold mb-3 text-yellow-300"> Tus datos</h3>
-
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-yellow-300 mb-1">
-            Nombre Completo *
-          </label>
-          <input
-            type="text"
-            value={clienteNombre}
-            onChange={(e) => setClienteNombre(e.target.value)}
-            placeholder="Ej: Juan Pérez"
-            className="w-full border text-yellow-300 border-gray-300 p-3 rounded-lg"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-yellow-300 mb-1">
-            Teléfono *
-          </label>
-          <input
-            type="tel"
-            value={clienteTelefono}
-            onChange={(e) => setClienteTelefono(e.target.value)}
-            placeholder="Ej: 3001234567"
-            className="w-full border border-gray-300 p-3 rounded-lg text-yellow-300"
-            required
-          />
+          </aside>
         </div>
       </div>
-
-      {/* BOTÓN AGENDAR */}
-      <button
-        onClick={registrarTurno}
-        disabled={
-          loading ||
-          !subservicioSeleccionado ||
-          !fecha ||
-          !hora ||
-          !clienteNombre ||
-          !clienteTelefono
-        }
-        className={`
-          w-full p-4 rounded-lg font-semibold text-lg text-white transition-colors
-          ${
-            loading ||
-            !subservicioSeleccionado ||
-            !fecha ||
-            !hora ||
-            !clienteNombre ||
-            !clienteTelefono
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-amber-600 hover:bg-amber-700"
-          }
-        `}
-      >
-        {loading ? (
-          <span className="flex items-center justify-center">
-            <svg
-              className="animate-spin h-2 w- mr-2 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
-            Agendando...
-          </span>
-        ) : (
-          " Confirmar Cita"
-        )}
-      </button>
-
-      {mensaje && (
-        <div
-          className={`
-          mt-4 p-3 rounded-lg text-center
-          ${
-            mensaje.includes("✅")
-              ? "bg-green-100 text-green-800 border border-green-200"
-              : mensaje.includes("❌")
-                ? "bg-red-100 text-red-800 border border-red-200"
-                : "bg-yellow-100 text-yellow-800 border border-yellow-200"
-          }
-        `}
-        >
-          {mensaje}
-        </div>
-      )}
     </div>
-   
-    </>
+  );
+}
+
+/* ===== Componentes de presentación ===== */
+
+const inputClass =
+  "w-full rounded-xl border border-white/15 bg-white/[0.04] p-3.5 text-white placeholder:text-white/30 outline-none transition-colors [color-scheme:dark] focus:border-gold focus:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-50";
+
+function Paso({ numero, titulo, children }) {
+  return (
+    <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:p-8">
+      <h2 className="mb-6 flex items-center gap-3 font-display text-xl text-white">
+        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gold font-sans text-sm font-bold text-ink">
+          {numero}
+        </span>
+        {titulo}
+      </h2>
+      {children}
+    </section>
+  );
+}
+
+function Etiqueta({ htmlFor, children }) {
+  return (
+    <label
+      htmlFor={htmlFor}
+      className="mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-white/60"
+    >
+      {children}
+    </label>
+  );
+}
+
+function FilaResumen({ titulo, children }) {
+  return (
+    <div className="flex justify-between gap-4 border-b border-white/10 pb-4">
+      <dt className="text-white/50">{titulo}</dt>
+      <dd className="text-right font-medium">{children}</dd>
+    </div>
   );
 }

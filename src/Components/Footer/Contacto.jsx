@@ -25,7 +25,7 @@ export default function Contacto() {
               />
             </fieldset>
             <fieldset>
-              <legend className="font-bold my-1 ">Correco Electronico</legend>
+              <legend className="font-bold my-1 ">Correo Electronico</legend>
               <input
                 type="email"
                 placeholder="Correo"

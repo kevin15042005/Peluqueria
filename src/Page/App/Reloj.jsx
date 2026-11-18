@@ -22,7 +22,7 @@ export default function RelojElegante() {
   const rotacionSegundo = sec * 6;
 
   return (
-    <div className="flex flex-col items-center justify-center p-8 bg-zinc-900/80 backdrop-blur-md border border-amber-400/30 rounded-3xl shadow-2xl w-full max-w-xs mx-auto">
+    <div className="flex flex-col items-center justify-center p-8 bg-white/[0.03] border border-gold/25 rounded-3xl shadow-2xl shadow-black/50 w-full">
       
       {/* Reloj Analógico */}
       <div className="relative w-48 h-48 rounded-full border-4 border-amber-500 shadow-[0_0_20px_rgba(251,191,36,0.2)] bg-zinc-950 flex items-center justify-center mb-6">

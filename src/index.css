@@ -35,3 +35,22 @@
   font-style: normal;
   
 }
+
+/* ===== Tema dorado ===== */
+@theme {
+  --font-display: "Playfair Display", serif;
+  --color-gold: #d4a650;
+  --color-gold-light: #ecd08f;
+  --color-ink: #0c0c0d;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(120deg, #f3dfa6 0%, #d4a650 45%, #a8782c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

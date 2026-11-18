@@ -1,6 +1,6 @@
 import React from "react";
-import NavbarEmpleado from "./NavbarEmpleado.jsx";
-import Footer from "./Footer/Footer";
+import NavbarEmpleado from "../Navbar/NavbarEmpleado";
+import Footer from "../Footer/Footer";
 import { Outlet } from "react-router-dom";
 export default function Layout() {
   return (

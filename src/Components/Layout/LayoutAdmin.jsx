@@ -1,7 +1,7 @@
 import React from "react";
-import Navbar1 from "./NavbarAdmin";
+import Navbar1 from "../Navbar/NavbarAdmin";
 import { Outlet } from "react-router-dom";
-import Footer from "./Footer/Footer";
+import Footer from "../Footer/Footer";
 
 export default function LayoutAdmin() {
   return (

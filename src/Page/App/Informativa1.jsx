@@ -1,79 +1,110 @@
 import { Link } from "react-router-dom";
 import video from "../../assets/Dorado.mp4";
-import { MailCheck, Instagram, PersonStanding } from "lucide-react";
+import { Instagram, Phone, MapPin, ChevronDown } from "lucide-react";
 
-const VideoPlayer = () => {
+const TikTok = ({ size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48Z" />
+  </svg>
+);
+
+const redes = [
+  {
+    href: "https://www.instagram.com/peluqueriaseldorado",
+    label: "Instagram",
+    icon: <Instagram size={20} />,
+  },
+  {
+    href: "https://www.tiktok.com/@eldoradopeluquerias",
+    label: "TikTok",
+    icon: <TikTok size={20} />,
+  },
+  {
+    href: "tel:+573202837622",
+    label: "Llamar",
+    icon: <Phone size={20} />,
+  },
+];
+
+export default function Informacion1() {
   return (
-    <div className="w-full= flex flex-col items-center justify-center mt-8 mb-8">
+    <section className="relative isolate flex min-h-[calc(100svh-5rem)] items-center overflow-hidden bg-ink">
+      {/* Video de fondo */}
       <video
-        className="w-full max-w-2xl aspect-video rounded-xl shadow-2xl "
-        controls
+        className="absolute inset-0 -z-20 h-full w-full object-cover"
         autoPlay
         muted
         playsInline
         loop
       >
         <source src={video} type="video/mp4" />
-        Tu navegador no soporta etiquetas de video.
       </video>
-    </div>
-  );
-};
+      {/* Capas de oscurecimiento */}
+      <div className="absolute inset-0 -z-10 bg-linear-to-r from-ink via-ink/80 to-ink/30" />
+      <div className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-linear-to-t from-ink to-transparent" />
 
-export default function Informacion1() {
-  return (
-    <>
-      <div className="mt-15 relative h-160 sm:h-170 md:h-130 bg-linear-to-b from-[#000000]  to-[#364153]  ">
-        <div className="relative z-10 grid grid-cols-1 justify-center  md:grid-cols-[1fr_1fr] mt-8  p-6 pt-4  md:pt-10">
-          <div>
-            <VideoPlayer />
+      <div className="mx-auto w-full max-w-7xl px-6 py-20 md:px-8">
+        <div className="max-w-2xl">
+          <p className="mb-5 flex items-center gap-3 text-xs uppercase tracking-[0.35em] text-gold">
+            <span className="h-px w-10 bg-gold" />
+            Peluquería El Dorado
+          </p>
+
+          <h1 className="font-display text-4xl leading-tight text-white sm:text-5xl md:text-6xl">
+            Cambia tu estilo <br />
+            <span className="text-gradient-gold italic">con confianza</span>
+          </h1>
+
+          <p className="mt-6 max-w-lg text-base leading-relaxed text-white/70 md:text-lg">
+            Corte, color, manicure y tratamientos en el corazón del Aeropuerto
+            El Dorado. Llega con prisa, sal renovado.
+          </p>
+
+          <div className="mt-10 flex flex-wrap items-center gap-4">
+            <Link
+              to="/Citas"
+              className="rounded-full bg-gold px-8 py-4 text-sm font-semibold uppercase tracking-[0.15em] text-ink shadow-lg shadow-gold/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-gold-light hover:shadow-gold/40"
+            >
+              Pide tu turno
+            </Link>
+            <Link
+              to="/ServiciosUsuarios"
+              className="rounded-full border border-white/30 px-8 py-4 text-sm font-semibold uppercase tracking-[0.15em] text-white transition-colors duration-300 hover:border-gold hover:text-gold"
+            >
+              Ver servicios
+            </Link>
           </div>
-          <div className="bg-[#2b25204f]  rounded-2xl font-serif flex flex-col justify-center items-center text-center p-1 md:mb-3 sm:p-8  min-h-ful shadow-xl/60 shadow-amber-300">
-            <div className="flex  flex-col justify-center p-10 max-w-full ">
-              <h2 className="text-1 md:text-[20px] sm:text-[10px]font-bold mb-2 text-white text-center flex flex-col justify-center">
-                CAMBIA TU ESTILO CON CONFIANZA
-              </h2>
-              <div className="text-center flex justify-center items-center mt-10 ">
-                <Link to="/Citas">
-                  <a href="#_" class="relative inline-block text-lg group">
-                    <span class="relative z-10 block px-10 py-6 overflow-hidden font-medium leading-tight text-black transition-colors duration-300 ease-out border-2 border-gray-900 rounded-lg group-hover:text-white ">
-                      <span class="absolute inset-0 w-full h-full px-10 py-6 rounded-lg bg-gray-50"></span>
-                      <span class="absolute left-0 md:w-80 h-50 -ml-1 transition-all duration-300 origin-top-right -rotate-90 -translate-x-full translate-y-12 bg-amber-600 group-hover:-rotate-180 ease"></span>
-                      <button className="relative  text-[15px] md:text-[18px]">PIDE TU TURNO AQUI</button>
-                    </span>
-                    <span
-                      className="absolute bottom-0 right-0 w-full h-12 -mb-1 -mr-1 transition-all duration-200 ease-linear bg-amber-600 rounded-lg group-hover:mb-0 group-hover:mr-0"
-                      data-rounded="rounded-lg"
-                    ></span>
-                  </a>
-                </Link>
-              </div>
+
+          <div className="mt-12 flex flex-wrap items-center gap-6">
+            <div className="flex items-center gap-3">
+              {redes.map((r) => (
+                <a
+                  key={r.label}
+                  href={r.href}
+                  target={r.href.startsWith("http") ? "_blank" : undefined}
+                  rel="noreferrer"
+                  aria-label={r.label}
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-gold/40 text-gold transition-all duration-300 hover:bg-gold hover:text-ink"
+                >
+                  {r.icon}
+                </a>
+              ))}
             </div>
-            <div className="grid grid-cols-3 items-center divide-amber-300/80 gap-3  mb-3 ">
-              <div className=" border-amber-300/80  pb-2 text-yellow-300 font-bold  px-4  border-b-4  ">
-                <a className="flex justify-center items-center"  href="">
-                  <MailCheck
-                    size={40}
-                  />
-                </a>
-              </div>
-              <div className=" border-amber-300/80   pb-2  px-4 border-b-4  ">
-                <a  className="flex justify-center items-center" href="https://www.instagram.com/peluqueriaseldorado?igsh=MXNsNmxkc2llaHY2ZA==https://www.instagram.com/peluqueriaseldorado?igsh=MXNsNmxkc2llaHY2ZA==">
-                  <Instagram size={40} className="text-yellow-300  font-bold" />
-                </a>
-              </div>
-              <div className="  border-amber-300/80 gap-3 pb-2 px-4   border-b-4  ">
-                <a className="flex justify-center items-center" href="https://www.tiktok.com/@eldoradopeluquerias">
-                  <PersonStanding
-                    size={40}
-                    className="text-yellow-300  font-bold"
-                  />
-                </a>
-              </div>
-            </div>
+            <span className="flex items-center gap-2 text-sm text-white/60">
+              <MapPin size={16} className="text-gold" />
+              Aeropuerto El Dorado · Local 26
+            </span>
           </div>
         </div>
       </div>
-    </>
+
+      <a
+        href="#servicios"
+        aria-label="Ir a servicios"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce text-gold/70 hover:text-gold"
+      >
+        <ChevronDown size={28} />
+      </a>
+    </section>
   );
 }
