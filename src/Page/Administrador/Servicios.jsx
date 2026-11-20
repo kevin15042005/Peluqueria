@@ -111,17 +111,17 @@ export default function ServiciosAdmin() {
           {/* Formulario Crear Servicio */}
           <div className=" bg-linear-to-br from-black to-gray-900 rounded-2xl shadow-xl border-2 border-amber-500/30 p-6">
             {" "}
-            <h2 className="text-2xl font-bold mb-6 text-amber-300">
+            <h2 className="text-2xl mb-6 text-gradient-gold uppercase font-bold font-serif tracking-tight">
               {" "}
               Administrar Servicios
             </h2>
             {mensaje && (
               <div
                 className={`mb-4 p-3 rounded-lg flex items-center animate-pulse ${
-                  mensaje.includes("✅")
-                    ? "bg-green-100 text-green-800 border border-green-200"
-                    : "bg-red-100 text-red-800 border border-red-200"
-                }`}
+ mensaje.includes("✅")
+ ? "bg-green-900/30 border border-green-500/30 text-green-300 border border-green-200"
+ : "bg-red-900/30 border border-red-500/30 text-red-300 border border-red-200"
+ }`}
               >
                 <span className="mr-2">
                   {mensaje.includes("✅") ? "✅" : "❌"}
@@ -129,7 +129,7 @@ export default function ServiciosAdmin() {
                 <span>{mensaje.replace("✅", "").replace("❌", "").trim()}</span>
               </div>
             )}
-            <div className="flex flex-col  gap-6">
+            <div className="flex flex-col gap-6">
               <div>
                 <label className="block text-sm font-medium text-amber-300 mb-2">
                   Nombre del servicio *
@@ -139,7 +139,7 @@ export default function ServiciosAdmin() {
                   placeholder="Ej: Corte de Cabello"
                   value={nombre}
                   onChange={(e) => setNombre(e.target.value)}
-                  className="w-full p-3 border border-gray-300 text-amber-300 rounded-lg focus:ring-2 focus:ring-amber-300 transition-colors"
+                  className="w-full p-3 border border-amber-500/30 text-amber-300 rounded-lg focus:ring-2 focus:ring-amber-300 transition-colors"
                   onKeyPress={(e) => {
                     if (e.key === "Enter") crearServicio();
                   }}
@@ -154,7 +154,7 @@ export default function ServiciosAdmin() {
                   placeholder="Ej: Servicios de corte para hombres y mujeres"
                   value={descripcion}
                   onChange={(e) => setDescripcion(e.target.value)}
-                  className="w-full p-3 border text-amber-300 border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-300 transition-colors h-24"
+                  className="w-full p-3 border text-amber-300 border-amber-500/30 rounded-lg focus:ring-2 focus:ring-amber-300 transition-colors h-24"
                 />
               </div>
             </div>
@@ -163,10 +163,10 @@ export default function ServiciosAdmin() {
                 onClick={crearServicio}
                 disabled={loading || !nombre.trim()}
                 className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2 ${
-                  loading || !nombre.trim()
-                    ? "bg-gray-400 cursor-not-allowed text-gray-600"
-                    : " bg-linear-to-r bg-amber-700 from-amber-700/50 to-amber-800/50 hover:bg-amber-500 text-black shadow-lg hover:shadow-xl"
-                }`}
+ loading || !nombre.trim()
+ ? "bg-gray-700 cursor-not-allowed text-gray-300"
+ : " bg-linear-to-r bg-amber-700 from-amber-700/50 to-amber-800/50 hover:bg-amber-500 text-amber-100 shadow-lg hover:shadow-xl"
+ }`}
               >
                 {loading ? (
                   <>
@@ -175,14 +175,14 @@ export default function ServiciosAdmin() {
                   </>
                 ) : (
                   <>
-                    <span className="text-lg  text-white ">Crear Servicio</span>
+                    <span className="text-lg text-white ">Crear Servicio</span>
                   </>
                 )}
               </button>
 
               <button
                 onClick={cargarServicios}
-                className="px-4 py-3 borderbg-linear-to-r bg-yellow-400  text-black shadow-lg hover:shadow-xl rounded-lg hover:bg-yellow-500 transition-colors flex items-center space-x-2"
+                className="px-4 py-3 bg-linear-to-r from-[#f3dfa6] via-[#d4a650] to-[#a8782c] hover:from-[#c2b184] hover:via-[#a07d3c] hover:to-[#7b5820] text-black shadow-lg hover:shadow-xl rounded-lg transition-colors flex items-center space-x-2"
               >
                 <span className="text-white">🔄</span>
                 <span>Actualizar Lista</span>
@@ -190,7 +190,7 @@ export default function ServiciosAdmin() {
             </div>
           </div>
           {/* Lista de Servicios Existentes */}
-          <div className="bg-linear-to-br from-black to-gray-900 rounded-2xl shadow-xl border-2  p-6">
+          <div className="bg-linear-to-br from-black to-gray-900 rounded-2xl shadow-xl border-2 p-6">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-xl font-bold text-amber-300">
                 Servicios Registrados
@@ -216,13 +216,13 @@ export default function ServiciosAdmin() {
                 {servicios.map((servicio) => (
                   <div
                     key={servicio.ID}
-                    className="border  border-gray-200 rounded-lg p-5 hover:shadow-lg transition-all duration-300   "
+                    className="border border-amber-500/30 rounded-lg p-5 hover:shadow-lg transition-all duration-300 "
                   >
-                    <div className="flex  justify-between items-start mb-3">
-                      <h4 className="font-bold  text-lg text-yellow-400 group-hover:text-amber-00 transition-colors">
+                    <div className="flex justify-between items-start mb-3">
+                      <h4 className="font-bold text-lg text-yellow-400 group-hover:text-amber-200 transition-colors">
                         {servicio.NOMBRE}
                       </h4>
-                      <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-medium">
+                      <span className="text-xs bg-blue-900/30 border border-blue-500/30 text-blue-300 px-2 py-1 rounded-full font-medium">
                         ID: {servicio.ID}
                       </span>
                     </div>
@@ -237,13 +237,13 @@ export default function ServiciosAdmin() {
                       </p>
                     )}
 
-                    <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
+                    <div className="flex justify-between items-center mt-4 pt-4 border-t border-amber-500/30">
                       <span
                         className={`text-xs px-3 py-1 rounded-full font-medium ${
-                          servicio.ESTADO === "activo"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
+ servicio.ESTADO === "activo"
+ ? "bg-green-900/30 border border-green-500/30 text-green-300"
+ : "bg-red-900/30 border border-red-500/30 text-red-300"
+ }`}
                       >
                         {servicio.ESTADO === "activo" ? "Activo" : "Inactivo"}
                       </span>
@@ -251,7 +251,7 @@ export default function ServiciosAdmin() {
                       <div className="flex space-x-2">
                         <button
                           onClick={() => eliminarServicio(servicio.ID)}
-                          className=" text-xs px-3 py-1 bg-red-50 text-red-600 hover:bg-red-100 rounded transition-colors"
+                          className=" text-xs px-3 py-1 bg-red-900/30 border border-red-500/30 text-red-400 hover:bg-red-900/30 border border-red-500/30 rounded transition-colors"
                           title="Eliminar servicio"
                         >
                           Eliminar

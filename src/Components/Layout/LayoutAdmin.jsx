@@ -9,7 +9,7 @@ export default function LayoutAdmin() {
       <div className="flex  flex-col min-h-screen">
         
         <Navbar1 />
-        <main className="grow pt-20 flex items-center justify-center bg-gray-700">
+        <main className="grow pt-20 flex items-center justify-center bg-ink">
           <Outlet />
         </main>
         <Footer />

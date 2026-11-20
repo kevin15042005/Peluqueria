@@ -7,7 +7,7 @@ import { AuthProvider } from "./Components/RutaProteguida/AutoContext.jsx";
 
 //Layout
 import Layout from "./Components/Layout/Layout.jsx";
-import LayoutAdmin from "./Components/Layout/LayoutEmpleado";
+import LayoutAdmin from "./Components/Layout/LayoutAdmin.jsx";
 import LayouEmpleado from "./Components/Layout/LayoutEmpleado.jsx";
 
 import App from "./Page/App/App.jsx";
@@ -22,7 +22,9 @@ import Administrador from "./Page/Administrador/Index.jsx";
 import Asistencia from "./Page/Administrador/Asistenica.jsx";
 import Servicios from "./Page/Administrador/Servicios.jsx";
 import VistaTurno from "./Page/Administrador/VistaTurnos.jsx";
-import Turnos from "../src/Page/Turnos.jsx";
+import CartaAdmin from "./Page/Administrador/CartaAdmin.jsx";
+import MiTurno from "./Page/MiTurno.jsx";
+import Pantalla from "./Page/Pantalla.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
@@ -40,16 +42,23 @@ createRoot(document.getElementById("root")).render(
               path="/Contacto"
               element={<Contacto />}
             ></Route>
+            <Route path="/MiTurno" element={<MiTurno />} />
+            <Route path="/MiTurno/:id" element={<MiTurno />} />
           </Route>
+
+          {/* Pantalla pública para la TV del salón (sin menú) */}
+          <Route path="/Pantalla" element={<Pantalla />} />
+
           <Route element={<LayoutAdmin />}>
             <Route
-              path="/Turnos"
+              path="/Carta"
               element={
                 <RutaProtegida rolPermitido="administrador">
-                  <Turnos />
+                  <CartaAdmin />
                 </RutaProtegida>
               }
             />
+        
 
             <Route
               path="/VistaTurno"

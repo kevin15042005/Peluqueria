@@ -372,21 +372,21 @@ export default function UsuariosAdmin() {
                 <input
                   name="nombre"
                   placeholder="Nombre completo "
-                  className="w-full p-3 border text-amber-300 border-amber-300 rounded-lg "
+                  className="w-full p-3 border text-amber-300 border-amber-500/30 rounded-lg "
                   required
                 />
                 <input
                   type="email"
                   name="correo"
                   placeholder="Correo electrónico "
-                  className="w-full p-3 border text-amber-300 border-amber-300 rounded-lg "
+                  className="w-full p-3 border text-amber-300 border-amber-500/30 rounded-lg "
                   required
                 />
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="Contraseña "
-                  className="w-full p-3 border text-amber-300 border-amber-300 rounded-lg "
+                  className="w-full p-3 border text-amber-300 border-amber-500/30 rounded-lg "
                   required
                 />
                 <input
@@ -395,13 +395,13 @@ export default function UsuariosAdmin() {
                   placeholder="PIN (6 dígitos) "
                   maxLength={6}
                   pattern="\d{6}"
-                  className="w-full p-3 border text-amber-300 border-amber-300 rounded-lg "
+                  className="w-full p-3 border text-amber-300 border-amber-500/30 rounded-lg "
                   required
                 />
 
                 <select
                   name="rol"
-                  className="w-full p-3 border text-amber-300 border-amber-300 rounded-lg "
+                  className="w-full p-3 border text-amber-300 border-amber-500/30 rounded-lg "
                   required
                 >
                   <option className="bg-black" value="">
@@ -431,13 +431,13 @@ export default function UsuariosAdmin() {
                   <button
                     type="button"
                     onClick={() => setModalCrear(false)}
-                    className="px-4 py-2 border rounded-lg text-amber-300 border-amber-300 hover:bg-white/30"
+                    className="px-4 py-2 border rounded-lg text-amber-300 border-amber-500/30 hover:bg-white/30"
                   >
                     Cancelar
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 border text-amber-300 border-amber-300   rounded-lg hover:bg-white/30"
+                    className="px-4 py-2 border text-amber-300 border-amber-500/30 rounded-lg hover:bg-white/30"
                   >
                     Guardar
                   </button>
@@ -493,7 +493,7 @@ export default function UsuariosAdmin() {
             })
           }
           placeholder="Mínimo 8 caracteres"
-          className="w-full p-2.5 bg-transparent border border-amber-300 text-amber-300 rounded-lg text-sm focus:ring-1 focus:ring-amber-300 outline-none"
+          className="w-full p-2.5 bg-transparent border border-amber-500/30 text-amber-300 rounded-lg text-sm focus:ring-1 focus:ring-amber-300 outline-none"
           required
         />
       </div>
@@ -514,7 +514,7 @@ export default function UsuariosAdmin() {
           type={showPassword ? "text" : "password"}
           placeholder="6 dígitos"
           maxLength={6}
-          className="w-full p-2.5 bg-transparent border border-amber-300 text-amber-300 rounded-lg text-sm focus:ring-1 focus:ring-amber-300 outline-none"
+          className="w-full p-2.5 bg-transparent border border-amber-500/30 text-amber-300 rounded-lg text-sm focus:ring-1 focus:ring-amber-300 outline-none"
           required
         />
       </div>
@@ -541,7 +541,7 @@ export default function UsuariosAdmin() {
         </button>
         <button
           onClick={editarUsuario}
-          className="px-4 py-2 text-xs font-bold rounded-lg bg-amber-300 text-black hover:bg-amber-400 transition-transform active:scale-95"
+          className="px-4 py-2 text-xs font-bold rounded-lg bg-amber-300 text-amber-100 hover:bg-amber-400 transition-transform active:scale-95"
         >
           Guardar Cambios
         </button>
@@ -560,7 +560,7 @@ export default function UsuariosAdmin() {
     <div className="text-center">
       {/* Icono de advertencia opcional para reforzar visualmente */}
       <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-900/20 mb-4">
-        <span className="text-red-500 text-2xl">⚠️</span>
+        <span className="text-red-400 text-2xl">⚠️</span>
       </div>
       
       <h3 className="text-lg font-bold text-amber-300 mb-2">
@@ -575,14 +575,14 @@ export default function UsuariosAdmin() {
     <div className="flex flex-col space-y-2"> {/* Botones en columna para mejor alcance del pulgar en móvil */}
       <button
         onClick={eliminarUsuario}
-        className="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-white font-bold rounded-xl transition-colors active:scale-95"
+        className="w-full py-3 bg-linear-to-r from-[#f3dfa6] via-[#d4a650] to-[#a8782c] hover:from-[#c2b184] hover:via-[#a07d3c] hover:to-[#7b5820] text-white font-bold rounded-xl transition-colors active:scale-95"
       >
         Sí, eliminar
       </button>
       
       <button
         onClick={() => setModalEliminar(false)}
-        className="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-white font-bold rounded-xl transition-colors active:scale-95"
+        className="w-full py-3 bg-linear-to-r from-[#f3dfa6] via-[#d4a650] to-[#a8782c] hover:from-[#c2b184] hover:via-[#a07d3c] hover:to-[#7b5820] text-white font-bold rounded-xl transition-colors active:scale-95"
       >
         Cancelar
       </button>
@@ -663,7 +663,7 @@ export default function UsuariosAdmin() {
                   <div className="text-[11px] text-amber-300/60 flex justify-between items-center">
                     <span className="truncate italic">{categoria}</span>
                     {servicio.PRECIO !== undefined && (
-                      <span className="font-bold text-green-500 ml-2">
+                      <span className="font-bold text-green-400 ml-2">
                         ${parseFloat(servicio.PRECIO).toLocaleString()}
                       </span>
                     )}
@@ -690,10 +690,10 @@ export default function UsuariosAdmin() {
         onClick={asignarServiciosEmpleado}
         disabled={serviciosSeleccionados.length === 0 || cargandoServicios}
         className={`px-3 py-1.5 rounded-lg text-sm font-bold transition-colors ${
-          serviciosSeleccionados.length === 0 || cargandoServicios
-            ? "bg-gray-700 text-gray-500 cursor-not-allowed"
-            : "bg-amber-500 hover:bg-amber-600 text-black"
-        }`}
+ serviciosSeleccionados.length === 0 || cargandoServicios
+ ? "bg-gray-700 text-gray-500 cursor-not-allowed"
+ : "bg-amber-500 hover:bg-amber-600 text-amber-100"
+ }`}
       >
         {cargandoServicios ? "..." : `Asignar (${serviciosSeleccionados.length})`}
       </button>
@@ -704,52 +704,52 @@ export default function UsuariosAdmin() {
 
       {/* Tabla de Usuarios */}
 
-      <div className=" py-10  my-10 grid grid-cols-1  overflow-x-auto  bg-linear-to-br from-black to-gray-900 shadow-lg border-2 border-amber-500 rounded-lg ">
-        <div className="flex flex-col  sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 px-4 md:px-6">
+      <div className=" py-10 my-10 grid grid-cols-1 overflow-x-auto bg-linear-to-br from-black to-gray-900 shadow-lg border-2 border-amber-500 rounded-lg ">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 px-4 md:px-6">
            
-          <h2 className="text-2xl font-bold text-amber-300"> Gestión de Usuarios</h2>
+          <h2 className="text-2xl text-gradient-gold uppercase font-bold font-serif tracking-tight"> Gestión de Usuarios</h2>
           <button
             onClick={() => setModalCrear(true)}
-            className="px-4 py-2 bg-yellow-400 text-black  font-bold rounded-lg hover:bg-yellow-500"
+            className="px-4 py-2 bg-linear-to-r from-[#f3dfa6] via-[#d4a650] to-[#a8782c] hover:from-[#c2b184] hover:via-[#a07d3c] hover:to-[#7b5820] text-black font-bold rounded-lg "
           >
             Agregar Usuario
           </button>
         </div>
         <div className="">
-          <table className="w-full  divide-y divide-x   ">
+          <table className="w-full divide-y divide-x ">
              
             <thead className="hidden md:table-header-group ">
-              <tr className="   max-w-full">
+              <tr className=" max-w-full">
                 <th className="px-6 py-3 text-left text-xs text-amber-300 font-extrabold uppercase tracking-wider">
                   ID
                 </th>
-                <th className="px-6 py-3 text-left text-xs text-amber-300 font-extrabold  uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs text-amber-300 font-extrabold uppercase tracking-wider">
                   Nombre
                 </th>
-                <th className="px-6 py-3 text-left text-xs text-amber-300 font-extrabold  uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs text-amber-300 font-extrabold uppercase tracking-wider">
                   Correo
                 </th>
-                <th className="px-6 py-3 text-left text-xs text-amber-300 font-extrabold  uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs text-amber-300 font-extrabold uppercase tracking-wider">
                   Rol
                 </th>
-                <th className="px-6 py-3 text-left text-xs text-amber-300 font-extrabold  uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs text-amber-300 font-extrabold uppercase tracking-wider">
                   Servicios Asignados
                 </th>
-                <th className="px-6 py-3 text-left text-xs text-amber-300 font-extrabold  uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs text-amber-300 font-extrabold uppercase tracking-wider">
                   Estado
                 </th>
-                <th className="px-6 py-3 text-left text-xs text-amber-300 font-extrabold  uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs text-amber-300 font-extrabold uppercase tracking-wider">
                   Acciones
                 </th>
               </tr>
             </thead>
-            <tbody className=" bg-amber divide-y divide-gray-200 ">
+            <tbody className=" bg-amber divide-y divide-amber-500/20 ">
                
               {usuarios.length > 0 ? (
                 usuarios.map((usuario) => (
                   <tr
                     key={usuario.ID}
-                    className="hover:bg-amber-50/25 max-w-6xl w-full md:table-row grid grid-cols-2   border-b"
+                    className="hover:bg-amber-50/25 max-w-6xl w-full md:table-row grid grid-cols-2 border-b"
                   >
                      
                     <td className="px-6 py-4 whitespace-nowrap md:table-cell block text-white">
@@ -768,10 +768,10 @@ export default function UsuariosAdmin() {
                       <span className="md:hidden font-bold mr-2 ">Rol:</span>
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          usuario.ROL === "administrador"
-                            ? "bg-purple-100 text-purple-800"
-                            : "bg-blue-100 text-blue-800"
-                        }`}
+ usuario.ROL === "administrador"
+ ? "bg-purple-900/30 border border-purple-500/30 text-purple-300"
+ : "bg-blue-900/30 border border-blue-500/30 text-blue-300"
+ }`}
                       >
                         {usuario.ROL}
                       </span>
@@ -783,12 +783,12 @@ export default function UsuariosAdmin() {
                       <div className="max-w-xs">
                         {usuario.SERVICIOS_ASIGNADOS &&
                         usuario.SERVICIOS_ASIGNADOS !== "NULL" ? (
-                          <div className="text-sm text-gray-700">
+                          <div className="text-sm text-gray-300">
                             {usuario.SERVICIOS_ASIGNADOS.split(", ").map(
                               (servicio, idx) => (
                                 <span
                                   key={idx}
-                                  className="inline-block bg-gray-100 text-gray-800 px-2 py-1 rounded mr-1 mb-1 text-xs"
+                                  className="inline-block bg-gray-800 text-gray-300 px-2 py-1 rounded mr-1 mb-1 text-xs"
                                 >
                                   {servicio}
                                 </span>
@@ -806,10 +806,10 @@ export default function UsuariosAdmin() {
                       <span className="md:hidden font-bold mr-2 ">Estado:</span>
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          usuario.ESTADO === "activo"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
+ usuario.ESTADO === "activo"
+ ? "bg-green-900/30 border border-green-500/30 text-green-300"
+ : "bg-red-900/30 border border-red-500/30 text-red-300"
+ }`}
                       >
                         {usuario.ESTADO}
                       </span>

@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from "react";
 import Logo from "../../assets/log/logo.png";
 import { Menu, X } from "lucide-react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../RutaProteguida/AutoContext.jsx";
 
-import { Link } from "react-router-dom";
+const enlaces = [
+  { to: "/Asistencia", label: "Asistencia" },
+  { to: "/Administrador", label: "Administrador" },
+  { to: "/Servicios", label: "Servicios" },
+  { to: "/VistaTurno", label: "VistaTurno" },
+  { to: "/Pantalla", label: "Pantalla", nueva: true },
+  { to: "/Carta", label: "Carta" },
+];
 
 const NavbarEmpleado = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,114 +31,120 @@ const NavbarEmpleado = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const cerrarSesion = () => {
+    logout();
+    setIsMenuOpen(false);
+    navigate("/", { replace: true });
+  };
+
+  const linkClass = ({ isActive }) =>
+    `relative py-2 text-sm uppercase tracking-[0.18em] transition-colors duration-300 after:absolute after:left-0 after:-bottom-0.5 after:h-px after:bg-gold after:transition-all after:duration-300 ${
+      isActive
+        ? "text-gold after:w-full"
+        : "text-white/80 hover:text-gold after:w-0 hover:after:w-full"
+    }`;
   return (
     <nav
-      className={`font-sans text-white p-4 bg-[#000000] flex items-center justify-center fixed w-full top-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 z-50 w-full h-20 transition-all duration-300 ${
         isScrolled
-          ? "bg-black   shadow-xl/70 shadow-amber-400 "
-          : "bg-[#000000] "
+          ? "bg-ink/90 backdrop-blur-md border-b border-gold/20 shadow-lg shadow-black/40"
+          : "bg-ink border-b border-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between w-full">
-        <div className="flex shrink-0">
-          <img
-            src={Logo}
-            alt="Logo"
-            className={`${isScrolled ? " roun" : "border-2 border-amber-50 rounded-2xl"} `}
-          />
-        </div>
-        <div>
-          <ul className=" uppercase hidden md:flex justify-center space-x-8 ml-auto ">
-           <li className="font-extrabold text-yellow-400  transition-colors duration-300" onClick={handleMenuClick}>
-            <Link to="/Turnos">Turno</Link>
-           </li>
-            <li
-              className=" font-extrabold text-yellow-400  transition-colors duration-300"
-              onClick={handleMenuClick}
-            >
-              <Link to="/Asistencia">Asistencia</Link>
+      <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-5 md:px-8">
+        {" "}
+        <Link to="/" onClick={handleMenuClick} className="shrink-0">
+          <img src={Logo} alt="Peluquería El Dorado" className="h-11 w-auto" />
+        </Link>
+        {/*Menu Escritorio*/}
+        <ul className="hidden md:flex items-center gap-10">
+          {enlaces.map((e) => (
+            <li key={e.to}>
+              {e.nueva ? (
+                <a
+                  href={e.to}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={linkClass({ isActive: false })}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {e.label}
+                </a>
+              ) : (
+                <NavLink
+                  to={e.to}
+                  end
+                  className={linkClass}
+                  onClick={handleMenuClick}
+                >
+                  {e.label}
+                </NavLink>
+              )}
             </li>
-              <li
-              className=" font-extrabold text-yellow-400  transition-colors duration-300"
-              onClick={handleMenuClick}
-            >
-              <Link to="/Administrador">CRUD</Link>
-            </li>
-              <li
-              className=" font-extrabold text-yellow-400  transition-colors duration-300"
-              onClick={handleMenuClick}
-            >
-              <Link to="/Servicios">Servicios</Link>
-            </li>
-            <li
-              className=" font-extrabold text-yellow-400  transition-colors duration-300"
-              onClick={handleMenuClick}
-            >
-              <Link to="/VistaTurno">VistaTurno</Link>
-            </li>
-          
-           
-          
+          ))}
 
-            <li
-              className=" font-extrabold text-yellow-400  transition-colors duration-300"
-              onClick={handleMenuClick}
+          <li>
+            <button
+              onClick={cerrarSesion}
+              className="rounded-full border border-gold/60 px-5 py-2 text-sm uppercase tracking-[0.18em] text-gold transition-colors duration-300 hover:bg-gold hover:text-ink"
             >
-              <Link to="/">Salir</Link>
-            </li>
-          </ul>
-        </div>
+              Salir
+            </button>
+          </li>
+        </ul>
         <button
-          className="md:hidden"
+          className="md:hidden text-gold"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
         >
-          {isMenuOpen ? <X size={32} /> : <Menu size={32} />}
+          {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
-      <ul
-        className={`flex flex-col items-center  border-y-[0.8px] border-amber-400  bg-amber-300  w-full absolute top-full left-0 md:hidden transition-all duration-300  ease-in-out gap-y-${
+      <div
+        className={`md:hidden absolute top-full left-0 w-full overflow-hidden bg-ink/95 backdrop-blur-md border-b border-gold/20 transition-all duration-500 ease-in-out ${
           isMenuOpen
-            ? "max-h-screen opacity-100 bg-black"
-            : "max-h-0 opacity-0 overflow-hidden"
+            ? "max-h-96 opacity-100"
+            : "max-h-0 opacity-0 pointer-events-none"
         }`}
       >
-        <li
-          className=" font-extrabold text-yellow-400  transition-colors duration-300"
-          onClick={handleMenuClick}
-        >
-          <Link to="/VistaTurno">VistaTurno</Link>
-        </li>
-        <li
-          className=" font-extrabold text-yellow-400  transition-colors duration-300"
-          onClick={handleMenuClick}
-        >
-          <Link to="/Administrador">CRUD</Link>
-        </li>
-
-        <li
-          className=" font-extrabold text-yellow-400  transition-colors duration-300"
-          onClick={handleMenuClick}
-        >
-          <Link to="/Asistencia">Asistencia</Link>
-        </li>
-        <li
-          className=" font-extrabold text-yellow-400  transition-colors duration-300"
-          onClick={handleMenuClick}
-        >
-          <Link to="/Servicios">Servicios</Link>
-        </li>
-        <li
-          className=" font-extrabold text-yellow-400  transition-colors duration-300"
-          onClick={handleMenuClick}
-        >
-          <Link
-            to="/"
-            className=" font-extrabold text-yellow-400  transition-colors duration-300"
-          >
-            Salir
-          </Link>
-        </li>
-      </ul>
+        <ul className="flex flex-col items-center gap-5 py-8">
+          {enlaces.map((e) => (
+            <li key={e.to}>
+              {e.nueva ? (
+                <a
+                  href={e.to}
+                  target="_blank"
+                  rel="noopener noreferrer" 
+                  className={linkClass({ isActive: false })}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {e.label}
+                </a>
+              ) : (
+                <NavLink
+                  to={e.to}
+                  end
+                  className={linkClass}
+                  onClick={handleMenuClick}
+                >
+                  {e.label}
+                </NavLink>
+              )}
+            </li>
+          ))}
+          <li>
+            <button
+              onClick={cerrarSesion}
+              className="rounded-full border border-gold/60 px-5 py-2 text-sm uppercase tracking-[0.18em] text-gold transition-colors duration-300 hover:bg-gold hover:text-ink"
+            >
+              Salir
+            </button>
+          </li>
+        </ul>
+      </div>
     </nav>
   );
 };

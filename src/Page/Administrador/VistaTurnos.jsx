@@ -252,10 +252,10 @@ export default function MonitorTurnos() {
     <div className="min-h-screen my-12 p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-black rounded-xl shadow-lg p-6 mb-8">
+        <div className="bg-linear-to-br from-black to-gray-900 border-2 border-amber-500 rounded-xl shadow-lg p-6 mb-8">
           <div className="flex flex-col gap-5 md:flex-row justify-between items-center">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-amber-400">
+              <h1 className="text-gradient-gold uppercase font-bold font-serif tracking-tight text-2xl md:text-4xl">
                 Monitor de Turnos - Administrador
               </h1>
               <p className="text-amber-400 mt-2 text-sm md:text-base">
@@ -284,7 +284,7 @@ export default function MonitorTurnos() {
                   if (mostrarHistorial) cargarHistorialTurnos();
                   setMensaje("🔄 Datos actualizados");
                 }}
-                className="flex items-center space-x-2 px-4 py-2 bg-amber-200 border-[0.8px] border-amber-400 text-black rounded-lg hover:bg-white transition-colors text-sm"
+                className="flex items-center space-x-2 px-4 py-2 bg-gray-800/60 border-[0.8px] border-amber-400 text-amber-100 rounded-lg hover:bg-amber-500/20 transition-colors text-sm"
               >
                 <RefreshCw
                   size={20}
@@ -300,10 +300,10 @@ export default function MonitorTurnos() {
         {mensaje && (
           <div
             className={`mb-6 p-4 rounded-lg text-sm md:text-base ${
-              mensaje.includes("✅") || mensaje.includes("🔄")
-                ? "bg-green-100 text-green-800"
-                : "bg-red-100 text-red-800"
-            }`}
+ mensaje.includes("✅") || mensaje.includes("🔄")
+ ? "bg-green-900/30 border border-green-500/30 text-green-300"
+ : "bg-red-900/30 border border-red-500/30 text-red-300"
+ }`}
           >
             {mensaje}
           </div>
@@ -311,21 +311,21 @@ export default function MonitorTurnos() {
 
         {/* Estadísticas */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
-          <div className="bg-amber-200 p-4 md:p-6 rounded-xl shadow-lg border border-blue-200">
+          <div className="bg-linear-to-br from-black to-gray-900 p-4 md:p-6 rounded-xl shadow-lg border border-amber-500/30">
             <div className="flex items-center">
               <Clock
-                className="text-blue-500 font-extrabold mr-2 md:mr-3"
+                className="text-blue-400 font-extrabold mr-2 md:mr-3"
                 size={24}
               />
               <div>
-                <p className="text-xl md:text-3xl font-extrabold text-blue-500">
+                <p className="text-xl md:text-3xl font-extrabold text-blue-400">
                   {turnosActivos.length}
                 </p>
-                <p className="text-black font-extrabold text-xs md:text-sm">
+                <p className="text-amber-100 font-extrabold text-xs md:text-sm">
                   Turnos Activos
                 </p>
                 {turnosActivos.length > 0 && (
-                  <p className="text-xs text-yello-300 mt-1 hidden md:block">
+                  <p className="text-xs text-amber-200 mt-1 hidden md:block">
                     Próximo: {calcularProximaHoraDisponible(turnosActivos)}
                   </p>
                 )}
@@ -333,36 +333,36 @@ export default function MonitorTurnos() {
             </div>
           </div>
 
-          <div className="bg-amber-200 p-4 md:p-6 rounded-xl shadow-lg border border-yellow-200">
+          <div className="bg-linear-to-br from-black to-gray-900 p-4 md:p-6 rounded-xl shadow-lg border border-amber-500/30">
             <div className="flex items-center">
-              <AlertCircle className="text-yellow-600 mr-2 md:mr-3" size={24} />
+              <AlertCircle className="text-amber-400 mr-2 md:mr-3" size={24} />
               <div>
-                <p className="text-xl md:text-3xl text-yellow-800 font-extrabold">
+                <p className="text-xl md:text-3xl text-amber-300 font-extrabold">
                   {turnosActivos.filter((t) => t.ESTADO === "pendiente").length}
                 </p>
-                <p className="text-black font-extrabold text-xs md:text-sm">
+                <p className="text-amber-100 font-extrabold text-xs md:text-sm">
                   En Espera
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-amber-200 p-4 md:p-6 rounded-xl shadow-lg border border-amber-200">
+          <div className="bg-linear-to-br from-black to-gray-900 p-4 md:p-6 rounded-xl shadow-lg border border-amber-500/30">
             <div className="flex items-center">
-              <PlayCircle className="text-green-600 mr-2 md:mr-3" size={24} />
+              <PlayCircle className="text-green-400 mr-2 md:mr-3" size={24} />
               <div>
-                <p className="text-xl md:text-3xl text-green-800 font-extrabold">
+                <p className="text-xl md:text-3xl text-green-300 font-extrabold">
                   {
                     turnosActivos.filter((t) => t.ESTADO === "confirmado")
                       .length
                   }
                 </p>
-                <p className="text-black font-extrabold text-xs md:text-sm">
+                <p className="text-amber-100 font-extrabold text-xs md:text-sm">
                   En Atención
                 </p>
                 {turnosActivos.filter((t) => t.ESTADO === "confirmado").length >
                   0 && (
-                  <p className="text-xs text-green-600 mt-1 hidden md:block">
+                  <p className="text-xs text-green-400 mt-1 hidden md:block">
                     En curso:{" "}
                     {
                       turnosActivos.filter((t) => t.ESTADO === "confirmado")
@@ -374,18 +374,18 @@ export default function MonitorTurnos() {
             </div>
           </div>
 
-          <div className="bg-amber-200 p-4 md:p-6 rounded-xl shadow-lg border border-purple-200">
+          <div className="bg-linear-to-br from-black to-gray-900 p-4 md:p-6 rounded-xl shadow-lg border border-amber-500/30">
             <div className="flex items-center">
-              <CheckSquare className="text-purple-600 mr-2 md:mr-3" size={24} />
+              <CheckSquare className="text-purple-400 mr-2 md:mr-3" size={24} />
               <div>
-                <p className="text-xl md:text-3xl font-extrabold text-purple-800">
+                <p className="text-xl md:text-3xl font-extrabold text-purple-300">
                   {historialTurnos.length}
                 </p>
-                <p className="text-black font-extrabold text-xs md:text-sm">
+                <p className="text-amber-100 font-extrabold text-xs md:text-sm">
                   Completados Hoy
                 </p>
                 {historialTurnos.length > 0 && (
-                  <p className="text-xs font-extrabold text-purple-600 mt-1 hidden md:block">
+                  <p className="text-xs font-extrabold text-purple-400 mt-1 hidden md:block">
                     Promedio:{" "}
                     {Math.round(
                       historialTurnos.reduce((sum, t) => {
@@ -424,18 +424,18 @@ export default function MonitorTurnos() {
 
         {/* Turnos Activos - VISTA MÓVIL */}
         <div className="md:hidden mb-8">
-          <div className="bg-amber-200 rounded-xl shadow-lg p-4 mb-6">
+          <div className="bg-linear-to-br from-black to-gray-900 border-2 border-amber-500 rounded-xl shadow-lg p-4 mb-6">
             <div className="flex flex-col items-center mb-4">
-              <h2 className="text-xl font-bold text-yello-300 flex items-center mb-2">
-                <Clock className="mr-2 text-yellow-800 font-extrabold" />
+              <h2 className="text-xl flex items-center mb-2 text-gradient-gold uppercase font-bold font-serif tracking-tight">
+                <Clock className="mr-2 text-amber-300 font-extrabold" />
                 Turnos Activos Hoy
               </h2>
               <div className="flex items-center space-x-2">
-                <span className="px-3 py-1 bg-blue-100 text-yellow-800 rounded-full text-xs font-extrabold">
+                <span className="px-3 py-1 bg-blue-900/30 border border-blue-500/30 text-amber-300 rounded-full text-xs font-extrabold">
                   {turnosActivos.length} activos
                 </span>
                 {turnosActivos.length > 0 && (
-                  <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-bold">
+                  <span className="px-2 py-1 bg-green-900/30 border border-green-500/30 text-green-300 rounded-full text-xs font-bold">
                     Siguiente: {calcularProximaHoraDisponible(turnosActivos)}
                   </span>
                 )}
@@ -444,17 +444,17 @@ export default function MonitorTurnos() {
 
             {loading ? (
               <div className="text-center py-8">
-                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600 mx-auto"></div>
-                <p className="mt-4 text-yello-300 text-sm">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-amber-500 mx-auto"></div>
+                <p className="mt-4 text-amber-200 text-sm">
                   Cargando turnos activos...
                 </p>
               </div>
             ) : turnosActivos.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-yellow-800 font-extrabold text-base">
+                <p className="text-amber-300 font-extrabold text-base">
                   No hay turnos activos en este momento
                 </p>
-                <p className="text-black font-extrabold mt-2 text-sm">
+                <p className="text-amber-100 font-extrabold mt-2 text-sm">
                   Todos los turnos han sido atendidos o no hay citas programadas
                 </p>
               </div>
@@ -480,25 +480,25 @@ export default function MonitorTurnos() {
                   return (
                     <div
                       key={turno.ID}
-                      className="bg-white rounded-lg p-4 shadow border"
+                      className="bg-gray-800/40 rounded-lg p-4 shadow border border-amber-500/20"
                     >
                       {/* Header */}
                       <div className="flex justify-between items-start mb-3">
                         <div>
                           <div className="flex items-center">
-                            <User size={16} className="text-yello-300 mr-2" />
+                            <User size={16} className="text-amber-200 mr-2" />
                             <div>
-                              <div className="font-medium text-yello-300 text-sm">
+                              <div className="font-medium text-amber-200 text-sm">
                                 {turno.CLIENTE_NOMBRE || "Sin nombre"}
                               </div>
-                              <div className="text-xs text-yello-300 flex items-center">
+                              <div className="text-xs text-amber-200 flex items-center">
                                 <Phone size={10} className="mr-1" />
                                 {turno.CLIENTE_TELEFONO || "Sin teléfono"}
                               </div>
                             </div>
                           </div>
                         </div>
-                        <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                        <span className="px-2 py-1 bg-blue-900/30 border border-blue-500/30 text-blue-300 rounded-full text-xs font-medium">
                           {turno.EMPLEADO}
                         </span>
                       </div>
@@ -506,12 +506,12 @@ export default function MonitorTurnos() {
                       {/* Servicio y Duración */}
                       <div className="mb-3">
                         <div className="flex items-center mb-1">
-                          <Scissors size={14} className="text-yello-300 mr-2" />
-                          <div className="font-medium text-yello-300 text-sm">
+                          <Scissors size={14} className="text-amber-200 mr-2" />
+                          <div className="font-medium text-amber-200 text-sm">
                             {turno.SUBSERVICIO || turno.SERVICIO}
                           </div>
                         </div>
-                        <div className="text-xs text-yello-300 flex items-center">
+                        <div className="text-xs text-amber-200 flex items-center">
                           <Timer size={10} className="mr-1" />
                           {duracion} minutos
                         </div>
@@ -520,27 +520,27 @@ export default function MonitorTurnos() {
                       {/* Horarios */}
                       <div className="grid grid-cols-2 gap-3 mb-3">
                         <div>
-                          <p className="text-xs text-yello-300">Programado</p>
-                          <p className="text-sm text-yello-300 font-medium">
+                          <p className="text-xs text-amber-200">Programado</p>
+                          <p className="text-sm text-amber-200 font-medium">
                             {formatearHora(turno.HORA_INICIO)}
                           </p>
-                          <p className="text-xs text-yello-300">
+                          <p className="text-xs text-amber-200">
                             Fin: {formatearHora(horaFinProgramada)}
                           </p>
                         </div>
                         <div>
-                          <p className="text-xs text-yello-300">Real/Estimado</p>
+                          <p className="text-xs text-amber-200">Real/Estimado</p>
                           {turno.HORA_INICIO_REAL ? (
                             <>
-                              <p className="text-xs text-green-700 font-medium">
+                              <p className="text-xs text-green-300 font-medium">
                                 Inicio: {formatearHora(turno.HORA_INICIO_REAL)}
                               </p>
-                              <p className="text-xs text-blue-700">
+                              <p className="text-xs text-blue-300">
                                 Fin: {formatearHora(horaFinEstimada)}
                               </p>
                             </>
                           ) : (
-                            <p className="text-xs text-yello-300">No iniciado</p>
+                            <p className="text-xs text-amber-200">No iniciado</p>
                           )}
                         </div>
                       </div>
@@ -550,29 +550,29 @@ export default function MonitorTurnos() {
                         <div className="flex items-center justify-between mb-2">
                           <span
                             className={`px-2 py-1 rounded-full text-xs font-medium ${
-                              turno.ESTADO === "pendiente"
-                                ? "bg-yellow-100 text-yellow-800"
-                                : "bg-green-100 text-green-800"
-                            }`}
+ turno.ESTADO === "pendiente"
+ ? "bg-amber-900/30 border border-amber-500/30 text-amber-300"
+ : "bg-green-900/30 border border-green-500/30 text-green-300"
+ }`}
                           >
                             {turno.ESTADO_TEXTO || turno.ESTADO}
                           </span>
                           {tiempoTranscurrido !== null && (
                             <div
                               className={`text-xs font-bold ${
-                                tiempoTranscurrido > duracion
-                                  ? "text-red-600"
-                                  : tiempoTranscurrido > duracion * 0.8
-                                    ? "text-yellow-600"
-                                    : "text-green-600"
-                              }`}
+ tiempoTranscurrido > duracion
+ ? "text-red-400"
+ : tiempoTranscurrido > duracion * 0.8
+ ? "text-amber-400"
+ : "text-green-400"
+ }`}
                             >
                               ⏱️ {tiempoTranscurrido}/{duracion} min
                             </div>
                           )}
                         </div>
                         {tiempoRestante !== null && tiempoRestante > 0 && (
-                          <div className="text-xs text-yello-300">
+                          <div className="text-xs text-amber-200">
                             Restan: {tiempoRestante} min
                           </div>
                         )}
@@ -583,7 +583,7 @@ export default function MonitorTurnos() {
                         {turno.ESTADO === "pendiente" && (
                           <button
                             onClick={() => iniciarTurnoAdmin(turno.ID)}
-                            className="flex-1 flex items-center justify-center space-x-1 px-2 py-1.5 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors text-xs"
+                            className="flex-1 flex items-center justify-center space-x-1 px-2 py-1.5 bg-blue-900/30 border border-blue-500/30 text-blue-300 rounded-lg hover:bg-blue-800/50 transition-colors text-xs"
                           >
                             <PlayCircle size={12} />
                             <span>Iniciar</span>
@@ -592,7 +592,7 @@ export default function MonitorTurnos() {
                         {turno.ESTADO === "confirmado" && (
                           <button
                             onClick={() => completarTurnoAdmin(turno.ID)}
-                            className="flex-1 flex items-center justify-center space-x-1 px-2 py-1.5 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors text-xs"
+                            className="flex-1 flex items-center justify-center space-x-1 px-2 py-1.5 bg-green-900/30 border border-green-500/30 text-green-300 rounded-lg hover:bg-green-800/50 transition-colors text-xs"
                           >
                             <CheckCircle size={12} />
                             <span>Completar</span>
@@ -600,7 +600,7 @@ export default function MonitorTurnos() {
                         )}
                         <button
                           onClick={() => cancelarTurnoAdmin(turno.ID)}
-                          className="flex-1 flex items-center justify-center px-2 py-1.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors text-xs"
+                          className="flex-1 flex items-center justify-center px-2 py-1.5 bg-red-900/30 border border-red-500/30 text-red-300 rounded-lg hover:bg-red-800/50 transition-colors text-xs"
                         >
                           <span>Cancelar</span>
                         </button>
@@ -614,18 +614,18 @@ export default function MonitorTurnos() {
         </div>
 
         {/* Turnos Activos - VISTA DESKTOP */}
-        <div className="hidden md:block mb-8 bg-amber-200 rounded-xl shadow-lg p-6">
+        <div className="hidden md:block mb-8 bg-linear-to-br from-black to-gray-900 border-2 border-amber-500 rounded-xl shadow-lg p-6">
           <div className="flex flex-col justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-yello-300 flex items-center">
-              <Clock className="mr-2 text-yellow-800 font-extrabold" />
+            <h2 className="text-2xl flex items-center text-gradient-gold uppercase font-bold font-serif tracking-tight">
+              <Clock className="mr-2 text-amber-300 font-extrabold" />
               Turnos Activos Hoy
             </h2>
             <div className="flex items-center space-x-2">
-              <span className="px-4 py-2 bg-blue-100 text-yellow-800 rounded-full text-sm font-extrabold">
+              <span className="px-4 py-2 bg-blue-900/30 border border-blue-500/30 text-amber-300 rounded-full text-sm font-extrabold">
                 {turnosActivos.length} activos
               </span>
               {turnosActivos.length > 0 && (
-                <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-bold">
+                <span className="px-3 py-1 bg-green-900/30 border border-green-500/30 text-green-300 rounded-full text-sm font-bold">
                   Siguiente: {calcularProximaHoraDisponible(turnosActivos)}
                 </span>
               )}
@@ -633,33 +633,33 @@ export default function MonitorTurnos() {
           </div>
 
           <div className="overflow-x-auto shadow-lg rounded-lg">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-amber-200">
+            <table className="min-w-full divide-y divide-amber-500/20">
+              <thead className="bg-gray-800/60">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-yello-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-amber-200 uppercase tracking-wider">
                     Cliente
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-yello-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-amber-200 uppercase tracking-wider">
                     Empleado
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-yello-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-amber-200 uppercase tracking-wider">
                     Servicio / Duración
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-yello-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-amber-200 uppercase tracking-wider">
                     Horario Programado
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-yello-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-amber-200 uppercase tracking-wider">
                     Horario Real / Fin
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-yello-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-amber-200 uppercase tracking-wider">
                     Tiempo / Estado
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-yello-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-amber-200 uppercase tracking-wider">
                     Acciones
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-gray-800/40 divide-y divide-amber-500/20">
                 {turnosActivos.length > 0 ? (
                   turnosActivos.map((turno) => (
                     <tr
@@ -669,7 +669,7 @@ export default function MonitorTurnos() {
                       {/* CLIENTE */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <div className="shrink-0 h-8 w-8 bg-amber-100 rounded-full flex items-center justify-center">
+                          <div className="shrink-0 h-8 w-8 bg-amber-900/30 rounded-full flex items-center justify-center">
                             <User className="w-4 h-4 text-amber-600" />
                           </div>
                           <div className="ml-4">
@@ -685,7 +685,7 @@ export default function MonitorTurnos() {
 
                       {/* EMPLEADO */}
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center text-sm text-yellow-900">
+                        <div className="flex items-center text-sm text-amber-300">
                           <Scissors className="w-4 h-4 mr-2 text-yellow-300" />
                           {turno.EMPLEADO_NOMBRE || "Sin asignar"}
                         </div>
@@ -702,14 +702,14 @@ export default function MonitorTurnos() {
                       </td>
 
                       {/* HORARIO PROGRAMADO */}
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-yello-300 font-mono">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-amber-200 font-mono">
                         {formatearHora(turno.HORA_INICIO)}
                       </td>
 
                       {/* HORARIO REAL / FIN (ELIMINA EL "NO INICIADO") */}
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-yello-300">
-                          <span className="text-yello-300 text-xs font-bold mr-1">
+                        <div className="text-sm text-amber-200">
+                          <span className="text-amber-200 text-xs font-bold mr-1">
                             R:
                           </span>
                           {/* Si no hay inicio real, muestra el programado */}
@@ -717,7 +717,7 @@ export default function MonitorTurnos() {
                             ? formatearHora(turno.HORA_INICIO_REAL)
                             : formatearHora(turno.HORA_INICIO)}
                         </div>
-                        <div className="text-xs text-yello-300">
+                        <div className="text-xs text-amber-200">
                           <span className="font-bold mr-1">F:</span>
                           {turno.HORA_FIN_REAL
                             ? formatearHora(turno.HORA_FIN_REAL)
@@ -732,18 +732,18 @@ export default function MonitorTurnos() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
                           className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                            turno.ESTADO === "en atención"
-                              ? "bg-blue-100 text-blue-800"
-                              : turno.ESTADO === "completado"
-                                ? "bg-green-100 text-green-800"
-                                : "bg-gray-100 text-yello-300"
-                          }`}
+ turno.ESTADO === "en atención"
+ ? "bg-blue-900/30 border border-blue-500/30 text-blue-300"
+ : turno.ESTADO === "completado"
+ ? "bg-green-900/30 border border-green-500/30 text-green-300"
+ : "bg-gray-800 text-amber-200"
+ }`}
                         >
                           {turno.ESTADO.toUpperCase()}
                         </span>
                         <div className="mt-1">
                           {turno.ESTADO === "en atención" && (
-                            <span className="text-xs flex items-center text-blue-600 animate-pulse">
+                            <span className="text-xs flex items-center text-blue-400 animate-pulse">
                               <Timer className="w-3 h-3 mr-1" />
                               {obtenerTiempoTranscurrido(
                                 turno.HORA_INICIO_REAL,
@@ -760,7 +760,7 @@ export default function MonitorTurnos() {
                           {turno.ESTADO !== "en atención" && (
                             <button
                               onClick={() => iniciarTurnoAdmin(turno.ID)}
-                              className="text-blue-600 hover:text-blue-900 transition-transform hover:scale-110"
+                              className="text-blue-400 hover:text-blue-300 transition-transform hover:scale-110"
                               title="Iniciar Turno"
                             >
                               <PlayCircle className="w-6 h-6" />
@@ -768,14 +768,14 @@ export default function MonitorTurnos() {
                           )}
                           <button
                             onClick={() => completarTurnoAdmin(turno.ID)}
-                            className="text-green-600 hover:text-green-900 transition-transform hover:scale-110"
+                            className="text-green-400 hover:text-green-300 transition-transform hover:scale-110"
                             title="Finalizar y Completar"
                           >
                             <CheckCircle className="w-6 h-6" />
                           </button>
                           <button
                             onClick={() => cancelarTurnoAdmin(turno.ID)}
-                            className="text-red-400 hover:text-red-600 transition-transform hover:scale-110"
+                            className="text-red-400 hover:text-red-400 transition-transform hover:scale-110"
                             title="Cancelar"
                           >
                             <AlertCircle className="w-6 h-6" />
@@ -788,7 +788,7 @@ export default function MonitorTurnos() {
                   <tr>
                     <td
                       colSpan="7"
-                      className="px-6 py-10 text-center text-yello-300 italic"
+                      className="px-6 py-10 text-center text-amber-200 italic"
                     >
                       No hay turnos activos para mostrar en este momento.
                     </td>
@@ -804,25 +804,25 @@ export default function MonitorTurnos() {
           <div className="md:hidden">
             <div className="p-4 border-2 border-amber-500 rounded-xl bg-linear-to-br from-black to-gray-900 shadow-lg mb-6">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-bold text-yellow-500  flex items-center">
-                  <History className="mr-2 text-yellow-800" />
+                <h2 className="text-xl flex items-center text-gradient-gold uppercase font-bold font-serif tracking-tight">
+                  <History className="mr-2 text-amber-300" />
                   Historial de Turnos
                 </h2>
-                <span className="px-3 py-1 bg-blue-100 text-yellow-800 rounded-full text-xs font-extrabold">
+                <span className="px-3 py-1 bg-blue-900/30 border border-blue-500/30 text-amber-300 rounded-full text-xs font-extrabold">
                   {historialTurnos.length} turnos
                 </span>
               </div>
 
               {loadingHistorial ? (
                 <div className="text-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                  <p className="mt-2 text-yello-300 text-sm">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500 mx-auto"></div>
+                  <p className="mt-2 text-amber-200 text-sm">
                     Cargando historial...
                   </p>
                 </div>
               ) : historialTurnos.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-black font-extrabold text-base">
+                  <p className="text-amber-100 font-extrabold text-base">
                     No hay turnos completados hoy
                   </p>
                 </div>
@@ -848,53 +848,53 @@ export default function MonitorTurnos() {
                     return (
                       <div
                         key={turno.ID}
-                        className="bg-white rounded-lg p-4 shadow"
+                        className="bg-gray-800/40 rounded-lg p-4 shadow"
                       >
                         <div className="flex justify-between items-start mb-3">
                           <div>
                             <div className="flex items-center">
-                              <User size={16} className="text-yello-300 mr-2" />
+                              <User size={16} className="text-amber-200 mr-2" />
                               <div>
-                                <div className="font-medium text-yello-300 text-sm">
+                                <div className="font-medium text-amber-200 text-sm">
                                   {turno.CLIENTE_NOMBRE}
                                 </div>
-                                <div className="text-xs text-yello-300">
+                                <div className="text-xs text-amber-200">
                                   {turno.CLIENTE_TELEFONO}
                                 </div>
                               </div>
                             </div>
                           </div>
-                          <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                          <span className="px-2 py-1 bg-blue-900/30 border border-blue-500/30 text-blue-300 rounded-full text-xs font-medium">
                             {turno.EMPLEADO}
                           </span>
                         </div>
 
                         <div className="mb-3">
-                          <p className="text-sm text-yello-300 font-medium mb-1">
+                          <p className="text-sm text-amber-200 font-medium mb-1">
                             {turno.SUBSERVICIO || turno.SERVICIO}
                           </p>
-                          <p className="text-xs text-yello-300">
+                          <p className="text-xs text-amber-200">
                             Duración estimada: {duracionEstimada} min
                           </p>
                         </div>
 
                         <div className="grid grid-cols-2 gap-3 mb-3">
                           <div>
-                            <p className="text-xs text-yello-300">Programado</p>
-                            <p className="text-sm text-yello-300">
+                            <p className="text-xs text-amber-200">Programado</p>
+                            <p className="text-sm text-amber-200">
                               {formatearHora(turno.HORA_INICIO)}
                             </p>
-                            <p className="text-xs text-yello-300">
+                            <p className="text-xs text-amber-200">
                               Fin: {formatearHora(horaFinProgramada)}
                             </p>
                           </div>
                           <div>
-                            <p className="text-xs text-yello-300">Real</p>
-                            <p className="text-sm text-yello-300">
+                            <p className="text-xs text-amber-200">Real</p>
+                            <p className="text-sm text-amber-200">
                               Inicio:{" "}
                               {formatearHora(turno.HORA_INICIO_REAL) || "--:--"}
                             </p>
-                            <p className="text-sm text-yello-300">
+                            <p className="text-sm text-amber-200">
                               Fin:{" "}
                               {formatearHora(turno.HORA_FIN_REAL) || "--:--"}
                             </p>
@@ -907,16 +907,16 @@ export default function MonitorTurnos() {
                               <div className="space-y-1">
                                 <span
                                   className={`px-2 py-1 rounded-full text-xs font-bold ${
-                                    duracionReal > duracionEstimada
-                                      ? "bg-red-100 text-red-800"
-                                      : "bg-green-100 text-green-800"
-                                  }`}
+ duracionReal > duracionEstimada
+ ? "bg-red-900/30 border border-red-500/30 text-red-300"
+ : "bg-green-900/30 border border-green-500/30 text-green-300"
+ }`}
                                 >
                                   {duracionReal} min
                                 </span>
                                 {diferencia !== null && (
                                   <div
-                                    className={`text-xs ${diferencia > 0 ? "text-red-600" : "text-green-600"}`}
+                                    className={`text-xs ${diferencia > 0 ? "text-red-400" : "text-green-400"}`}
                                   >
                                     {diferencia > 0
                                       ? `+${diferencia}`
@@ -926,17 +926,17 @@ export default function MonitorTurnos() {
                                 )}
                               </div>
                             ) : (
-                              <span className="text-yello-300 text-xs">--</span>
+                              <span className="text-amber-200 text-xs">--</span>
                             )}
                           </div>
                           <span
                             className={`px-2 py-1 rounded-full text-xs font-bold ${
-                              duracionReal <= duracionEstimada
-                                ? "bg-green-100 text-green-800"
-                                : duracionReal <= duracionEstimada * 1.2
-                                  ? "bg-yellow-100 text-yellow-800"
-                                  : "bg-red-100 text-red-800"
-                            }`}
+ duracionReal <= duracionEstimada
+ ? "bg-green-900/30 border border-green-500/30 text-green-300"
+ : duracionReal <= duracionEstimada * 1.2
+ ? "bg-amber-900/30 border border-amber-500/30 text-amber-300"
+ : "bg-red-900/30 border border-red-500/30 text-red-300"
+ }`}
                           >
                             {eficiencia}% eficiencia
                           </span>
@@ -950,13 +950,13 @@ export default function MonitorTurnos() {
 
             {/* Resumen estadístico del historial - MÓVIL */}
             {historialTurnos.length > 0 && (
-              <div className="p-3 border border-amber-300 rounded-2xl bg-linear-to-br from-black to-gray-900 shadow-lg mb-6">
+              <div className="p-3 border border-amber-500/30 rounded-2xl bg-linear-to-br from-black to-gray-900 shadow-lg mb-6">
                 <h4 className="font-bold text-white mb-3 text-sm">
                   📈 Resumen del día:
                 </h4>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="text-center">
-                    <p className="text-lg font-bold text-blue-600">
+                    <p className="text-lg font-bold text-blue-400">
                       {historialTurnos.length}
                     </p>
                     <p className="text-xs text-white font-bold">
@@ -964,7 +964,7 @@ export default function MonitorTurnos() {
                     </p>
                   </div>
                   <div className="text-center">
-                    <p className="text-lg font-bold text-green-600">
+                    <p className="text-lg font-bold text-green-400">
                       {
                         historialTurnos.filter((t) => {
                           const duracionReal = calcularDuracionReal(
@@ -981,7 +981,7 @@ export default function MonitorTurnos() {
                     <p className="text-xs text-white font-bold">A tiempo</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-lg font-bold text-red-600">
+                    <p className="text-lg font-bold text-red-400">
                       {
                         historialTurnos.filter((t) => {
                           const duracionReal = calcularDuracionReal(
@@ -998,7 +998,7 @@ export default function MonitorTurnos() {
                     <p className="text-xs text-white font-bold">Con retraso</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-lg font-bold text-purple-600">
+                    <p className="text-lg font-bold text-purple-400">
                       {Math.round(
                         historialTurnos.reduce((sum, t) => {
                           const duracionReal = calcularDuracionReal(
@@ -1026,12 +1026,12 @@ export default function MonitorTurnos() {
             ={" "}
             <div className="p-6 border-2 border-amber-500 rounded-xl bg-linear-to-br from-black to-gray-900 shadow-lg">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-yellow-500 flex items-center">
-                  <History className="mr-2 text-yellow-800" />
+                <h2 className="text-2xl flex items-center text-gradient-gold uppercase font-bold font-serif tracking-tight">
+                  <History className="mr-2 text-amber-300" />
                   Historial de Turnos
                 </h2>
                 <div className="flex justify-center space-x-2">
-                  <span className="px-4 py-2 bg-blue-100 text-yellow-800 rounded-full text-sm font-extrabold">
+                  <span className="px-4 py-2 bg-blue-900/30 border border-blue-500/30 text-amber-300 rounded-full text-sm font-extrabold">
                     {historialTurnos.length} turnos
                   </span>
                 </div>
@@ -1039,40 +1039,40 @@ export default function MonitorTurnos() {
 
               {loadingHistorial ? (
                 <div className="text-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                  <p className="mt-2 text-yello-300">Cargando historial...</p>
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500 mx-auto"></div>
+                  <p className="mt-2 text-amber-200">Cargando historial...</p>
                 </div>
               ) : historialTurnos.length === 0 ? (
                 <div className="text-center py-12">
-                  <p className="text-black font-extrabold">
+                  <p className="text-amber-100 font-extrabold">
                     No hay turnos completados hoy
                   </p>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
+                  <table className="min-w-full divide-y divide-amber-500/20">
                     {/* ... MANTENGO LA TABLA COMPLETA ... */}
                     <thead className="border border-amber-400 divide-y-2 divide-x-2">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-yello-300 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-amber-200 uppercase tracking-wider">
                           Cliente
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-yello-300 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-amber-200 uppercase tracking-wider">
                           Empleado
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-yello-300 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-amber-200 uppercase tracking-wider">
                           Servicio / Duración
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-yello-300 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-amber-200 uppercase tracking-wider">
                           Horario Programado
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-yello-300 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-amber-200 uppercase tracking-wider">
                           Horario Real
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-yello-300 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-amber-200 uppercase tracking-wider">
                           Duración Real
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-yello-300 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-amber-200 uppercase tracking-wider">
                           Eficiencia
                         </th>
                       </tr>
@@ -1098,7 +1098,7 @@ export default function MonitorTurnos() {
                               <div className="flex items-center">
                                 <User
                                   size={16}
-                                  className="text-yello-300 mr-2"
+                                  className="text-amber-200 mr-2"
                                 />
                                 <div>
                                   <div className="font-medium text-white">
@@ -1111,7 +1111,7 @@ export default function MonitorTurnos() {
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                              <span className="px-2 py-1 bg-blue-900/30 border border-blue-500/30 text-blue-300 rounded-full text-xs font-medium">
                                 {turno.EMPLEADO}
                               </span>
                             </td>
@@ -1127,7 +1127,7 @@ export default function MonitorTurnos() {
                               <div className="text-sm text-white">
                                 {formatearHora(turno.HORA_INICIO)}
                               </div>
-                              <div className="text-xs text-yello-300">
+                              <div className="text-xs text-amber-200">
                                 Fin estimado: {formatearHora(horaFinProgramada)}
                               </div>
                             </td>
@@ -1151,16 +1151,16 @@ export default function MonitorTurnos() {
                                   <div className="space-y-1">
                                     <span
                                       className={`px-2 py-1 rounded-full text-xs font-bold ${
-                                        duracionReal > duracionEstimada
-                                          ? "bg-red-100 text-red-800"
-                                          : "bg-green-100 text-green-800"
-                                      }`}
+ duracionReal > duracionEstimada
+ ? "bg-red-900/30 border border-red-500/30 text-red-300"
+ : "bg-green-900/30 border border-green-500/30 text-green-300"
+ }`}
                                     >
                                       {duracionReal} min
                                     </span>
                                     {diferencia !== null && (
                                       <div
-                                        className={`text-xs ${diferencia > 0 ? "text-red-600" : "text-green-600"}`}
+                                        className={`text-xs ${diferencia > 0 ? "text-red-400" : "text-green-400"}`}
                                       >
                                         {diferencia > 0
                                           ? `+${diferencia}`
@@ -1170,7 +1170,7 @@ export default function MonitorTurnos() {
                                     )}
                                   </div>
                                 ) : (
-                                  <span className="text-yello-300">--</span>
+                                  <span className="text-amber-200">--</span>
                                 )}
                               </div>
                             </td>
@@ -1179,12 +1179,12 @@ export default function MonitorTurnos() {
                                 {duracionReal ? (
                                   <span
                                     className={`px-2 py-1 rounded-full text-xs font-bold ${
-                                      duracionReal <= duracionEstimada
-                                        ? "bg-green-100 text-green-800"
-                                        : duracionReal <= duracionEstimada * 1.2
-                                          ? "bg-yellow-100 text-yellow-800"
-                                          : "bg-red-100 text-red-800"
-                                    }`}
+ duracionReal <= duracionEstimada
+ ? "bg-green-900/30 border border-green-500/30 text-green-300"
+ : duracionReal <= duracionEstimada * 1.2
+ ? "bg-amber-900/30 border border-amber-500/30 text-amber-300"
+ : "bg-red-900/30 border border-red-500/30 text-red-300"
+ }`}
                                   >
                                     {Math.round(
                                       (duracionEstimada / duracionReal) * 100,
@@ -1192,7 +1192,7 @@ export default function MonitorTurnos() {
                                     % eficiencia
                                   </span>
                                 ) : (
-                                  <span className="text-yello-300">--</span>
+                                  <span className="text-amber-200">--</span>
                                 )}
                               </div>
                             </td>
@@ -1205,13 +1205,13 @@ export default function MonitorTurnos() {
               )}
             </div>
             {historialTurnos.length > 0 && (
-              <div className="p-3 border border-amber-300 rounded-2xl bg-linear-to-br from-black to-gray-900 shadow-lg mb-6">
+              <div className="p-3 border border-amber-500/30 rounded-2xl bg-linear-to-br from-black to-gray-900 shadow-lg mb-6">
                 <h4 className="font-bold text-white mb-3">
                   📈 Resumen del día:
                 </h4>
                 <div className="grid grid-cols-2 items-center md:grid-cols-4 gap-4">
                   <div className="text-center">
-                    <p className="text-2xl font-bold text-blue-600">
+                    <p className="text-2xl font-bold text-blue-400">
                       {historialTurnos.length}
                     </p>
                     <p className="text-xs text-white font-bold">
@@ -1219,7 +1219,7 @@ export default function MonitorTurnos() {
                     </p>
                   </div>
                   <div className="text-center">
-                    <p className="text-2xl font-bold text-green-600">
+                    <p className="text-2xl font-bold text-green-400">
                       {
                         historialTurnos.filter((t) => {
                           const duracionReal = calcularDuracionReal(
@@ -1236,7 +1236,7 @@ export default function MonitorTurnos() {
                     <p className="text-xs text-white font-bold">A tiempo</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-2xl font-bold text-red-600">
+                    <p className="text-2xl font-bold text-red-400">
                       {
                         historialTurnos.filter((t) => {
                           const duracionReal = calcularDuracionReal(
@@ -1253,7 +1253,7 @@ export default function MonitorTurnos() {
                     <p className="text-xs text-white font-bold">Con retraso</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-2xl font-bold text-purple-600">
+                    <p className="text-2xl font-bold text-purple-400">
                       {Math.round(
                         historialTurnos.reduce((sum, t) => {
                           const duracionReal = calcularDuracionReal(

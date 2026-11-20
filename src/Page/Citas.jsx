@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { CalendarDays, Clock, User, Phone, Sparkles, Loader2, CheckCircle2, AlertCircle, Info } from "lucide-react";
 export default function Citas() {
   const [servicios, setServicios] = useState({});
@@ -23,6 +24,7 @@ export default function Citas() {
   const [cargandoServicios, setCargandoServicios] = useState(true);
 
   const API = import.meta.env.VITE_API_URL;
+  const navigate = useNavigate();
 
   //CARGAR CATEGORÍAS Y SUBSERVICIOS
 
@@ -438,29 +440,15 @@ export default function Citas() {
         setTurnoCreado(true);
         setMensaje("✅ ¡Cita agendada exitosamente!");
 
-        const subservicioInfo = obtenerSubservicioInfo(subservicioSeleccionado);
-        const empleadoNombre = empleadoDisponible?.NOMBRE || "Por asignar";
-        const horaFin = calcularHoraFin(hora);
+        // Guardar el teléfono para que "Mi turno" lo recuerde
+        try {
+          localStorage.setItem("telefonoCliente", clienteTelefono.replace(/\D/g, ""));
+        } catch {
+          /* sin almacenamiento disponible */
+        }
 
-        alert(`
-          🎉 ¡CITA CONFIRMADA!
-          
-          📋 Detalles:
-          • Servicio: ${subservicioInfo?.NOMBRE || ""}
-          • Duración: ${duracionServicio} minutos
-          • Horario: ${formatearHora(hora)} - ${horaFin}
-          • Fecha: ${fecha}
-          • Empleado: ${empleadoNombre}
-          • Cliente: ${clienteNombre}
-          • Teléfono: ${clienteTelefono}
-        `);
-
-        setClienteNombre("");
-        setClienteTelefono("");
-        setHora("");
-
-        // Recargar horarios después de agendar
-        await cargarHorariosDisponibles();
+        // Llevar al cliente a la pantalla de seguimiento de su turno
+        navigate(`/MiTurno/${data.turnoId}?nuevo=1`);
       } else {
         setMensaje(`❌ ${data.message || "Error al agendar la cita"}`);
       }

@@ -7,6 +7,7 @@ const enlaces = [
   { to: "/", label: "Inicio" },
   { to: "/ServiciosUsuarios", label: "Servicios" },
   { to: "/Citas", label: "Agenda turno" },
+  { to: "/MiTurno", label: "Mi turno" },
   { to : "/Contacto", label: "Contacto"}
 ];
 
